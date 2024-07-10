@@ -1,10 +1,10 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 
-const App = () => {
+export default function Ajustes() {
   return (
     <View style={styles.container}>
-      <Text>Hola Mundo!</Text>
+      <Text>achu</Text>
     </View>
   );
 };
@@ -16,5 +16,3 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
-
-export default App;
