@@ -1,10 +1,10 @@
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { View, Text, Button, StyleSheet } from 'react-native';
 
-export default function Ajustes() {
+const Historial = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      <Text>achu</Text>
+      <Text>Historial</Text>
     </View>
   );
 };
@@ -16,3 +16,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+
+export default Historial;

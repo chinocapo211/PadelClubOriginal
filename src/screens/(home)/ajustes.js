@@ -1,10 +1,10 @@
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { View, Text, Button, StyleSheet } from 'react-native';
 
-export default function Ajustes() {
+const Ajustes = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      <Text>Que onda guacho</Text>
+      <Text>Ajustes</Text>
     </View>
   );
 };
@@ -16,3 +16,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+
+export default Ajustes;

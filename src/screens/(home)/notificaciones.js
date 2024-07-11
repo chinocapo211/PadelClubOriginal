@@ -1,10 +1,10 @@
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { View, Text, Button, StyleSheet } from 'react-native';
 
-const App = () => {
+const Notificaciones = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      <Text>Hola Mundo!</Text>
+      <Text>Notificaciones</Text>
     </View>
   );
 };
@@ -17,4 +17,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+export default Notificaciones;
