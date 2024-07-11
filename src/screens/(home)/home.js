@@ -1,14 +1,31 @@
 import React from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
+
+const screenWidth = Dimensions.get('window').width;
 
 const Home = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      <Text>Home Screen</Text>
-      <Button
-        title="Go to Details"
-        onPress={() => navigation.navigate('Ajustes')}
-      />
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity
+          style={[styles.button, styles.buttonFriends]}
+          onPress={() => navigation.navigate('InicioJugar')}
+        >
+          <Text style={styles.buttonText}>Jugar</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.button, styles.buttonTournaments]}
+          onPress={() => navigation.navigate('Torneos')}
+        >
+          <Text style={styles.buttonText}>Torneos</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.button, styles.buttonPlay]}
+          onPress={() => navigation.navigate('Amigos')}
+        >
+          <Text style={styles.buttonText}>Amigos</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -18,6 +35,38 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    padding: 20,
+  },
+  buttonContainer: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    width: '80%',
+    maxWidth: 400,
+  },
+  button: {
+    height: 130,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+    marginBottom: 10,
+    width: '100%', // Adjusted to '100%' to fit within parent container
+  },
+  buttonPlay: {
+    backgroundColor: '#00BFFF',
+    height: 150,
+  },
+  buttonTournaments: {
+    backgroundColor: '#FF69B4',
+    height: 150,
+  },
+  buttonFriends: {
+    backgroundColor: '#32CD32',
+    height: 150,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 35,
   },
 });
 
