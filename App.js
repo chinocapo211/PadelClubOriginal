@@ -8,6 +8,8 @@ import Historial from './src/screens/(home)/historial';
 import Perfil from './src/screens/(home)/perfil';
 import Notificaciones from './src/screens/(home)/notificaciones';
 import InicioJugar from './src/screens/(jugar)/inicioJugar';
+import RegistrarUser from './src/screens/(login)/registrarUser';
+import IniciarSesion from './src/screens/(login)/iniciarSesion';
 
 const Stack = createStackNavigator();
 
@@ -21,6 +23,8 @@ export default function App() {
         <Stack.Screen name="Perfil" component={Perfil} />
         <Stack.Screen name="Notifiaciones" component={Notificaciones} />
         <Stack.Screen name="InicioJugar" component={InicioJugar} />
+        <Stack.Screen name="RegistrarUser" component={RegistrarUser} />
+        <Stack.Screen name="IniciarSesion" component={IniciarSesion} />
       </Stack.Navigator>
     </NavigationContainer>
   );}
