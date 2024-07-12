@@ -2,28 +2,29 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, Alert } from 'react-native';
 import user_login from '../../userApi';
+import { AsyncStorage } from 'react-native';
 
 
 
 const IniciarSesion = ({ navigation }) => {
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [Contraseña, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
  
-  function handleLogin () 
+  const handleLogin = () =>
     {
-      console.log("Hola")
       user_login(
         {
           email: email,
-          password: password
+          password: Contraseña
         }).then((result) => {
           if(result == "Inicio de sesión exitoso")
             {
+              AsyncStorage.setItem("AccessToken", result.data);
               navigation.replace("Home")
             }
         })
-        
+
     };
   
 
@@ -52,12 +53,14 @@ const IniciarSesion = ({ navigation }) => {
     <View><TextInput
         style={styles.input}
         placeholder="email"
+        value={email}
         onChangeText={(text) =>setEmail(text)}
       /></View>
       <View><TextInput
         style={styles.input}
         placeholder="contraseña"
         secureTextEntry
+        value={Contraseña}
         onChangeText={(text) =>setPassword(text)}
 
       /></View>
