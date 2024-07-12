@@ -1,8 +1,8 @@
 import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
-import Logo from '../../../assets/images/logo.jpg';
+import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import Logo from '../../../assets/images/verif.jpg';
 
-const Registro = ({navigation}) => {
+const ContraseñaExitosa = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.topBackground}>
@@ -17,27 +17,15 @@ const Registro = ({navigation}) => {
             style={styles.logo}
           />
         </View>
-        <Text style={styles.title}>Registrarse</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Nombre"
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Contraseña"
-          secureTextEntry
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Club"
-        />
-        <Text style={styles.note}>Se podrán agregar más clubes en configuración</Text>
+        <View style={styles.logoContainer}>
+          <Image
+            source={require('../../../assets/images/verif.jpg')}
+            style={styles.image}
+          />
+        </View>
+        <Text style={styles.title}>Contraseña actualizada con éxito!!</Text>
         <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('IniciarSesion')}>
-          <Text style={styles.buttonText}>Continuar</Text>
+          <Text style={styles.buttonText}>Regresar a Iniciar Sesión</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -53,6 +41,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#00AEEF',
     height: '40%',
     width: '100%',
+  
     justifyContent: 'flex-start',
     paddingTop: 40,
     paddingLeft: 20,
@@ -83,19 +72,16 @@ const styles = StyleSheet.create({
     width: 130,
     height: 160,
   },
-  input: {
-    width: '100%',
-    height: 50,
-    borderColor: '#CCCCCC',
-    borderWidth: 1,
-    borderRadius: 8,
-    paddingHorizontal: 10,
-    marginBottom: 15,
+  image: {
+    marginTop:90,
+    width: 100,
+    height: 100,
   },
-  note: {
-    fontSize: 12,
-    color: '#888888',
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
     marginBottom: 20,
+    textAlign: 'center',
   },
   button: {
     width: '100%',
@@ -109,11 +95,6 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 18,
   },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
 });
 
-export default Registro;
+export default ContraseñaExitosa;

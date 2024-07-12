@@ -5,7 +5,7 @@ export const user_login = async data =>
 {
     try
     {
-        const result = await ApiManger("/Jugador/Login", {
+        const result = await ApiManger("/auth/login", {
             method: "POST",
             headers:
             {

@@ -1,12 +1,13 @@
+
+
 import React from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
-import Logo from '../../../assets/images/logo.jpg';
 
-const Registro = ({navigation}) => {
+const CrearNuevaContraseña = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.topBackground}>
-        <TouchableOpacity style={styles.backButton}>
+        <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
           <Text style={styles.backButtonText}>{'<'}</Text>
         </TouchableOpacity>
       </View>
@@ -17,27 +18,19 @@ const Registro = ({navigation}) => {
             style={styles.logo}
           />
         </View>
-        <Text style={styles.title}>Registrarse</Text>
+        <Text style={styles.title}>Crear nueva contraseña</Text>
         <TextInput
           style={styles.input}
-          placeholder="Email"
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Nombre"
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Contraseña"
+          placeholder="Nueva contraseña"
           secureTextEntry
         />
         <TextInput
           style={styles.input}
-          placeholder="Club"
+          placeholder="Repetir nueva contraseña"
+          secureTextEntry
         />
-        <Text style={styles.note}>Se podrán agregar más clubes en configuración</Text>
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('IniciarSesion')}>
-          <Text style={styles.buttonText}>Continuar</Text>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ContraseñaExitosa')}>
+          <Text style={styles.buttonText}>Confirmar contraseña</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -83,6 +76,12 @@ const styles = StyleSheet.create({
     width: 130,
     height: 160,
   },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    textAlign: 'center',
+  },
   input: {
     width: '100%',
     height: 50,
@@ -92,11 +91,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     marginBottom: 15,
   },
-  note: {
-    fontSize: 12,
-    color: '#888888',
-    marginBottom: 20,
-  },
   button: {
     width: '100%',
     height: 50,
@@ -104,16 +98,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 8,
+    marginTop: 20,
   },
   buttonText: {
     color: '#FFFFFF',
     fontSize: 18,
   },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
 });
 
-export default Registro;
+export default CrearNuevaContraseña;
+

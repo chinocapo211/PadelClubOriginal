@@ -1,8 +1,41 @@
-import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
-import Logo from '../../../assets/images/logo.jpg';
+
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, Alert } from 'react-native';
+import user_login from '../../userApi';
+import { AsyncStorage } from 'react-native';
+
+
 
 const IniciarSesion = ({ navigation }) => {
+  const [email, setEmail] = useState('');
+  const [Contraseña, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+ 
+  const handleLogin = () =>
+    {
+      user_login(
+        {
+          email: email,
+          password: Contraseña
+        }).then((result) => {
+          if(result == "Inicio de sesión exitoso")
+            {
+              AsyncStorage.setItem("AccessToken", result.data);
+              navigation.replace("Home")
+            }
+        })
+
+    };
+  
+
+    
+  
+  
+
+
+
+
+
   return (
     <View style={styles.container}>
       <View style={styles.logoContainer}>
@@ -38,29 +71,46 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF',
-    alignItems: 'center',
-    paddingHorizontal: 20,
+  },
+  topBackground: {
+    backgroundColor: '#00AEEF',
+    height: '40%',
+    width: '100%',
+    justifyContent: 'flex-start',
+    paddingTop: 40,
+    paddingLeft: 20,
   },
   backButton: {
     alignSelf: 'flex-start',
-    marginTop: 40,
   },
   backButtonText: {
     fontSize: 24,
-    color: '#000000',
+    color: '#FFFFFF',
+  },
+  contentContainer: {
+    flex: 1,
+    backgroundColor: '#FFFFFF',
+    marginTop: -200,
+    borderTopLeftRadius: 205,
+    borderTopRightRadius: 205,
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingTop: 40,
   },
   logoContainer: {
     alignItems: 'center',
-    marginVertical: 20,
+    marginVertical: 50,
   },
   logo: {
-    width: 100,
-    height: 100,
+    marginTop: -50,
+    width: 130,
+    height: 160,
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
+    textAlign: 'center',
   },
   input: {
     width: '100%',
@@ -81,9 +131,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#888888',
     marginBottom: 20,
+    textAlign: 'center',
   },
   registerLink: {
     color: '#00AEEF',
+    textDecorationLine: 'underline',
   },
   button: {
     width: '100%',
@@ -92,6 +144,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 8,
+    marginTop: 20,
   },
   buttonText: {
     color: '#FFFFFF',

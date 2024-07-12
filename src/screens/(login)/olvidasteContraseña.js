@@ -2,11 +2,11 @@ import React from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import Logo from '../../../assets/images/logo.jpg';
 
-const Registro = ({navigation}) => {
+const OlvidasteContraseña = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.topBackground}>
-        <TouchableOpacity style={styles.backButton}>
+        <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
           <Text style={styles.backButtonText}>{'<'}</Text>
         </TouchableOpacity>
       </View>
@@ -17,27 +17,13 @@ const Registro = ({navigation}) => {
             style={styles.logo}
           />
         </View>
-        <Text style={styles.title}>Registrarse</Text>
+        <Text style={styles.title}>Olvidaste tu contraseña?</Text>
         <TextInput
           style={styles.input}
-          placeholder="Email"
+          placeholder="Ingresá tu email"
         />
-        <TextInput
-          style={styles.input}
-          placeholder="Nombre"
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Contraseña"
-          secureTextEntry
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Club"
-        />
-        <Text style={styles.note}>Se podrán agregar más clubes en configuración</Text>
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('IniciarSesion')}>
-          <Text style={styles.buttonText}>Continuar</Text>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('IngresarCodigo')}>
+          <Text style={styles.buttonText}>Enviar Código</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -83,6 +69,12 @@ const styles = StyleSheet.create({
     width: 130,
     height: 160,
   },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    textAlign: 'center',
+  },
   input: {
     width: '100%',
     height: 50,
@@ -91,11 +83,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingHorizontal: 10,
     marginBottom: 15,
-  },
-  note: {
-    fontSize: 12,
-    color: '#888888',
-    marginBottom: 20,
   },
   button: {
     width: '100%',
@@ -109,11 +96,6 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 18,
   },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
 });
 
-export default Registro;
+export default OlvidasteContraseña;
