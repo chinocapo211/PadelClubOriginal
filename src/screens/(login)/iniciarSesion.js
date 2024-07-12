@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
-
-
+import NavbarHigh from '../../components/navbarHigh';
 const IniciarSesion = ({ navigation }) => {
   return (
     <View style={styles.container}>
