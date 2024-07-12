@@ -9,40 +9,40 @@ const MostrarJugadores = ({ navigation }) => {
 
   return (
     
-    <View style={styles.container}>
-       <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-        <Text style={styles.backButtonText}>{'<'}</Text>
-      </TouchableOpacity>
-      <View style={styles.innerContainer}>
-        <View style={styles.profileContainer}>
-          <View style={styles.userInfo}>
-            <Text style={styles.userName}>{userName}</Text>
-            <Text style={styles.userRank}>{userRank}</Text>
-            <TouchableOpacity
-          style={styles.addButton}
-          onPress={() => navigation.navigate('')}
-        >
-          <Text style={styles.addButtonText}>+</Text>
+      <View style={styles.container}>
+        <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+          <Text style={styles.backButtonText}>{'<'}</Text>
         </TouchableOpacity>
+        <View style={styles.innerContainer}>
+          <View style={styles.profileContainer}>
+            <View style={styles.userInfo}>
+              <Text style={styles.userName}>{userName}</Text>
+              <Text style={styles.userRank}>{userRank}</Text>
+              <TouchableOpacity
+            style={styles.addButton}
+            onPress={() => navigation.navigate('')}
+          >
+            <Text style={styles.addButtonText}>+</Text>
+          </TouchableOpacity>
+            </View>
           </View>
-        </View>
-        <View style={styles.profileContainer}>
-          <View style={styles.userInfo}>
-            <Text style={styles.userName}>{userName2}</Text>
-            <Text style={styles.userRank}>{userRank2}</Text>
-            <TouchableOpacity
-          style={styles.addButton}
-          onPress={() => navigation.navigate('')}
-        >
-          <Text style={styles.addButtonText}>+</Text>
-        </TouchableOpacity>
+          <View style={styles.profileContainer}>
+            <View style={styles.userInfo}>
+              <Text style={styles.userName}>{userName2}</Text>
+              <Text style={styles.userRank}>{userRank2}</Text>
+              <TouchableOpacity
+            style={styles.addButton}
+            onPress={() => navigation.navigate('')}
+          >
+            <Text style={styles.addButtonText}>+</Text>
+          </TouchableOpacity>
+            </View>
           </View>
+        
         </View>
-      
+        
+        
       </View>
-      
-      
-    </View>
   );
 }
 

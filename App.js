@@ -15,6 +15,7 @@ import OlvidasteContraseña from './src/screens/(login)/olvidasteContraseña';
 import IngresarCodigo from './src/screens/(login)/ingresarCodigo';
 import CrearNuevaContraseña from './src/screens/(login)/crearNuevaContraseña';
 import ContraseñaExitosa from './src/screens/(login)/contraseñaExitosa';
+import Amigos from './src/screens/(home)/amigos';
 
 const Stack = createStackNavigator();
 
@@ -36,6 +37,7 @@ export default function App() {
         <Stack.Screen name="IngresarCodigo" component={IngresarCodigo} />
         <Stack.Screen name="CrearNuevaContraseña" component={CrearNuevaContraseña} />
         <Stack.Screen name="ContraseñaExitosa" component={ContraseñaExitosa} />
+        <Stack.Screen name="Amigos" component={Amigos} />
 
       </Stack.Navigator>
     </NavigationContainer>
