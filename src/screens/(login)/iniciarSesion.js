@@ -18,24 +18,12 @@ const IniciarSesion = ({ navigation }) => {
           if(result.status == 200)
             {
               AsyncStorage.setItem("AccessToken", result.data);
-              navigation.replace(handleGetToken)
+              navigation.navigate("Home")
             }
         })
     };
 
-    const handleGetToken = async () =>
-    {
-      const dataToken = await AsyncStorage.getItem("AccessToken")
-      if( !dataToken)
-      {
-        navigation.navigation("IniciarSesion")
-      }
-      else
-      {
-        navigation.navigation("Home")
-      }
-    };
-
+  
 
   return (
     <View style={styles.container}>
@@ -70,7 +58,7 @@ const IniciarSesion = ({ navigation }) => {
         <TouchableOpacity onPress={() => navigation.navigate('Registro')}>
           <Text style={styles.register}>¿No tenés una cuenta? <Text style={styles.registerLink}>Regístrate</Text></Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Home')}>
+        <TouchableOpacity style={styles.button} onPress={handleLogin}>
         {/* onPress={handleLogin} */}
           <Text style={styles.buttonText}>Iniciar Sesión</Text>
         </TouchableOpacity>
