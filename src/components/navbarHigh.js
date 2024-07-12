@@ -6,44 +6,42 @@ const NavbarHigh = ({ navigation }) => {
     return (
       <View style={styles.container}>
         <View style={styles.topSection}>
-        <Feather name="bell" size={24} color="black" />
-          <View style={styles.logoContainer}>
-            <Image
-              source={require('../../assets/images/logo.jpg')}
-              style={styles.logo}
-            />
-          </View>
-          <Feather name="user" size={30} color="black" style={styles.profileIcon} />
+          <Feather name="bell" size={24} color="black" />
+          <Image
+            source={require('../../assets/images/logo.jpg')}
+            style={styles.logo}
+          />
+          <Feather name="user" size={26} color="black"/>
         </View>
       </View>
     );
   }
-  
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: 'white',
-    },
-    topSection: {
-      height: 120, // Tamaño predefinido del topSection
-      backgroundColor: 'white',
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-around',
-    },
-    logoContainer: {
-      width: 100, // Ancho predefinido para el contenedor del logo
-      height: '100%', // La altura del contenedor será la misma que la del topSection
-      justifyContent: 'center', // Centra verticalmente la imagen
-    },
-    logo: {
-      width: '100%',
-      height: '100%',
-    },
-    profileIcon: {
-      // Estilos opcionales para el icono de perfil
-    },
-  });
-  
-  
-  export default NavbarHigh;
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: 'white',
+    width: '100%',
+    height: '15%',  // Altura de la barra de navegación 
+    top: 0,
+    left: 0,
+    right: 0,
+  },
+  topSection: {
+    height: '100%',
+    width:'100%',
+    backgroundColor: 'white',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: '20%',  // Espaciado horizontal para los elementos
+    left:0,
+    top:0,
+  },
+  logo: {
+    width: '100%',  // Ajusta el tamaño según tu necesidad
+    height: '100%',  // Ajusta el tamaño según tu necesidad
+    resizeMode: 'contain',  // Asegura que la imagen no se deforme
+  },
+});
+
+export default NavbarHigh;
