@@ -1,11 +1,13 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
-
+import NavbarHigh from '../../components/navbarHigh' 
 const screenWidth = Dimensions.get('window').width;
 
 const Home = ({ navigation }) => {
   return (
-    <View style={styles.container}>
+    <View>
+      <NavbarHigh/>
+      <View style={styles.container}>
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           style={[styles.button, styles.buttonFriends]}
@@ -27,6 +29,8 @@ const Home = ({ navigation }) => {
         </TouchableOpacity>
       </View>
     </View>
+    </View>
+    
   );
 };
 
@@ -35,7 +39,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20,
+    height:'100%',
+    top:'30%',
   },
   buttonContainer: {
     flexDirection: 'column',

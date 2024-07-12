@@ -12,14 +12,14 @@ import IniciarSesion from './src/screens/(login)/iniciarSesion';
 import MostrarJugadores from './src/screens/(jugar)/mostrarJugadores';
 import Registro from './src/screens/(login)/registro';
 
-
+// screenOptions={{ headerShown: false }}
 
 const Stack = createStackNavigator();
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="IniciarSesion" screenOptions={{ headerShown: false }}>
+      <Stack.Navigator initialRouteName="Home" screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="Ajustes" component={Ajustes} />
         <Stack.Screen name="Historial" component={Historial} />
@@ -29,8 +29,6 @@ export default function App() {
         <Stack.Screen name="Registro" component={Registro} />
         <Stack.Screen name="IniciarSesion" component={IniciarSesion} />
         <Stack.Screen name="MostrarJugadores" component={MostrarJugadores} />
-       
-
       </Stack.Navigator>
     </NavigationContainer>
   );}
