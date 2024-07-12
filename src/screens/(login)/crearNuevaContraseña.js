@@ -1,7 +1,9 @@
+
+
 import React from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
 
-const IniciarSesion = ({ navigation }) => {
+const CrearNuevaContraseña = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.topBackground}>
@@ -16,24 +18,19 @@ const IniciarSesion = ({ navigation }) => {
             style={styles.logo}
           />
         </View>
-        <Text style={styles.title}>Iniciá Sesión</Text>
+        <Text style={styles.title}>Crear nueva contraseña</Text>
         <TextInput
           style={styles.input}
-          placeholder="Ingresá tu email"
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Ingresá tu contraseña"
+          placeholder="Nueva contraseña"
           secureTextEntry
         />
-        <TouchableOpacity onPress={() => navigation.navigate('OlvidasteContraseña')}>
-          <Text style={styles.forgotPassword}>¿Olvidaste tu contraseña?</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('Registro')}>
-          <Text style={styles.register}>¿No tenés una cuenta? <Text style={styles.registerLink}>Regístrate</Text></Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Home')}>
-          <Text style={styles.buttonText}>Iniciar Sesión</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Repetir nueva contraseña"
+          secureTextEntry
+        />
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ContraseñaExitosa')}>
+          <Text style={styles.buttonText}>Confirmar contraseña</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -72,7 +69,7 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     alignItems: 'center',
-    marginVertical: 50,
+    marginVertical: 20,
   },
   logo: {
     marginTop: -50,
@@ -94,22 +91,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     marginBottom: 15,
   },
-  forgotPassword: {
-    fontSize: 14,
-    color: '#888888',
-    alignSelf: 'flex-end',
-    marginBottom: 20,
-  },
-  register: {
-    fontSize: 14,
-    color: '#888888',
-    marginBottom: 20,
-    textAlign: 'center',
-  },
-  registerLink: {
-    color: '#00AEEF',
-    textDecorationLine: 'underline',
-  },
   button: {
     width: '100%',
     height: 50,
@@ -125,4 +106,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export default IniciarSesion;
+export default CrearNuevaContraseña;
+

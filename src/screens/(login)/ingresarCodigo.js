@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
 
-const IniciarSesion = ({ navigation }) => {
+const IngresarCodigo = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.topBackground}>
@@ -16,24 +16,19 @@ const IniciarSesion = ({ navigation }) => {
             style={styles.logo}
           />
         </View>
-        <Text style={styles.title}>Iniciá Sesión</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Ingresá tu email"
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Ingresá tu contraseña"
-          secureTextEntry
-        />
-        <TouchableOpacity onPress={() => navigation.navigate('OlvidasteContraseña')}>
-          <Text style={styles.forgotPassword}>¿Olvidaste tu contraseña?</Text>
+        <Text style={styles.title}>Ingresar código</Text>
+        <Text style={styles.subtitle}>Ingrese aquí el código que recibió por correo</Text>
+        <View style={styles.codeContainer}>
+          <TextInput style={styles.codeInput} maxLength={1} keyboardType="numeric" />
+          <TextInput style={styles.codeInput} maxLength={1} keyboardType="numeric" />
+          <TextInput style={styles.codeInput} maxLength={1} keyboardType="numeric" />
+          <TextInput style={styles.codeInput} maxLength={1} keyboardType="numeric" />
+        </View>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('CrearNuevaContraseña')}>
+          <Text style={styles.buttonText}>Verificar Código</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('Registro')}>
-          <Text style={styles.register}>¿No tenés una cuenta? <Text style={styles.registerLink}>Regístrate</Text></Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Home')}>
-          <Text style={styles.buttonText}>Iniciar Sesión</Text>
+        <TouchableOpacity>
+          <Text style={styles.resend}>¿No recibiste el código? <Text style={styles.resendLink}>Reenviar</Text></Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -72,7 +67,7 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     alignItems: 'center',
-    marginVertical: 50,
+    marginVertical: 20,
   },
   logo: {
     marginTop: -50,
@@ -82,33 +77,29 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: 'bold',
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  subtitle: {
+    fontSize: 14,
+    color: '#888888',
     marginBottom: 20,
     textAlign: 'center',
   },
-  input: {
+  codeContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     width: '100%',
+    marginBottom: 20,
+  },
+  codeInput: {
+    width: 50,
     height: 50,
     borderColor: '#CCCCCC',
     borderWidth: 1,
     borderRadius: 8,
-    paddingHorizontal: 10,
-    marginBottom: 15,
-  },
-  forgotPassword: {
-    fontSize: 14,
-    color: '#888888',
-    alignSelf: 'flex-end',
-    marginBottom: 20,
-  },
-  register: {
-    fontSize: 14,
-    color: '#888888',
-    marginBottom: 20,
     textAlign: 'center',
-  },
-  registerLink: {
-    color: '#00AEEF',
-    textDecorationLine: 'underline',
+    fontSize: 24,
   },
   button: {
     width: '100%',
@@ -117,12 +108,21 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 8,
-    marginTop: 20,
+    marginBottom: 20,
   },
   buttonText: {
     color: '#FFFFFF',
     fontSize: 18,
   },
+  resend: {
+    fontSize: 14,
+    color: '#888888',
+    textAlign: 'center',
+  },
+  resendLink: {
+    color: '#00AEEF',
+    textDecorationLine: 'underline',
+  },
 });
 
-export default IniciarSesion;
+export default IngresarCodigo;

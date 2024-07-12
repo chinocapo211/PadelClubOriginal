@@ -11,15 +11,18 @@ import InicioJugar from './src/screens/(jugar)/inicioJugar';
 import IniciarSesion from './src/screens/(login)/iniciarSesion';
 import MostrarJugadores from './src/screens/(jugar)/mostrarJugadores';
 import Registro from './src/screens/(login)/registro';
-
-// screenOptions={{ headerShown: false }}
+import OlvidasteContraseña from './src/screens/(login)/olvidasteContraseña';
+import IngresarCodigo from './src/screens/(login)/ingresarCodigo';
+import CrearNuevaContraseña from './src/screens/(login)/crearNuevaContraseña';
+import ContraseñaExitosa from './src/screens/(login)/contraseñaExitosa';
 
 const Stack = createStackNavigator();
+
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="MostrarJugadores" >
+      <Stack.Navigator initialRouteName="IniciarSesion" screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="Ajustes" component={Ajustes} />
         <Stack.Screen name="Historial" component={Historial} />
@@ -29,7 +32,10 @@ export default function App() {
         <Stack.Screen name="Registro" component={Registro} />
         <Stack.Screen name="IniciarSesion" component={IniciarSesion} />
         <Stack.Screen name="MostrarJugadores" component={MostrarJugadores} />
-       
+        <Stack.Screen name="OlvidasteContraseña" component={OlvidasteContraseña} />
+        <Stack.Screen name="IngresarCodigo" component={IngresarCodigo} />
+        <Stack.Screen name="CrearNuevaContraseña" component={CrearNuevaContraseña} />
+        <Stack.Screen name="ContraseñaExitosa" component={ContraseñaExitosa} />
 
       </Stack.Navigator>
     </NavigationContainer>

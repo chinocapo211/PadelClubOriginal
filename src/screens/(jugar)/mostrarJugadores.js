@@ -2,8 +2,10 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 const MostrarJugadores = ({ navigation }) => {
-  const userName = 'Jose';
+  const userName = 'Borja';
   const userRank = 'Rango XVII';
+  const userName2 = 'Merentiel';
+  const userRank2 = 'Rango XI';
 
   return (
     
@@ -24,8 +26,21 @@ const MostrarJugadores = ({ navigation }) => {
         </TouchableOpacity>
           </View>
         </View>
+        <View style={styles.profileContainer}>
+          <View style={styles.userInfo}>
+            <Text style={styles.userName}>{userName2}</Text>
+            <Text style={styles.userRank}>{userRank2}</Text>
+            <TouchableOpacity
+          style={styles.addButton}
+          onPress={() => navigation.navigate('')}
+        >
+          <Text style={styles.addButtonText}>+</Text>
+        </TouchableOpacity>
+          </View>
+        </View>
       
       </View>
+      
       
     </View>
   );
