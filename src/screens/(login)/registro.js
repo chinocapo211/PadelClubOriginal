@@ -4,7 +4,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'reac
 const Registro = ({navigation}) => {
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.backButton}>
+      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
         <Text style={styles.backButtonText}>{'<'}</Text>
       </TouchableOpacity>
       <View style={styles.logoContainer}>
@@ -32,7 +32,7 @@ const Registro = ({navigation}) => {
         placeholder="Club"
       />
       <Text style={styles.note}>Se podrán agregar más clubes en configuración</Text>
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('IniciarSesion')}>
         <Text style={styles.buttonText}>Continuar</Text>
       </TouchableOpacity>
     </View>
