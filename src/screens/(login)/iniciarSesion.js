@@ -1,41 +1,68 @@
-import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
+
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, Alert } from 'react-native';
+import user_login from '../../userApi';
+import { AsyncStorage } from 'react-native';
+
+
 
 const IniciarSesion = ({ navigation }) => {
+  const [email, setEmail] = useState('');
+  const [Contraseña, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+ 
+  const handleLogin = () =>
+    {
+      user_login(
+        {
+          email: email,
+          password: Contraseña
+        }).then((result) => {
+          if(result == "Inicio de sesión exitoso")
+            {
+              AsyncStorage.setItem("AccessToken", result.data);
+              navigation.replace("Home")
+            }
+        })
+
+    };
+  
+
+    
+  
+  
+
+
+
+
+
   return (
     <View style={styles.container}>
-      <View style={styles.topBackground}>
-        <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-          <Text style={styles.backButtonText}>{'<'}</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.contentContainer}>
-        <View style={styles.logoContainer}>
-          <Image
-            source={require('../../../assets/images/logo.jpg')}
-            style={styles.logo}
-          />
-        </View>
-        <Text style={styles.title}>Iniciá Sesión</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Ingresá tu email"
+      <View style={styles.logoContainer}>
+        <Image
+          source={require('../../../assets/images/logo.jpg')}
+          style={styles.logo}
         />
-        <TextInput
-          style={styles.input}
-          placeholder="Ingresá tu contraseña"
-          secureTextEntry
-        />
-        <TouchableOpacity onPress={() => navigation.navigate('OlvidasteContraseña')}>
-          <Text style={styles.forgotPassword}>¿Olvidaste tu contraseña?</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('Registro')}>
-          <Text style={styles.register}>¿No tenés una cuenta? <Text style={styles.registerLink}>Regístrate</Text></Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Home')}>
-          <Text style={styles.buttonText}>Iniciar Sesión</Text>
-        </TouchableOpacity>
       </View>
+      <Text style={styles.title}>Iniciá Sesión</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Ingresá tu email"
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Ingresá tu contraseña"
+        secureTextEntry
+      />
+      <TouchableOpacity>
+        <Text style={styles.forgotPassword}>¿Olvidaste tu contraseña?</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.navigate('Registro')}>
+        <Text style={styles.register}>¿No tenés una cuenta? <Text style={styles.registerLink}>Regístrate</Text></Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Home')}>
+        <Text style={styles.buttonText}>Iniciar Sesión</Text>
+      </TouchableOpacity>
     </View>
   );
 };
