@@ -24,18 +24,7 @@ const IniciarSesion = ({ navigation }) => {
               navigation.replace("Home")
             }
         })
-
     };
-  
-
-    
-  
-  
-
-
-
-
-
   return (
     <><View style={styles.container}>
       <View style={styles.logoContainer}>
