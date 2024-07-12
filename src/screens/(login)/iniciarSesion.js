@@ -1,16 +1,10 @@
-<<<<<<< HEAD
+
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, Alert } from 'react-native';
 import user_login from '../../userApi';
 
 
 
-
-=======
-import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
-import NavbarHigh from '../../components/navbarHigh';
->>>>>>> 5cf6b2729288794af89274e1d035db475146c966
 const IniciarSesion = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
