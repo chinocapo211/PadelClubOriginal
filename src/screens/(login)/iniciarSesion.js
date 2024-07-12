@@ -8,12 +8,6 @@ const IniciarSesion = ({ navigation }) => {
       <TouchableOpacity style={styles.backButton}>
         <Text style={styles.backButtonText}>{'<'}</Text>
       </TouchableOpacity>
-      <View style={styles.logoContainer}>
-        <Image
-          source={require('../../../assets/images/logo.jpg')}
-          style={styles.logo}
-        />
-      </View>
       <Text style={styles.title}>Iniciá Sesión</Text>
       <TextInput
         style={styles.input}
@@ -27,8 +21,9 @@ const IniciarSesion = ({ navigation }) => {
       <TouchableOpacity>
         <Text style={styles.forgotPassword}>¿Olvidaste tu contraseña?</Text>
       </TouchableOpacity>
-      <TouchableOpacity>
-        <Text style={styles.register}>¿No tenés una cuenta? <Text style={styles.registerLink}>Regístrate</Text></Text>
+      <TouchableOpacity 
+      onPress={() => navigation.navigate('Registro')}>
+        <Text style={styles.register}>¿No tenés una cuenta? <Text style={styles.registerLink} >Regístrate</Text></Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.button}>
         <Text style={styles.buttonText}>Iniciar Sesión</Text>

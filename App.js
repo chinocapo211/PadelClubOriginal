@@ -8,23 +8,29 @@ import Historial from './src/screens/(home)/historial';
 import Perfil from './src/screens/(home)/perfil';
 import Notificaciones from './src/screens/(home)/notificaciones';
 import InicioJugar from './src/screens/(jugar)/inicioJugar';
-import RegistrarUser from './src/screens/(login)/registrarUser';
 import IniciarSesion from './src/screens/(login)/iniciarSesion';
+import MostrarJugadores from './src/screens/(jugar)/mostrarJugadores';
+import Registro from './src/screens/(login)/registro';
+
+
 
 const Stack = createStackNavigator();
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
+      <Stack.Navigator initialRouteName="IniciarSesion">
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="Ajustes" component={Ajustes} />
         <Stack.Screen name="Historial" component={Historial} />
         <Stack.Screen name="Perfil" component={Perfil} />
         <Stack.Screen name="Notifiaciones" component={Notificaciones} />
         <Stack.Screen name="InicioJugar" component={InicioJugar} />
-        <Stack.Screen name="RegistrarUser" component={RegistrarUser} />
+        <Stack.Screen name="Registro" component={Registro} />
         <Stack.Screen name="IniciarSesion" component={IniciarSesion} />
+        <Stack.Screen name="MostrarJugadores" component={MostrarJugadores} />
+       
+
       </Stack.Navigator>
     </NavigationContainer>
   );}

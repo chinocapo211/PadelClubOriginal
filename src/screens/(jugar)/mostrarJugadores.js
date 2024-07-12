@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
-const InicioJugar = ({ navigation }) => {
-  const userName = 'Raul Molonuense';
+const MostrarJugadores = ({ navigation }) => {
+  const userName = 'Jose';
   const userRank = 'Rango XVII';
 
   return (
@@ -16,7 +16,7 @@ const InicioJugar = ({ navigation }) => {
         </View>
         <TouchableOpacity
           style={styles.addButton}
-          onPress={() => navigation.navigate('MostrarJugadores')}
+          onPress={() => navigation.navigate('')}
         >
           <Text style={styles.addButtonText}>+</Text>
         </TouchableOpacity>
@@ -87,4 +87,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default InicioJugar;
+export default MostrarJugadores;

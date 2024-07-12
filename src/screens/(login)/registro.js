@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import Logo from '../../../assets/images/logo.jpg';
-const RegistrarUser = ({navigation}) => {
+const Registro = ({navigation}) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.backButton}>
@@ -95,4 +95,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RegistrarUser;
+export default Registro;
