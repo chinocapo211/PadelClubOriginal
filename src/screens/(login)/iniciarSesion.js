@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import Logo from '../../../assets/images/back.png';
 import user_login from '../../userApi';
 import { AsyncStorage } from 'react-native';
 
@@ -24,9 +25,6 @@ const IniciarSesion = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.topBackground}>
-        <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-          <Text style={styles.backButtonText}>{'<'}</Text>
-        </TouchableOpacity>
       </View>
       <View style={styles.contentContainer}>
         <View style={styles.logoContainer}>
@@ -78,13 +76,6 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     paddingTop: 40,
     paddingLeft: 20,
-  },
-  backButton: {
-    alignSelf: 'flex-start',
-  },
-  backButtonText: {
-    fontSize: 24,
-    color: '#FFFFFF',
   },
   contentContainer: {
     flex: 1,
