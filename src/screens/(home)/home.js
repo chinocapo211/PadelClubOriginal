@@ -5,9 +5,11 @@ const screenWidth = Dimensions.get('window').width;
 
 const Home = ({ navigation }) => {
   return (
-    <View>
-      <NavbarHigh/>
       <View style={styles.container}>
+        <NavbarHigh/>
+      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+        <Text style={styles.backButtonText}>{'<'}</Text>
+      </TouchableOpacity>
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           style={[styles.button, styles.buttonFriends]}
@@ -29,7 +31,6 @@ const Home = ({ navigation }) => {
         </TouchableOpacity>
       </View>
     </View>
-    </View>
     
   );
 };
@@ -40,7 +41,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     height:'100%',
-    top:'30%',
   },
   buttonContainer: {
     flexDirection: 'column',

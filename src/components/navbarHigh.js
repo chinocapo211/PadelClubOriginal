@@ -25,12 +25,15 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
+    position:'absolute',
+    
   },
   topSection: {
     height: '100%',
     width:'100%',
     backgroundColor: 'white',
     flexDirection: 'row',
+    flex:1,
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: '20%',  // Espaciado horizontal para los elementos
