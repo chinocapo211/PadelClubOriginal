@@ -1,10 +1,8 @@
-
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import Logo from '../../../assets/images/back.png';
 import user_login from '../../userApi';
 import { AsyncStorage } from 'react-native';
-
-
 
 const IniciarSesion = ({ navigation }) => {
   const [Email, setEmail] = useState('');
@@ -79,13 +77,6 @@ const styles = StyleSheet.create({
     paddingTop: 40,
     paddingLeft: 20,
   },
-  backButton: {
-    alignSelf: 'flex-start',
-  },
-  backButtonText: {
-    fontSize: 24,
-    color: '#FFFFFF',
-  },
   contentContainer: {
     flex: 1,
     backgroundColor: '#FFFFFF',
@@ -109,7 +100,6 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
-    textAlign: 'center',
   },
   input: {
     width: '100%',
