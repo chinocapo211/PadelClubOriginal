@@ -1,24 +1,26 @@
 import { resolveHref } from "expo-router/build/link/href";
-import ApiManger from "./apiManger";
+import {apiPost} from '../src/apiManger'
 
-export const user_login = async data =>
+export const user_login = async (data) =>
 {
+    let result = {}
+    console.log(data);
     try
     {
-        const result = await ApiManger("/auth/login", {
+        result = await apiPost({
             method: "POST",
-            headers:
-            {
-                'Content-Type': "application/json"
-            },
+            url: "auth/login",
             data: data
         })
-        return result;
+        console.log(result);
+        
+
     }
     catch(error)
     {
-        return error.response.data
+        console.log(error)
     }
+    return result;
 }
 
 export default user_login

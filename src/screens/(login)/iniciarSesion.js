@@ -7,17 +7,17 @@ import { AsyncStorage } from 'react-native';
 
 
 const IniciarSesion = ({ navigation }) => {
-  const [email, setEmail] = useState('');
+  const [Email, setEmail] = useState('');
   const [Contraseña, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
  
   const handleLogin = () =>
     {
-      user_login(
-        {
-          email: email,
-          password: Contraseña
-        }).then((result) => {
+      let data = {
+        email: Email,
+        contraseña: Contraseña
+      }
+      user_login(data).then((result) => {
           if(result == "Inicio de sesión exitoso")
             {
               AsyncStorage.setItem("AccessToken", result.data);
@@ -37,21 +37,31 @@ const IniciarSesion = ({ navigation }) => {
       <TextInput
         style={styles.input}
         placeholder="Ingresá tu email"
+        value = {Email}
+        onChangeText={(text) =>setEmail(text)}
       />
       <TextInput
         style={styles.input}
         placeholder="Ingresá tu contraseña"
         secureTextEntry
+        value = {Contraseña}
+        onChangeText={(text) =>setPassword(text)}
       />
       <TouchableOpacity>
         <Text style={styles.forgotPassword}>¿Olvidaste tu contraseña?</Text>
       </TouchableOpacity>
+      <View>
       <TouchableOpacity onPress={() => navigation.navigate('Registro')}>
         <Text style={styles.register}>¿No tenés una cuenta? <Text style={styles.registerLink}>Regístrate</Text></Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Home')}>
+      </View>
+      
+      <View>
+        <TouchableOpacity style={styles.button} onPress={(handleLogin)}>
         <Text style={styles.buttonText}>Iniciar Sesión</Text>
       </TouchableOpacity>
+      </View>
+      
     </View>
   );
 };
