@@ -21,16 +21,19 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
     width: '100%',
-    height: '15%',  // Altura de la barra de navegación 
+    height: '15%',   
     top: 0,
     left: 0,
     right: 0,
+    position:'absolute',
+    
   },
   topSection: {
     height: '100%',
     width:'100%',
     backgroundColor: 'white',
     flexDirection: 'row',
+    flex:1,
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: '20%',  // Espaciado horizontal para los elementos
