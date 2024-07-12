@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
-import Logo from '../../../assets/images/logo.jpg';
+
 
 const IniciarSesion = ({ navigation }) => {
   return (
@@ -8,6 +8,12 @@ const IniciarSesion = ({ navigation }) => {
       <TouchableOpacity style={styles.backButton}>
         <Text style={styles.backButtonText}>{'<'}</Text>
       </TouchableOpacity>
+      <View style={styles.logoContainer}>
+        <Image
+          source={require('../../../assets/images/logo.jpg')}
+          style={styles.logo}
+        />
+      </View>
       <Text style={styles.title}>Iniciá Sesión</Text>
       <TextInput
         style={styles.input}

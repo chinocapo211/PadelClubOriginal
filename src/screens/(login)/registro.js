@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
-import Logo from '../../../assets/images/logo.jpg';
+
 const Registro = ({navigation}) => {
   return (
     <View style={styles.container}>
