@@ -1,12 +1,11 @@
 import React from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
-import Logo from '../../../assets/images/logo.jpg';
 
-const Registro = ({navigation}) => {
+const IngresarCodigo = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.topBackground}>
-        <TouchableOpacity style={styles.backButton}>
+        <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
           <Text style={styles.backButtonText}>{'<'}</Text>
         </TouchableOpacity>
       </View>
@@ -17,27 +16,19 @@ const Registro = ({navigation}) => {
             style={styles.logo}
           />
         </View>
-        <Text style={styles.title}>Registrarse</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Nombre"
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Contraseña"
-          secureTextEntry
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Club"
-        />
-        <Text style={styles.note}>Se podrán agregar más clubes en configuración</Text>
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('IniciarSesion')}>
-          <Text style={styles.buttonText}>Continuar</Text>
+        <Text style={styles.title}>Ingresar código</Text>
+        <Text style={styles.subtitle}>Ingrese aquí el código que recibió por correo</Text>
+        <View style={styles.codeContainer}>
+          <TextInput style={styles.codeInput} maxLength={1} keyboardType="numeric" />
+          <TextInput style={styles.codeInput} maxLength={1} keyboardType="numeric" />
+          <TextInput style={styles.codeInput} maxLength={1} keyboardType="numeric" />
+          <TextInput style={styles.codeInput} maxLength={1} keyboardType="numeric" />
+        </View>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('CrearNuevaContraseña')}>
+          <Text style={styles.buttonText}>Verificar Código</Text>
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <Text style={styles.resend}>¿No recibiste el código? <Text style={styles.resendLink}>Reenviar</Text></Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -83,19 +74,32 @@ const styles = StyleSheet.create({
     width: 130,
     height: 160,
   },
-  input: {
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  subtitle: {
+    fontSize: 14,
+    color: '#888888',
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  codeContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     width: '100%',
+    marginBottom: 20,
+  },
+  codeInput: {
+    width: 50,
     height: 50,
     borderColor: '#CCCCCC',
     borderWidth: 1,
     borderRadius: 8,
-    paddingHorizontal: 10,
-    marginBottom: 15,
-  },
-  note: {
-    fontSize: 12,
-    color: '#888888',
-    marginBottom: 20,
+    textAlign: 'center',
+    fontSize: 24,
   },
   button: {
     width: '100%',
@@ -104,16 +108,21 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 8,
+    marginBottom: 20,
   },
   buttonText: {
     color: '#FFFFFF',
     fontSize: 18,
   },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
+  resend: {
+    fontSize: 14,
+    color: '#888888',
+    textAlign: 'center',
+  },
+  resendLink: {
+    color: '#00AEEF',
+    textDecorationLine: 'underline',
   },
 });
 
-export default Registro;
+export default IngresarCodigo;
