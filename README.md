@@ -6,4 +6,4 @@ npm install react-native-gesture-handler @react-navigation/native @react-navigat
 
 npm install @react-navigation/bottom-tabs npm install @react-navigation/material-bottom-tabs react-native-paper
 
-npm install react-native-vector-icons
+npm install react-native-vector-icons npm install @react-native-async-storage/async-storage

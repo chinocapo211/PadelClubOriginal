@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet } from 'react-native';
-import Logo from '../../../assets/images/back.png';
 import user_login from '../../userApi';
-import { AsyncStorage } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const IniciarSesion = ({ navigation }) => {
   const [gmail, setEmail] = useState('');
@@ -16,13 +15,28 @@ const IniciarSesion = ({ navigation }) => {
         Contraseña: contraseña
       }
       user_login(data).then((result) => {
-          if(result == "Inicio de sesión exitoso")
+          if(result.status == 200)
             {
               AsyncStorage.setItem("AccessToken", result.data);
-              navigation.replace("Home")
+              navigation.replace(handleGetToken)
             }
         })
     };
+
+    const handleGetToken = async () =>
+    {
+      const dataToken = await AsyncStorage.getItem("AccessToken")
+      if( !dataToken)
+      {
+        navigation.navigation("IniciarSesion")
+      }
+      else
+      {
+        navigation.navigation("Home")
+      }
+    };
+
+
   return (
     <View style={styles.container}>
       <View style={styles.logoContainer}>
