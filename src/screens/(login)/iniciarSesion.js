@@ -39,39 +39,41 @@ const IniciarSesion = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.logoContainer}>
-        <Image
-          source={require('../../../assets/images/logo.jpg')}
-          style={styles.logo}
+      <View style={styles.topBackground}>
+      </View>
+      <View style={styles.contentContainer}>
+        <View style={styles.logoContainer}>
+          <Image
+            source={require('../../../assets/images/logo.jpg')}
+            style={styles.logo}
+          />
+        </View>
+        <Text style={styles.title}>Iniciar Sesión</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Ingresá tu email"
+          value={gmail}
+          onChangeText={setEmail}
+          autoCapitalize="none"
+          keyboardType="email-address"
         />
-      </View>
-      <Text style={styles.title}>Iniciá Sesión</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Ingresá tu email"
-        value = {gmail}
-        onChangeText={(text) =>setEmail(text)}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Ingresá tu contraseña"
-        secureTextEntry
-        value = {contraseña}
-        onChangeText={(text) =>setPassword(text)}
-      />
-      <TouchableOpacity>
-        <Text style={styles.forgotPassword}>¿Olvidaste tu contraseña?</Text>
-      </TouchableOpacity>
-      <View>
-      <TouchableOpacity onPress={() => navigation.navigate('Registro')}>
-        <Text style={styles.register}>¿No tenés una cuenta? <Text style={styles.registerLink}>Regístrate</Text></Text>
-      </TouchableOpacity>
-      </View>
-      
-      <View>
-        <TouchableOpacity style={styles.button} onPress={(handleLogin)}>
-        <Text style={styles.buttonText}>Iniciar Sesión</Text>
-      </TouchableOpacity>
+        <TextInput
+          style={styles.input}
+          placeholder="Ingresá tu contraseña"
+          secureTextEntry
+          value={contraseña}
+          onChangeText={setPassword}
+        />
+        <TouchableOpacity onPress={() => navigation.navigate('OlvidasteContraseña')}>
+          <Text style={styles.forgotPassword}>¿Olvidaste tu contraseña?</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('Registro')}>
+          <Text style={styles.register}>¿No tenés una cuenta? <Text style={styles.registerLink}>Regístrate</Text></Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Home')}>
+        {/* onPress={handleLogin} */}
+          <Text style={styles.buttonText}>Iniciar Sesión</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
