@@ -6,7 +6,7 @@ const Registro = ({navigation}) => {
   return (
     <View style={styles.container}>
       <View style={styles.topBackground}>
-        <TouchableOpacity style={styles.backButton}>
+        <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
           <Text style={styles.backButtonText}>{'<'}</Text>
         </TouchableOpacity>
       </View>
