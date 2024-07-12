@@ -5,61 +5,61 @@ import user_login from '../../userApi';
 import { AsyncStorage } from 'react-native';
 
 const IniciarSesion = ({ navigation }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [Email, setEmail] = useState('');
+  const [Contraseña, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-
-  const handleLogin = () => {
-    user_login({ email, password }).then((result) => {
-      if (result === "Inicio de sesión exitoso") {
-        AsyncStorage.setItem("AccessToken", result.data);
-        navigation.replace("Home");
-      } else {
-        setErrorMessage("Error en inicio de sesión");
-        // Aquí puedes mostrar un mensaje de error al usuario si el inicio de sesión falla
-        Alert.alert("Error", "Inicio de sesión fallido. Verifica tus credenciales.");
+ 
+  const handleLogin = () =>
+    {
+      let data = {
+        email: Email,
+        contraseña: Contraseña
       }
-    });
-  };
-
+      user_login(data).then((result) => {
+          if(result == "Inicio de sesión exitoso")
+            {
+              AsyncStorage.setItem("AccessToken", result.data);
+              navigation.replace("Home")
+            }
+        })
+    };
   return (
     <View style={styles.container}>
-      <View style={styles.topBackground}>
-      </View>
-      <View style={styles.contentContainer}>
-        <View style={styles.logoContainer}>
-          <Image
-            source={require('../../../assets/images/logo.jpg')}
-            style={styles.logo}
-          />
-        </View>
-        <Text style={styles.title}>Iniciar Sesión</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Ingresá tu email"
-          value={email}
-          onChangeText={setEmail}
-          autoCapitalize="none"
-          keyboardType="email-address"
+      <View style={styles.logoContainer}>
+        <Image
+          source={require('../../../assets/images/logo.jpg')}
+          style={styles.logo}
         />
-        <TextInput
-          style={styles.input}
-          placeholder="Ingresá tu contraseña"
-          secureTextEntry
-          value={password}
-          onChangeText={setPassword}
-        />
-        <TouchableOpacity onPress={() => navigation.navigate('OlvidasteContraseña')}>
-          <Text style={styles.forgotPassword}>¿Olvidaste tu contraseña?</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('Registro')}>
-          <Text style={styles.register}>¿No tenés una cuenta? <Text style={styles.registerLink}>Regístrate</Text></Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Home')}>
-        {/* onPress={handleLogin} */}
-          <Text style={styles.buttonText}>Iniciar Sesión</Text>
-        </TouchableOpacity>
       </View>
+      <Text style={styles.title}>Iniciá Sesión</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Ingresá tu email"
+        value = {Email}
+        onChangeText={(text) =>setEmail(text)}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Ingresá tu contraseña"
+        secureTextEntry
+        value = {Contraseña}
+        onChangeText={(text) =>setPassword(text)}
+      />
+      <TouchableOpacity>
+        <Text style={styles.forgotPassword}>¿Olvidaste tu contraseña?</Text>
+      </TouchableOpacity>
+      <View>
+      <TouchableOpacity onPress={() => navigation.navigate('Registro')}>
+        <Text style={styles.register}>¿No tenés una cuenta? <Text style={styles.registerLink}>Regístrate</Text></Text>
+      </TouchableOpacity>
+      </View>
+      
+      <View>
+        <TouchableOpacity style={styles.button} onPress={(handleLogin)}>
+        <Text style={styles.buttonText}>Iniciar Sesión</Text>
+      </TouchableOpacity>
+      </View>
+      
     </View>
   );
 };
