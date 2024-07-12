@@ -1,32 +1,33 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import user_login from '../../userApi';
-import { AsyncStorage } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const IniciarSesion = ({ navigation }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [gmail, setEmail] = useState('');
+  const [contraseña, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-
-  const handleLogin = () => {
-    user_login({ email, password }).then((result) => {
-      if (result === "Inicio de sesión exitoso") {
-        AsyncStorage.setItem("AccessToken", result.data);
-        navigation.replace("Home");
-      } else {
-        setErrorMessage("Error en inicio de sesión");
-        // Aquí puedes mostrar un mensaje de error al usuario si el inicio de sesión falla
-        Alert.alert("Error", "Inicio de sesión fallido. Verifica tus credenciales.");
+ 
+  const handleLogin = () =>
+    {
+      let data = {
+        Gmail: gmail,
+        Contraseña: contraseña
       }
-    });
-  };
+      user_login(data).then((result) => {
+          if(result.status == 200)
+            {
+              AsyncStorage.setItem("AccessToken", result.data);
+              navigation.navigate("Home")
+            }
+        })
+    };
+
+  
 
   return (
     <View style={styles.container}>
       <View style={styles.topBackground}>
-        <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-          <Text style={styles.backButtonText}>{'<'}</Text>
-        </TouchableOpacity>
       </View>
       <View style={styles.contentContainer}>
         <View style={styles.logoContainer}>
@@ -39,7 +40,7 @@ const IniciarSesion = ({ navigation }) => {
         <TextInput
           style={styles.input}
           placeholder="Ingresá tu email"
-          value={email}
+          value={gmail}
           onChangeText={setEmail}
           autoCapitalize="none"
           keyboardType="email-address"
@@ -48,7 +49,7 @@ const IniciarSesion = ({ navigation }) => {
           style={styles.input}
           placeholder="Ingresá tu contraseña"
           secureTextEntry
-          value={password}
+          value={contraseña}
           onChangeText={setPassword}
         />
         <TouchableOpacity onPress={() => navigation.navigate('OlvidasteContraseña')}>
@@ -57,7 +58,7 @@ const IniciarSesion = ({ navigation }) => {
         <TouchableOpacity onPress={() => navigation.navigate('Registro')}>
           <Text style={styles.register}>¿No tenés una cuenta? <Text style={styles.registerLink}>Regístrate</Text></Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Home')}>
+        <TouchableOpacity style={styles.button} onPress={handleLogin}>
         {/* onPress={handleLogin} */}
           <Text style={styles.buttonText}>Iniciar Sesión</Text>
         </TouchableOpacity>
@@ -78,13 +79,6 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     paddingTop: 40,
     paddingLeft: 20,
-  },
-  backButton: {
-    alignSelf: 'flex-start',
-  },
-  backButtonText: {
-    fontSize: 24,
-    color: '#FFFFFF',
   },
   contentContainer: {
     flex: 1,

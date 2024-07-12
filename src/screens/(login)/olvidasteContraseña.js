@@ -6,8 +6,11 @@ const OlvidasteContraseña = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.topBackground}>
-        <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-          <Text style={styles.backButtonText}>{'<'}</Text>
+      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+        <Image
+            source={require('../../../assets/images/back.png')}
+            style={styles.backButton}
+          />
         </TouchableOpacity>
       </View>
       <View style={styles.contentContainer}>
@@ -45,10 +48,8 @@ const styles = StyleSheet.create({
   },
   backButton: {
     alignSelf: 'flex-start',
-  },
-  backButtonText: {
-    fontSize: 24,
-    color: '#FFFFFF',
+    width: 30,
+    height: 30,
   },
   contentContainer: {
     flex: 1,
