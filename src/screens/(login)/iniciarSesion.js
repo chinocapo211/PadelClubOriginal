@@ -59,7 +59,6 @@ const IniciarSesion = ({ navigation }) => {
         <Text style={styles.buttonText}>Iniciar Sesión</Text>
       </TouchableOpacity>
       </View>
-      
     </View>
   );
 };
