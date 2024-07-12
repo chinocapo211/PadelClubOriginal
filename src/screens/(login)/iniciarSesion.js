@@ -5,15 +5,15 @@ import user_login from '../../userApi';
 import { AsyncStorage } from 'react-native';
 
 const IniciarSesion = ({ navigation }) => {
-  const [Email, setEmail] = useState('');
-  const [Contraseña, setPassword] = useState('');
+  const [gmail, setEmail] = useState('');
+  const [contraseña, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
  
   const handleLogin = () =>
     {
       let data = {
-        email: Email,
-        contraseña: Contraseña
+        Gmail: gmail,
+        Contraseña: contraseña
       }
       user_login(data).then((result) => {
           if(result == "Inicio de sesión exitoso")
@@ -35,14 +35,14 @@ const IniciarSesion = ({ navigation }) => {
       <TextInput
         style={styles.input}
         placeholder="Ingresá tu email"
-        value = {Email}
+        value = {gmail}
         onChangeText={(text) =>setEmail(text)}
       />
       <TextInput
         style={styles.input}
         placeholder="Ingresá tu contraseña"
         secureTextEntry
-        value = {Contraseña}
+        value = {contraseña}
         onChangeText={(text) =>setPassword(text)}
       />
       <TouchableOpacity>
