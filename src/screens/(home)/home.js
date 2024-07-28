@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import NavbarHigh from '../../components/navbarHigh' 
+import NavbarLow from '../../components/navbarLow';
 const screenWidth = Dimensions.get('window').width;
 
 const Home = ({ navigation }) => {
@@ -29,7 +30,9 @@ const Home = ({ navigation }) => {
         >
           <Text style={styles.buttonText}>Amigos</Text>
         </TouchableOpacity>
+        
       </View>
+      <NavbarLow/>
     </View>
     
   );

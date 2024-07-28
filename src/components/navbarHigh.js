@@ -1,4 +1,4 @@
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import React from 'react';
 import { Feather } from '@expo/vector-icons';
 
@@ -6,12 +6,16 @@ const NavbarHigh = ({ navigation }) => {
     return (
       <View style={styles.container}>
         <View style={styles.topSection}>
+        <TouchableOpacity onPress={() => navigation.navigate('InicioJugar')}>
           <Feather name="bell" size={24} color="black" />
+        </TouchableOpacity>
           <Image
             source={require('../../assets/images/logo.jpg')}
             style={styles.logo}
           />
-          <Feather name="user" size={26} color="black"/>
+          <TouchableOpacity onPress={() => navigation.navigate('InicioJugar')}>
+            <Feather name="user" size={26} color="black"/>
+          </TouchableOpacity>
         </View>
       </View>
     );

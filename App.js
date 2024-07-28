@@ -16,6 +16,7 @@ import IngresarCodigo from './src/screens/(login)/ingresarCodigo';
 import CrearNuevaContraseña from './src/screens/(login)/crearNuevaContraseña';
 import ContraseñaExitosa from './src/screens/(login)/contraseñaExitosa';
 import Amigos from './src/screens/(home)/amigos';
+import NavbarHigh from './src/components/navbarHigh';
 
 const Stack = createStackNavigator();
 
@@ -23,7 +24,7 @@ const Stack = createStackNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="IniciarSesion" screenOptions={{ headerShown: false }}>
+      <Stack.Navigator initialRouteName="Home" screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="Ajustes" component={Ajustes} />
         <Stack.Screen name="Historial" component={Historial} />
@@ -38,7 +39,7 @@ export default function App() {
         <Stack.Screen name="CrearNuevaContraseña" component={CrearNuevaContraseña} />
         <Stack.Screen name="ContraseñaExitosa" component={ContraseñaExitosa} />
         <Stack.Screen name="Amigos" component={Amigos} />
-
+        <Stack.Screen name="NavbarHigh" component={NavbarHigh}/>
       </Stack.Navigator>
     </NavigationContainer>
   );}
