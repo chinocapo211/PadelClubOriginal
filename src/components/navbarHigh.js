@@ -9,6 +9,10 @@ const NavbarHigh = ({ navigation }) => {
         <TouchableOpacity onPress={() => navigation.navigate('InicioJugar')}>
           <Feather name="bell" size={24} color="black" />
         </TouchableOpacity>
+        <Image
+            source={require('../../assets/images/logo.jpg')}
+            style={styles.logo}
+          />
           <TouchableOpacity onPress={() => navigation.navigate('InicioJugar')}>
             <Feather name="user" size={26} color="black"/>
           </TouchableOpacity>
@@ -35,8 +39,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flex:1,
     alignItems: 'center',
-    justifyContent: 'space-around',
-    paddingHorizontal: '1%',  // Espaciado horizontal para los elementos
+    justifyContent: 'center',
+    paddingHorizontal: '20%',  // Espaciado horizontal para los elementos
     left:0,
     top:0,
   },
