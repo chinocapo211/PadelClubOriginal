@@ -61,7 +61,6 @@ function TabBarStackScreen() {
 export default function App() {
   return (
     <NavigationContainer>
-<<<<<<< HEAD
       <AppStack.Navigator screenOptions={{ headerShown: false }}>
         {isAuthenticated ? (
           <>
@@ -72,25 +71,6 @@ export default function App() {
           <AppStack.Screen name="Login" component={LoginStackScreen} />
         )}
       </AppStack.Navigator>
-=======
-      <Stack.Navigator initialRouteName="Perfil" screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Home" component={Home} />
-        <Stack.Screen name="Ajustes" component={Ajustes} />
-        <Stack.Screen name="Historial" component={Historial} />
-        <Stack.Screen name="Perfil" component={Perfil} />
-        <Stack.Screen name="Notifiaciones" component={Notificaciones} />
-        <Stack.Screen name="InicioJugar" component={InicioJugar} />
-        <Stack.Screen name="Registro" component={Registro} />
-        <Stack.Screen name="IniciarSesion" component={IniciarSesion} />
-        <Stack.Screen name="MostrarJugadores" component={MostrarJugadores} />
-        <Stack.Screen name="OlvidasteContraseña" component={OlvidasteContraseña} />
-        <Stack.Screen name="IngresarCodigo" component={IngresarCodigo} />
-        <Stack.Screen name="CrearNuevaContraseña" component={CrearNuevaContraseña} />
-        <Stack.Screen name="ContraseñaExitosa" component={ContraseñaExitosa} />
-        <Stack.Screen name="Amigos" component={Amigos} />
-        <Stack.Screen name="NavbarHigh" component={NavbarHigh}/>
-      </Stack.Navigator>
->>>>>>> d674c22ce84166c301d6b1249236e05a418a42e9
     </NavigationContainer>
   );
 }
