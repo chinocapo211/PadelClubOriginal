@@ -13,3 +13,5 @@ npx expo install
 npx expo install react-native-web react-dom @expo/metro-runtime
 
 npm install -g expo-cli
+
+npm install @react-navigation/native @react-navigation/stack

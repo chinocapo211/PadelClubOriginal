@@ -1,15 +1,16 @@
 import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import React from 'react';
 import { Feather } from '@expo/vector-icons';
-
-const NavbarHigh = ({ navigation }) => {
+import { useNavigation } from '@react-navigation/native';
+const NavbarHigh = () => {
+  const navigation = useNavigation();
     return (
       <View style={styles.container}>
         <View style={styles.topSection}>
-        <TouchableOpacity onPress={() => navigation.navigate('InicioJugar')}>
+        <TouchableOpacity onPress={() => navigation.navigate('NavBar', {screen: 'Notificaciones'})}>
           <Feather name="bell" size={24} color="black" />
         </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('InicioJugar')}>
+          <TouchableOpacity onPress={() => navigation.navigate('NavBar', {screen: 'Perfil'})}>
             <Feather name="user" size={26} color="black"/>
           </TouchableOpacity>
         </View>
