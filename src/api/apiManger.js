@@ -1,12 +1,12 @@
 import axios from "axios";
 const baseURL = "http://localhost:3005/"
 
- const apiPost = async  (method, headers, data, path) => {
-    
+ const apiManager = async  (method, headers, data, path) => {
+    console.log(headers);
     try {
         const result = await axios({
           method: method,
-          url: "http://localhost:3005/auth/login",
+          url: baseURL+path,
           data: data,
           headers: headers,
         });
@@ -16,4 +16,6 @@ const baseURL = "http://localhost:3005/"
         throw new Error(`Error en la solicitud POST a ${path}: Error`);
       }
 }
-export default apiPost
+
+
+export default apiManager

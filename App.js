@@ -17,14 +17,16 @@ import CrearNuevaContraseña from './src/screens/(login)/crearNuevaContraseña';
 import ContraseñaExitosa from './src/screens/(login)/contraseñaExitosa';
 import Amigos from './src/screens/(home)/amigos';
 import NavbarHigh from './src/components/navbarHigh';
+import { AuthProvider } from './src/components/AuthProvider';
 
 const Stack = createStackNavigator();
 
 
 export default function App() {
   return (
+    <AuthProvider>
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Notifiaciones" screenOptions={{ headerShown: false }}>
+      <Stack.Navigator initialRouteName="IniciarSesion" screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="Ajustes" component={Ajustes} />
         <Stack.Screen name="Historial" component={Historial} />
@@ -42,4 +44,5 @@ export default function App() {
         <Stack.Screen name="NavbarHigh" component={NavbarHigh}/>
       </Stack.Navigator>
     </NavigationContainer>
+    </AuthProvider>
   );}

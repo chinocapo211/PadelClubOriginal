@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet } from 'react-native';
-import user_login from '../../userApi';
+import userApi from '../../api/userApi';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const IniciarSesion = ({ navigation }) => {
@@ -8,20 +8,28 @@ const IniciarSesion = ({ navigation }) => {
   const [contraseña, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
  
-  const handleLogin = () =>
-    {
-      let data = {
-        Gmail: gmail,
-        Contraseña: contraseña
-      }
-      user_login(data).then((result) => {
-          if(result.status == 200)
-            {
-              AsyncStorage.setItem("AccessToken", result.data);
-              navigation.navigate("Home")
-            }
-        })
+  const handleLogin = async () => {
+    const data = {
+      Gmail: gmail,
+      Contraseña: contraseña,
     };
+    
+    try {
+      const result = await userApi.user_login(data);
+      
+      if (result.status === 200) {
+        // Asume que el token se encuentra en result.data.token
+        const token = result.data.token;
+        await AsyncStorage.setItem('@AccessToken', token);
+        navigation.navigate('Home');
+      } else {
+        setErrorMessage('Error de login');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      setErrorMessage('Error de login');
+    }
+  };
 
   
 

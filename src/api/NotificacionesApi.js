@@ -1,8 +1,8 @@
-import apiPost from './apiManger';
+import apiManager from './apiManger';
 
-export const user_login = async (data) => {
+export const Notificaciones = async (data,Token) => {
   try {
-    const result = await apiPost("POST", {}, data, "auth/login");
+    const result = await apiManager("GET", Token, data, "Notificaciones");
     console.log(result);
     return result;
   } catch (error) {
