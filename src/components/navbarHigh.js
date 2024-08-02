@@ -1,15 +1,20 @@
 import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import React from 'react';
 import { Feather } from '@expo/vector-icons';
-
-const NavbarHigh = ({ navigation }) => {
+import { useNavigation } from '@react-navigation/native';
+const NavbarHigh = () => {
+  const navigation = useNavigation();
     return (
       <View style={styles.container}>
         <View style={styles.topSection}>
-        <TouchableOpacity onPress={() => navigation.navigate('InicioJugar')}>
+        <TouchableOpacity onPress={() => navigation.navigate('NavBar', {screen: 'Notificaciones'})}>
           <Feather name="bell" size={24} color="black" />
         </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('InicioJugar')}>
+        <Image
+            source={require('../../assets/images/logo.jpg')}
+            style={styles.logo}
+          />
+          <TouchableOpacity onPress={() => navigation.navigate('NavBar', {screen: 'Perfil'})}>
             <Feather name="user" size={26} color="black"/>
           </TouchableOpacity>
         </View>
@@ -35,8 +40,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flex:1,
     alignItems: 'center',
-    justifyContent: 'space-around',
-    paddingHorizontal: '1%',  // Espaciado horizontal para los elementos
+    justifyContent: 'center',
+    paddingHorizontal: '20%',  // Espaciado horizontal para los elementos
     left:0,
     top:0,
   },

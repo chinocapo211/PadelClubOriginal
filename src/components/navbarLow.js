@@ -1,17 +1,18 @@
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import React from 'react';
 import { Feather } from '@expo/vector-icons';
-
-const NavbarLow = ({ navigation }) => {
+import { useNavigation } from '@react-navigation/native';
+const NavbarLow = () => {
+  const navigation = useNavigation();
     return (
       <View style={styles.container}>
-          <TouchableOpacity onPress={() => navigation.navigate('Notifications')}>
+          <TouchableOpacity onPress={() => navigation.navigate('TabBar', {screen: 'Home'})}>
             <Feather name="home" size={24} color="black" />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
+          <TouchableOpacity onPress={() => navigation.navigate('TabBar',{screen:'Historial'})}>
             <Feather name="book-open" size={24} color="black" />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
+          <TouchableOpacity onPress={() => navigation.navigate('TabBar',{screen:'Ajustes'})}>
             <Feather name="settings" size={24} color="black" />
           </TouchableOpacity>
       </View>
