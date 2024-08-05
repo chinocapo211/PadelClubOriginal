@@ -8,34 +8,34 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const screenWidth = Dimensions.get('window').width;
 
-const Home = ({ navigation }) => {
-  const { token, logout } = useAuth();
-  const [userData, setUserData] = useState(null);
+ const Home = ({ navigation }) => {
+//   const { token, logout } = useAuth();
+//   const [userData, setUserData] = useState(null);
   
-  useEffect(() => {
-    const fetchUserData = async () => {
-      if (token) {
-        try {
+//   useEffect(() => {
+//     const fetchUserData = async () => {
+//       if (token) {
+//         try {
           
-          const response = await userApi.ObtenerInfoJugador( await AsyncStorage.setItem('@AccessToken'));
+//           const response = await userApi.ObtenerInfoJugador( await AsyncStorage.setItem('@AccessToken'));
 
-          if (response.error) {
-            console.error('Error en la solicitud:', response.error);
-            return;
-          }
+//           if (response.error) {
+//             console.error('Error en la solicitud:', response.error);
+//             return;
+//           }
 
-          // Asume que `response` ya contiene los datos del usuario
-          setUserData(response);
-          console.log('User data:', response);
-        } catch (error) {
-          console.error('Failed to fetch user data:', error);
-        }
-      }
-    };
+//           // Asume que `response` ya contiene los datos del usuario
+//           setUserData(response);
+//           console.log('User data:', response);
+//         } catch (error) {
+//           console.error('Failed to fetch user data:', error);
+//         }
+//       }
+//     };
 
-    fetchUserData(); // Llama a la función para realizar la solicitud
+//     fetchUserData(); // Llama a la función para realizar la solicitud
 
-  }, [token]);
+//   }, [token]);
 
   
   return (

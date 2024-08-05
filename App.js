@@ -30,8 +30,8 @@ const AppStack = createStackNavigator();
 function LoginStackScreen() {
   return (
     <LoginStack.Navigator screenOptions={{ headerShown: false }}>
-      <LoginStack.Screen name="Registro" component={Registro} />
       <LoginStack.Screen name="IniciarSesion" component={IniciarSesion} />
+      <LoginStack.Screen name="Registro" component={Registro} />
       <LoginStack.Screen name="OlvidasteContraseña" component={OlvidasteContraseña} />
       <LoginStack.Screen name="IngresarCodigo" component={IngresarCodigo} />
       <LoginStack.Screen name="CrearNuevaContraseña" component={CrearNuevaContraseña} />
