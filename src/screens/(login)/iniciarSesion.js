@@ -19,7 +19,8 @@ const IniciarSesion = ({ navigation }) => {
       
       if (result.status === 200) {
     
-        const token = result.data.token;
+        const token = result.data.access_Token;
+        console.log(token);
         await AsyncStorage.setItem('@AccessToken', token);
         navigation.navigate('Home');
       } else {
