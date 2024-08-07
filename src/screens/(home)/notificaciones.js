@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import NavbarHigh from '../../components/navbarHigh';
 import NavbarLow from '../../components/navbarLow';
