@@ -27,12 +27,29 @@ export const AuthProvider = ({ children }) => {
     await AsyncStorage.removeItem('@AccessToken');
     setIsAuthenticated(false);
   };
-
+  useEffect(() => {
+    
+    const checkAuth = async () => {
+      try {
+        const token = await AsyncStorage.getItem('@AccessToken');
+        setIsAuthenticated(!!token);
+      } catch (error) {
+        console.error('Error checking authentication:', error);
+      }
+    };checkAuth();
+  }, []);
+  
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated,setIsAuthenticated, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-export const useAuth = () => useContext(AuthContext);
+export function useAuth() {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+}

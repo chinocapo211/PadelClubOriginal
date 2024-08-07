@@ -20,7 +20,8 @@ const IniciarSesion = ({ navigation }) => {
 
       if (result.status === 200) {
         const token = result.data.access_Token;
-        navigation.navigate('TabBar', { screen: 'Home' });
+        login(token);
+        navigation.navigate('TabBar', { screen: "Home" });
       } else {
         setErrorMessage('Error de login');
       }

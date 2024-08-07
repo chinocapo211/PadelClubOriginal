@@ -34,7 +34,6 @@ const Home = ({ navigation }) => {
         console.error('Failed to fetch user data or token:', error);
       }
     };
-
     fetchTokenAndData();
   }, []);
 
