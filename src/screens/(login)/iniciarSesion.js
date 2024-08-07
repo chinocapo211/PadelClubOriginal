@@ -18,7 +18,7 @@ const IniciarSesion = ({ navigation }) => {
       const result = await userApi.user_login(data);
       
       if (result.status === 200) {
-        // Asume que el token se encuentra en result.data.token
+    
         const token = result.data.token;
         await AsyncStorage.setItem('@AccessToken', token);
         navigation.navigate('Home');

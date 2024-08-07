@@ -20,7 +20,7 @@ import NavbarHigh from './src/components/navbarHigh';
 import { AuthProvider } from './src/components/AuthProvider';
 
 // Estado de autenticación simulado
-const isAuthenticated = true; // Cambia esto para simular autenticación
+const isAuthenticated = false; // Cambia esto para simular autenticación
 
 const LoginStack = createStackNavigator();
 const TabBarStack = createStackNavigator();
@@ -61,7 +61,7 @@ function TabBarStackScreen() {
 
 export default function App() {
   return (
-    
+    <AuthProvider>
     <NavigationContainer>
       <AppStack.Navigator screenOptions={{ headerShown: false }}>
         {isAuthenticated ? (
@@ -74,6 +74,7 @@ export default function App() {
         )}
       </AppStack.Navigator>
     </NavigationContainer>
+    </AuthProvider>
   );
 }
 
