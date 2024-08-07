@@ -1,28 +1,26 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import userApi from '../../api/userApi';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useAuth } from '../../components/AuthProvider'; // Ajusta la ruta según tu estructura
 
 const IniciarSesion = ({ navigation }) => {
   const [gmail, setEmail] = useState('');
   const [contraseña, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
- 
+  const { login } = useAuth();
+
   const handleLogin = async () => {
     const data = {
       Gmail: gmail,
       Contraseña: contraseña,
     };
-    
+
     try {
       const result = await userApi.user_login(data);
-      
+
       if (result.status === 200) {
-    
         const token = result.data.access_Token;
-        console.log(token);
-        await AsyncStorage.setItem('@AccessToken', token);
-        navigation.navigate('Home');
+        navigation.navigate('TabBar', { screen: 'Home' });
       } else {
         setErrorMessage('Error de login');
       }
@@ -31,8 +29,6 @@ const IniciarSesion = ({ navigation }) => {
       setErrorMessage('Error de login');
     }
   };
-
-  
 
   return (
     <View style={styles.container}>
@@ -68,7 +64,6 @@ const IniciarSesion = ({ navigation }) => {
           <Text style={styles.register}>¿No tenés una cuenta? <Text style={styles.registerLink}>Regístrate</Text></Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        {/* onPress={handleLogin} */}
           <Text style={styles.buttonText}>Iniciar Sesión</Text>
         </TouchableOpacity>
       </View>

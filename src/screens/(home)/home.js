@@ -2,42 +2,42 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import NavbarHigh from '../../components/navbarHigh';
 import NavbarLow from '../../components/navbarLow';
-import { useAuth } from '../../components/AuthProvider';
 import userApi from '../../api/userApi';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const screenWidth = Dimensions.get('window').width;
 
- const Home = ({ navigation }) => {
-   const { token, logout } = useAuth();
-   const [userData, setUserData] = useState(null);
-  
-   useEffect(() => {
-     const fetchUserData = async () => {
-      if (token) {
-        try {
-          
-          const response = await userApi.ObtenerInfoJugador( await AsyncStorage.setItem('@AccessToken'));
+const Home = ({ navigation }) => {
+  const [userData, setUserData] = useState(null);
+  const [token, setToken] = useState(null);
 
-           if (response.error) {
-             console.error('Error en la solicitud:', response.error);
-           return;
+  useEffect(() => {
+    const fetchTokenAndData = async () => {
+      try {
+      
+        const storedToken = await AsyncStorage.getItem('@AccessToken');
+        if (storedToken) {
+          setToken(storedToken);
+
+      
+          const response = await userApi.ObtenerInfoJugador(storedToken);
+          if (response.error) {
+            console.error('Error en la solicitud:', response.error);
+            return;
           }
-
-           
-           setUserData(response);
-           console.log('User data:', response);
-         } catch (error) {
-           console.error('Failed to fetch user data:', error);
-         }
+          setUserData(response);
+          console.log('User data:', response);
+        } else {
+          console.log('Token no encontrado');
+        }
+      } catch (error) {
+        console.error('Failed to fetch user data or token:', error);
       }
     };
 
-    fetchUserData(); 
+    fetchTokenAndData();
+  }, []);
 
-   }, [token]);
-
-  
   return (
     <View style={styles.container}>
       <NavbarHigh />

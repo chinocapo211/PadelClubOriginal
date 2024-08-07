@@ -7,9 +7,7 @@ import Ajustes from './src/screens/(home)/ajustes';
 import Historial from './src/screens/(home)/historial';
 import Perfil from './src/screens/(home)/perfil';
 import Notificaciones from './src/screens/(home)/notificaciones';
-import InicioJugar from './src/screens/(jugar)/inicioJugar';
 import IniciarSesion from './src/screens/(login)/iniciarSesion';
-import MostrarJugadores from './src/screens/(jugar)/mostrarJugadores';
 import Registro from './src/screens/(login)/registro';
 import OlvidasteContraseña from './src/screens/(login)/olvidasteContraseña';
 import IngresarCodigo from './src/screens/(login)/ingresarCodigo';
@@ -17,10 +15,7 @@ import CrearNuevaContraseña from './src/screens/(login)/crearNuevaContraseña';
 import ContraseñaExitosa from './src/screens/(login)/contraseñaExitosa';
 import Amigos from './src/screens/(home)/amigos';
 import NavbarHigh from './src/components/navbarHigh';
-import { AuthProvider } from './src/components/AuthProvider';
-
-// Estado de autenticación simulado
-const isAuthenticated = false; // Cambia esto para simular autenticación
+import { AuthProvider, useAuth } from './src/components/AuthProvider';
 
 const LoginStack = createStackNavigator();
 const TabBarStack = createStackNavigator();
@@ -59,21 +54,29 @@ function TabBarStackScreen() {
   );
 }
 
+function AppNavigator() {
+  const { isAuthenticated } = useAuth();
+
+  return (
+    <AppStack.Navigator screenOptions={{ headerShown: false }}>
+      {isAuthenticated ? (
+        <>
+          <AppStack.Screen name="TabBar" component={TabBarStackScreen} />
+          <AppStack.Screen name="NavBar" component={NavBarStackScreen} />
+        </>
+      ) : (
+        <AppStack.Screen name="Login" component={LoginStackScreen} />
+      )}
+    </AppStack.Navigator>
+  );
+}
+
 export default function App() {
   return (
     <AuthProvider>
-    <NavigationContainer>
-      <AppStack.Navigator screenOptions={{ headerShown: false }}>
-        {isAuthenticated ? (
-          <>
-            <AppStack.Screen name="TabBar" component={TabBarStackScreen} />
-            <AppStack.Screen name="NavBar" component={NavBarStackScreen} />
-          </>
-        ) : (
-          <AppStack.Screen name="Login" component={LoginStackScreen} />
-        )}
-      </AppStack.Navigator>
-    </NavigationContainer>
+      <NavigationContainer>
+        <AppNavigator />
+      </NavigationContainer>
     </AuthProvider>
   );
 }
