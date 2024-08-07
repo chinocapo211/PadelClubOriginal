@@ -12,8 +12,15 @@ const user_login = async (data) => {
 };
 
 const ObtenerInfoJugador = async (token) => {
+  console.log(token);
+  const method = "POST";
+    const headers = {
+      "Content-Type": "application/json",  // Asegúrate de incluir cualquier otro encabezado necesario
+    };const data = {};  // Sustituye esto por los datos que necesites enviar
+    const path = "auth/Decode";
   try {
-    const result = await apiManager('GET', token, {}, 'auth/Decode');
+    
+    const response = await apiManager(method, headers, data, path, token);
     console.log('User info response:', result);
     return result;
   } catch (error) {

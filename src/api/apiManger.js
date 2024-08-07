@@ -1,14 +1,16 @@
 import axios from "axios";
 const baseURL = "http://localhost:3005/"
 
- const apiManager = async  (method, headers, data, path) => {
+ const apiManager = async  (method,headers, data, path) => {
     console.log(headers);
     try {
         const result = await axios({
           method: method,
           url: baseURL+path,
           data: data,
-          headers: headers,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          }
         });
         console.log(result);
         return result;

@@ -14,7 +14,6 @@ import IngresarCodigo from './src/screens/(login)/ingresarCodigo';
 import CrearNuevaContraseña from './src/screens/(login)/crearNuevaContraseña';
 import ContraseñaExitosa from './src/screens/(login)/contraseñaExitosa';
 import Amigos from './src/screens/(home)/amigos';
-import NavbarHigh from './src/components/navbarHigh';
 import { AuthProvider, useAuth } from './src/components/AuthProvider';
 
 const LoginStack = createStackNavigator();
@@ -50,6 +49,7 @@ function TabBarStackScreen() {
       <TabBarStack.Screen name="Home" component={Home} />
       <TabBarStack.Screen name="Ajustes" component={Ajustes} />
       <TabBarStack.Screen name="Historial" component={Historial} />
+      <TabBarStack.Screen name="Amigos" component={Amigos} />
     </TabBarStack.Navigator>
   );
 }
@@ -80,7 +80,6 @@ export default function App() {
     </AuthProvider>
   );
 }
-
   /*
         <LoginStack.Screen name="InicioJugar" component={InicioJugar} />
         <LoginStack.Screen name="MostrarJugadores" component={MostrarJugadores} />
