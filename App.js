@@ -19,6 +19,7 @@ import { AuthProvider, useAuth } from './src/components/AuthProvider';
 const LoginStack = createStackNavigator();
 const TabBarStack = createStackNavigator();
 const NavBarStack = createStackNavigator();
+const HomeStack = createStackNavigator();
 const AppStack = createStackNavigator();
 
 function LoginStackScreen() {
@@ -34,6 +35,14 @@ function LoginStackScreen() {
   );
 }
 
+function HomeStackScreen() {
+  return (
+    <HomeStack.Navigator screenOptions={{ headerShown: false }}>
+      <HomeStack.Screen name="HomeMain" component={Home} />
+    </HomeStack.Navigator>
+  );
+}
+
 function NavBarStackScreen() {
   return (
     <NavBarStack.Navigator screenOptions={{ headerShown: false }}>
@@ -46,7 +55,7 @@ function NavBarStackScreen() {
 function TabBarStackScreen() {
   return (
     <TabBarStack.Navigator screenOptions={{ headerShown: false }}>
-      <TabBarStack.Screen name="Home" component={Home} />
+      <TabBarStack.Screen name="HomeStack" component={HomeStackScreen} />
       <TabBarStack.Screen name="Ajustes" component={Ajustes} />
       <TabBarStack.Screen name="Historial" component={Historial} />
       <TabBarStack.Screen name="Amigos" component={Amigos} />

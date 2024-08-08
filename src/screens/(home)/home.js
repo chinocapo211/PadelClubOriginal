@@ -5,7 +5,7 @@ import NavbarLow from '../../components/navbarLow';
 import userApi from '../../api/userApi';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const screenWidth = Dimensions.get('window').width;
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 const Home = ({ navigation }) => {
   const [userData, setUserData] = useState(null);
@@ -14,12 +14,10 @@ const Home = ({ navigation }) => {
   useEffect(() => {
     const fetchTokenAndData = async () => {
       try {
-      
         const storedToken = await AsyncStorage.getItem('@AccessToken');
         if (storedToken) {
           setToken(storedToken);
 
-      
           const response = await userApi.ObtenerInfoJugador(storedToken);
           if (response.error) {
             console.error('Error en la solicitud:', response.error);
@@ -73,17 +71,19 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    height: '100%',
+    paddingTop: screenHeight * 0.05,
+    paddingBottom: screenHeight * 0.05,
   },
   buttonContainer: {
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'flex-start',
     width: '80%',
-    maxWidth: 400,
+    maxWidth: screenWidth * 0.8,
+    paddingHorizontal: screenWidth * 0.05,
   },
   button: {
-    height: 130,
+    height: screenHeight * 0.15,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 10,
@@ -92,19 +92,16 @@ const styles = StyleSheet.create({
   },
   buttonPlay: {
     backgroundColor: '#00BFFF',
-    height: 150,
   },
   buttonTournaments: {
     backgroundColor: '#FF69B4',
-    height: 150,
   },
   buttonFriends: {
     backgroundColor: '#32CD32',
-    height: 150,
   },
   buttonText: {
     color: 'white',
-    fontSize: 35,
+    fontSize: screenWidth * 0.08,
   },
 });
 

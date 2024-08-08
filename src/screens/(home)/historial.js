@@ -1,51 +1,22 @@
 import React from 'react';
-import { View, Text, FlatList, StyleSheet, Image, Button, SafeAreaView } from 'react-native';
+import { View, Text, FlatList, StyleSheet, Image, Button, SafeAreaView, Dimensions } from 'react-native';
 import NavbarHigh from '../../components/navbarHigh';
 import NavbarLow from '../../components/navbarLow';
 
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
+
 const notificaciones = [
-  {
-    id: '1',
-    jugadores: [
-      { nombre: 'Raul', imagen: 'url-de-la-imagen-de-Raul' },
-      { nombre: 'Humberta', imagen: 'url-de-la-imagen-de-Humberta' },
-      { nombre: 'Marcos', imagen: 'url-de-la-imagen-de-Marcos' },
-      { nombre: 'Merentiel', imagen: 'url-de-la-imagen-de-Merentiel' },
-    ],
-    marcador: '2 - 1',
-    sets: '6-4 6-1 6-2',
-  },
-  {
-    id: '2',
-    jugadores: [
-      { nombre: 'Raul', imagen: 'url-de-la-imagen-de-Raul' },
-      { nombre: 'Humberta', imagen: 'url-de-la-imagen-de-Humberta' },
-      { nombre: 'Marcos', imagen: 'url-de-la-imagen-de-Marcos' },
-      { nombre: 'Merentiel', imagen: 'url-de-la-imagen-de-Merentiel' },
-    ],
-    marcador: '1 - 1',
-    sets: '6-4 1-6',
-  },
-  {
-    id: '3',
-    jugadores: [
-      { nombre: 'Raul', imagen: 'url-de-la-imagen-de-Raul' },
-      { nombre: 'Humberta', imagen: 'url-de-la-imagen-de-Humberta' },
-      { nombre: 'Marcos', imagen: 'url-de-la-imagen-de-Marcos' },
-      { nombre: 'Merentiel', imagen: 'url-de-la-imagen-de-Merentiel' },
-    ],
-    marcador: '1 - 2',
-    sets: '1-6 6-4 6-6',
-  },
+  // Datos de ejemplo
 ];
 
-const NotificacionesScreen = () => {
+const Historial = () => {
   return (
     <SafeAreaView style={styles.container}>
       <NavbarHigh />
       <FlatList
         data={notificaciones}
-        keyExtractor={item => item.id}
+        keyExtractor={(item) => item.id}
+        contentContainerStyle={styles.flatListContent}
         renderItem={({ item }) => (
           <View style={styles.notificacion}>
             <View style={styles.jugadoresContainer}>
@@ -84,50 +55,51 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
+  flatListContent: {
+    paddingTop: screenHeight * 0.02,  // Añade espacio en la parte superior
+    paddingBottom: screenHeight * 0.02, // Espacio para NavbarLow
+  },
   notificacion: {
     backgroundColor: '#f9f9f9',
-    padding: 15,
-    marginVertical: 8,
+    padding: screenHeight * 0.02,
+    marginVertical: screenHeight * 0.01,
     borderRadius: 5,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 1,
     elevation: 2,
-    marginTop: '32%',
-    marginBottom: '-12%',
-    
   },
   jugadoresContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 10,
+    marginBottom: screenHeight * 0.015,
   },
   jugador: {
     alignItems: 'center',
   },
   imagen: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
+    width: screenWidth * 0.15,
+    height: screenWidth * 0.15,
+    borderRadius: (screenWidth * 0.15) / 2,
   },
   nombre: {
-    marginTop: 5,
-    fontSize: 14,
+    marginTop: screenHeight * 0.01,
+    fontSize: screenWidth * 0.035,
     textAlign: 'center',
   },
   resultadoContainer: {
     alignItems: 'center',
   },
   marcador: {
-    fontSize: 24,
+    fontSize: screenWidth * 0.06,
     fontWeight: 'bold',
   },
   sets: {
-    fontSize: 12,
+    fontSize: screenWidth * 0.035,
     color: 'gray',
   },
 });
 
-export default NotificacionesScreen;
+export default Historial;
