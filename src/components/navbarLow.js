@@ -15,7 +15,7 @@ const NavbarLow = () => {
         style={styles.gradient}
       />
       <View style={styles.navbar}>
-        <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('TabBar', {screen: 'Home'})}>
+        <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('HomeStack', {screen: 'HomeMain'})}>
           <Feather name="home" size={24} color="black" />
           <Text style={styles.navText}>Home</Text>
         </TouchableOpacity>
