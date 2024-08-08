@@ -59,7 +59,7 @@ function AppNavigator() {
 
   return (
     <AppStack.Navigator screenOptions={{ headerShown: false }}>
-      {!isAuthenticated ? (
+      {isAuthenticated ? (
         <>
           <AppStack.Screen name="TabBar" component={TabBarStackScreen} />
           <AppStack.Screen name="NavBar" component={NavBarStackScreen} />
@@ -70,6 +70,7 @@ function AppNavigator() {
     </AppStack.Navigator>
   );
 }
+
 
 export default function App() {
   return (

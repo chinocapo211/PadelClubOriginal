@@ -12,19 +12,21 @@ const user_login = async (data) => {
 };
 
 const ObtenerInfoJugador = async (token) => {
-  console.log(token);
+  console.log('Token:', token);
   const method = "POST";
-    const headers = {
-      "Content-Type": "application/json",  // Asegúrate de incluir cualquier otro encabezado necesario
-    };const data = {};  // Sustituye esto por los datos que necesites enviar
-    const path = "auth/Decode";
+  const headers = {
+    "Content-Type": "application/json",
+    "Authorization": `Bearer ${token}`,  // Asegúrate de enviar el token en el encabezado Authorization
+  };
+  const data = {};  // Si no necesitas enviar datos en el cuerpo de la solicitud, puedes dejarlo vacío.
+  const path = "auth/Decode";  // Asegúrate de que esta ruta es correcta y está disponible en el servidor.
+  
   try {
-    
-    const response = await apiManager(method, headers, data, path, token);
-    console.log('User info response:', result);
-    return result;
+    const result = await apiManager(method, headers, data, path);
+    console.log('User info response:', result.data);  // Cambia result a result.data para acceder a los datos de la respuesta
+    return result.data;
   } catch (error) {
-    console.error('Error en ObtenerInfoJugador:', error);
+    console.error('Error en ObtenerInfoJugador:', error.message);
     return { error: error.message };
   }
 };

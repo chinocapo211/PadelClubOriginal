@@ -1,47 +1,53 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, FlatList } from 'react-native'; // Asegúrate de importar FlatList aquí
 import NavbarHigh from '../../components/navbarHigh';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import NavbarLow from '../../components/navbarLow';
+import NotificacionesApi from '../../api/NotificacionesApi';
 
 const Notificaciones = ({ navigation }) => {
-  const [isNotificacion, setNotificacion] = useState('');
-  const handleLogin = () =>
-    {
-      let data = {
-        Gmail: gmail,
-        Contraseña: contraseña
+  const [notificaciones, setNotificaciones] = useState([]);
+
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      try {
+        const storedToken = await AsyncStorage.getItem('@AccessToken');
+        if (storedToken) {
+          const response = await NotificacionesApi(storedToken);
+          if (response.error) {
+            console.error('Error en la solicitud:', response.error);
+            return;
+          }
+          setNotificaciones(response.notifications || []); // Asegúrate de que `response.notifications` es un array
+        } else {
+          console.log('Token no encontrado');
+        }
+      } catch (error) {
+        console.error('Failed to fetch notifications or token:', error);
       }
-      user_login(data).then((result) => {
-          if(result.status == 200)
-            {
-              AsyncStorage.setItem("AccessToken", result.data);
-              navigation.navigate("Home")
-            }
-        })
     };
+    fetchNotifications();
+  }, []);
+
+  const renderNotification = ({ item }) => (
+    <View style={styles.notificationItem}>
+      <Text style={styles.notificationText}>{item.mensaje}</Text> {/* Ajusta esto según la estructura de tu notificación */}
+    </View>
+  );
+
   return (
     <View style={styles.container}>
-      <NavbarHigh/>
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('MisClubes')}>
-        <Text style={styles.buttonText}>Sancion</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('PreguntasFrecuentes')}>
-        <Text style={styles.buttonText}>Global</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('TerminosCondiciones')}>
-        <Text style={styles.buttonText}>Aviso</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('CerrarSesion')}>
-        <Text style={styles.buttonText}>Invitacion</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('CerrarSesion')}>
-        <Text style={styles.buttonText}>Se confirmo el partido</Text>
-      </TouchableOpacity>
-      <NavbarLow/>
+      <NavbarHigh />
+      <FlatList
+        data={notificaciones}
+        renderItem={renderNotification}
+        keyExtractor={(item) => item.id.toString()} // Ajusta esto según el formato de tu notificación
+        contentContainerStyle={styles.list}
+      />
+      <NavbarLow />
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

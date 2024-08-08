@@ -1,8 +1,10 @@
 import apiManager from './apiManger';
+import userApi from './userApi';
 
-export const Notificaciones = async (data,Token) => {
+export const NotificacionesApi = async (token) => {
+  const Token = await userApi.ObtenerInfoJugador(token);
   try {
-    const result = await apiManager("GET", Token, data, "Notificaciones");
+    const result = await apiManager("GET", token, {}, `Notificaciones/:${Token.Usuario.id}`);
     console.log(result);
     return result;
   } catch (error) {
@@ -11,4 +13,4 @@ export const Notificaciones = async (data,Token) => {
   }
 };
 
-export default user_login
+export default NotificacionesApi
