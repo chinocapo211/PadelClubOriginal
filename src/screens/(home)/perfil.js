@@ -15,6 +15,8 @@ const Perfil = () => {
   const defeats = 68;
   const ranking = 34;
 
+  
+
   return (
     <View style={styles.container}>
       <NavbarHigh />
