@@ -1,11 +1,39 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet, Button } from 'react-native';
+import { View, Text, Image, StyleSheet, Button, Dimensions } from 'react-native';
 import NavbarHigh from '../../components/navbarHigh';
 import NavbarLow from '../../components/navbarLow';
+const { height } = Dimensions.get('window');
 const Historial = () => {
   return (
     <View style={styles.container}>
       <NavbarHigh/>
+      <View style={styles.matchContainer}>
+        <View style={styles.playerRow}>
+          <View style={styles.playerContainer}>
+            <Text style={styles.playerName}>Raul</Text>
+          </View>
+          <View style={styles.scoreContainer}>
+            <Text style={styles.score}>2 - 1</Text>
+            <Text style={styles.scoreDetails}>6-4 6-1 6-2</Text>
+          </View>
+          <View style={styles.playerContainer}>
+            <Text style={styles.playerName}>Marcos</Text>
+          </View>
+        </View>
+        <View style={styles.playerRow}>
+          <View style={styles.playerContainer}>
+            <Text style={styles.playerName}>Humberta</Text>
+          </View>
+          <View style={styles.scoreContainer}>
+            <Text style={styles.score}> - </Text>
+            <Text style={styles.scoreDetails}>6-4 1-6</Text>
+          </View>
+          <View style={styles.playerContainer}>
+            <Text style={styles.playerName}>Merentiel</Text>
+          </View>
+        </View>
+        <Button title="Reportar" onPress={() => {}} style={styles.reportButton} />
+      </View>
       <View style={styles.matchContainer}>
         <View style={styles.playerRow}>
           <View style={styles.playerContainer}>
@@ -50,10 +78,15 @@ const styles = StyleSheet.create({
   },
   matchContainer: {
     backgroundColor: '#fff',
-    marginBottom: 20,
+    marginTop: height * 0.15,
+    marginBottom: height * -0.099,
     padding: 15,
     borderRadius: 10,
-    boxShadow: '0px 5px 10px rgba(0, 0, 0, 0.1)',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    elevation: 5,
   },
   playerRow: {
     flexDirection: 'row',
