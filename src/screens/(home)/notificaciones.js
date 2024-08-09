@@ -40,7 +40,9 @@ const Notificaciones = ({ navigation }) => {
   // Renderizar cada notificación en un componente
   const renderNotification = ({ item }) => (
     <View style={styles.notificationContainer} key={item.id}>
-      <Image source={{ uri: item.icon }} style={styles.icon} />
+      <View style={styles.iconContainer}>
+        <Image source={{ uri: item.icon }} style={styles.icon} />
+      </View>
       <View style={styles.textContainer}>
         <Text style={styles.notificationText}>{item.Mensaje}</Text>
         <Text style={styles.dateText}>{new Date(item.Fecha).toLocaleString()}</Text>
@@ -76,33 +78,40 @@ const styles = StyleSheet.create({
   },
   notificationList: {
     flex: 1,
-    paddingHorizontal: 10,
+    paddingHorizontal: 20,
     paddingVertical: 20,
   },
   notificationContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#E0E0E0',
+    backgroundColor: '#FFF',
     borderRadius: 20,
     padding: 15,
-    marginVertical: 5,
+    marginVertical: 10,
+    elevation: 3, // Sombra para Android
+    shadowColor: '#000', // Sombra para iOS
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+  },
+  iconContainer: {
+    marginRight: 15,
   },
   icon: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    marginRight: 10,
+    width: 50,
+    height: 50,
+    borderRadius: 25,
   },
   textContainer: {
     flex: 1,
   },
   notificationText: {
     fontSize: 16,
-    color: '#000',
+    color: '#333',
   },
   dateText: {
     fontSize: 12,
-    color: '#757575',
+    color: '#666',
     marginTop: 5,
   },
   emptyContainer: {
@@ -117,3 +126,4 @@ const styles = StyleSheet.create({
 });
 
 export default Notificaciones;
+
