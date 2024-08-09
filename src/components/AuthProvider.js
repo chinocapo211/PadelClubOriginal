@@ -34,6 +34,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (newToken) => {
     try {
       await AsyncStorage.setItem('@AccessToken', newToken);
+      setIsAuthenticated(true);
     } catch (error) {
       console.error('Error logging in:', error);
     }

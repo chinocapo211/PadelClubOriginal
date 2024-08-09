@@ -21,7 +21,7 @@
         if (result.status === 200) {
           const token = result.data.access_Token;
           login(token);
-          navigation.navigate('HomeStack', { screen: "HomeMain" });
+          navigation.navigate('Logged', { screen: "HomeStack" });
         } else {
           setErrorMessage('Error de login');
         }

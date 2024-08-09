@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import React from 'react';
+import React, {useEffect} from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Home from './src/screens/(home)/home';
@@ -31,6 +31,8 @@ const AjustesStack = createStackNavigator();
 const HistorialStack = createStackNavigator();
 const LoggedStack = createStackNavigator();
 const NotLoggedStack = createStackNavigator();
+
+
 
 function LoginStackScreen() {
   return (
@@ -138,27 +140,24 @@ function NotLoggedStackScreen() {
   </NotLoggedStack.Navigator>
   )
   }
-
-
-function AppNavigator() {
-  const { isAuthenticated } = useAuth();
-
-  return (
-     <AppStack.Navigator screenOptions={{ headerShown: false }}>
-       {isAuthenticated ? (
-         <>
-           <AppStack.Screen name="TabBar" component={TabBarStackScreen} />
-           <AppStack.Screen name="NabBar" component={NavBarStackScreen} />
-         </>
-       ) : (
-         <AppStack.Screen name="Login" component={LoginStackScreen} />
-       )}
-     </AppStack.Navigator>
-    
-
-  );
-}
-
+  function AppNavigator() {
+    const { isAuthenticated } = useAuth();
+  
+    return (
+      <AppStack.Navigator screenOptions={{ headerShown: false }}>
+        {isAuthenticated ? (
+          <>
+            <AppStack.Screen name="TabBar" component={TabBarStackScreen} />
+            <AppStack.Screen name="NabBar" component={NavBarStackScreen} />
+          </>
+        ) : (
+          <AppStack.Screen name="Login" component={LoginStackScreen} />
+        )}
+      </AppStack.Navigator>
+    );
+  }
+  
+ 
 export default function App() {
   return (
     <AuthProvider>
