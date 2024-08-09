@@ -1,104 +1,93 @@
 import React from 'react';
-import { View, Text, FlatList, StyleSheet, Image, Button, SafeAreaView, Dimensions } from 'react-native';
+import { View, Text, Image, StyleSheet, Button } from 'react-native';
 import NavbarHigh from '../../components/navbarHigh';
 import NavbarLow from '../../components/navbarLow';
-
-const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
-
-const notificaciones = [
-  // Datos de ejemplo
-];
-
 const Historial = () => {
   return (
-    <SafeAreaView style={styles.container}>
-      <NavbarHigh />
-      <FlatList
-        data={notificaciones}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={styles.flatListContent}
-        renderItem={({ item }) => (
-          <View style={styles.notificacion}>
-            <View style={styles.jugadoresContainer}>
-              <View style={styles.jugador}>
-                <Image source={{ uri: item.jugadores[0].imagen }} style={styles.imagen} />
-                <Text style={styles.nombre}>{item.jugadores[0].nombre}</Text>
-              </View>
-              <View style={styles.jugador}>
-                <Image source={{ uri: item.jugadores[1].imagen }} style={styles.imagen} />
-                <Text style={styles.nombre}>{item.jugadores[1].nombre}</Text>
-              </View>
-              <View style={styles.resultadoContainer}>
-                <Text style={styles.sets}>{item.sets}</Text>
-                <Text style={styles.marcador}>{item.marcador}</Text>
-              </View>
-              <View style={styles.jugador}>
-                <Image source={{ uri: item.jugadores[2].imagen }} style={styles.imagen} />
-                <Text style={styles.nombre}>{item.jugadores[2].nombre}</Text>
-              </View>
-              <View style={styles.jugador}>
-                <Image source={{ uri: item.jugadores[3].imagen }} style={styles.imagen} />
-                <Text style={styles.nombre}>{item.jugadores[3].nombre}</Text>
-              </View>
-            </View>
-            <Button title="Reportar" onPress={() => {}} />
+    <View style={styles.container}>
+      <NavbarHigh/>
+      <View style={styles.matchContainer}>
+        <View style={styles.playerRow}>
+          <View style={styles.playerContainer}>
+            <Text style={styles.playerName}>Raul</Text>
           </View>
-        )}
-      />
-      <NavbarLow />
-    </SafeAreaView>
+          <View style={styles.scoreContainer}>
+            <Text style={styles.score}>2 - 1</Text>
+            <Text style={styles.scoreDetails}>6-4 6-1 6-2</Text>
+          </View>
+          <View style={styles.playerContainer}>
+            <Text style={styles.playerName}>Marcos</Text>
+          </View>
+        </View>
+        <View style={styles.playerRow}>
+          <View style={styles.playerContainer}>
+            <Text style={styles.playerName}>Humberta</Text>
+          </View>
+          <View style={styles.scoreContainer}>
+            <Text style={styles.score}> - </Text>
+            <Text style={styles.scoreDetails}>6-4 1-6</Text>
+          </View>
+          <View style={styles.playerContainer}>
+            <Text style={styles.playerName}>Merentiel</Text>
+          </View>
+        </View>
+        <Button title="Reportar" onPress={() => {}} style={styles.reportButton} />
+      </View>
+      <View style={styles.matchContainer}>
+      </View>
+      <View style={styles.matchContainer}>
+      </View>
+      <NavbarLow/>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    padding: 10,
+    verticalAlign: 'middle'
+  },
+  matchContainer: {
     backgroundColor: '#fff',
+    marginBottom: 20,
+    padding: 15,
+    borderRadius: 10,
+    boxShadow: '0px 5px 10px rgba(0, 0, 0, 0.1)',
   },
-  flatListContent: {
-    paddingTop: screenHeight * 0.02,  // Añade espacio en la parte superior
-    paddingBottom: screenHeight * 0.02, // Espacio para NavbarLow
-  },
-  notificacion: {
-    backgroundColor: '#f9f9f9',
-    padding: screenHeight * 0.02,
-    marginVertical: screenHeight * 0.01,
-    borderRadius: 5,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 1,
-    elevation: 2,
-  },
-  jugadoresContainer: {
+  playerRow: {
     flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: screenHeight * 0.015,
   },
-  jugador: {
-    alignItems: 'center',
+  playerContainer: {
+    flexDirection: 'column',
+    verticalAlign: 'center',
   },
-  imagen: {
-    width: screenWidth * 0.15,
-    height: screenWidth * 0.15,
-    borderRadius: (screenWidth * 0.15) / 2,
+  avatar: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
   },
-  nombre: {
-    marginTop: screenHeight * 0.01,
-    fontSize: screenWidth * 0.035,
-    textAlign: 'center',
-  },
-  resultadoContainer: {
-    alignItems: 'center',
-  },
-  marcador: {
-    fontSize: screenWidth * 0.06,
+  playerName: {
+    marginTop: 5,
+    fontSize: 16,
     fontWeight: 'bold',
   },
-  sets: {
-    fontSize: screenWidth * 0.035,
-    color: 'gray',
+  scoreContainer: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  score: {
+    fontSize: 40,
+    fontWeight: 'bold',
+  },
+  scoreDetails: {
+    fontSize: 16,
+    color: '#666',
+  },
+  reportButton: {
+    marginTop: 10,
+    alignSelf: 'center',
   },
 });
 
