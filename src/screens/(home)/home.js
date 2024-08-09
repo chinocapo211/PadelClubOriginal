@@ -21,7 +21,7 @@ const Home = ({ navigation }) => {
           const response = await userApi.ObtenerInfoJugador(storedToken);
           if (response.error) {
             console.error('Error en la solicitud:', response.error);
-            return;
+            navigation.navigate('Login', { screen: "IniciarSesion" })
           }
           setUserData(response);
           console.log('User data:', response);

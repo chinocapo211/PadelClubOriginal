@@ -1,5 +1,7 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import userApi from '../api/userApi';
+
 
 const AuthContext = createContext();
 
@@ -27,16 +29,32 @@ export const AuthProvider = ({ children }) => {
     await AsyncStorage.removeItem('@AccessToken');
     setIsAuthenticated(false);
   };
+
   useEffect(() => {
-    
     const checkAuth = async () => {
       try {
         const token = await AsyncStorage.getItem('@AccessToken');
-        setIsAuthenticated(!!token);
+        if (token) {
+          const decodedToken = await userApi.ObtenerInfoJugador(token);
+          const currentTime = Date.now() / 1000;
+    
+          if (decodedToken.exp < currentTime) {
+            
+            setIsAuthenticated(false);
+            await AsyncStorage.removeItem('@AccessToken');
+          } else {
+            
+            setIsAuthenticated(true);
+          }
+        } else {
+          setIsAuthenticated(false);
+        }
       } catch (error) {
         console.error('Error checking authentication:', error);
+        setIsAuthenticated(false);
       }
-    };checkAuth();
+    };
+    checkAuth();
   }, []);
   
   return (
