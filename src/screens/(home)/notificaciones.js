@@ -15,17 +15,15 @@ const Notificaciones = ({ navigation }) => {
         if (storedToken) {
           const response = await NotificacionesApi(storedToken);
 
-          // Verifica la respuesta de la API
           console.log('Respuesta de la API:', response);
 
           if (Array.isArray(response.data)) {
             setNotificaciones(response.data);
           } else if (response && Array.isArray(response.notificaciones)) {
-            // Ajusta esto según la estructura real de la respuesta
             setNotificaciones(response.notificaciones);
           } else {
             console.error('Respuesta inesperada:', response);
-            setNotificaciones([]); // Asegúrate de que `notificaciones` siempre sea un array
+            setNotificaciones([]);
           }
         } else {
           console.log('Token no encontrado');
@@ -37,7 +35,6 @@ const Notificaciones = ({ navigation }) => {
     fetchNotifications();
   }, []);
 
-  // Renderizar cada notificación en un componente
   const renderNotification = ({ item }) => (
     <View style={styles.notificationContainer} key={item.id}>
       <View style={styles.iconContainer}>
@@ -53,19 +50,13 @@ const Notificaciones = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <NavbarHigh />
-      <View style={styles.notificationList}>
-        {notificaciones.length > 0 ? (
-          <FlatList
-            data={notificaciones}
-            renderItem={renderNotification}
-            keyExtractor={(item) => item.id.toString()}
-          />
-        ) : (
-          <View style={styles.emptyContainer}>
-            <Text style={styles.emptyText}>No hay notificaciones</Text>
-          </View>
-        )}
-      </View>
+      <FlatList
+        contentContainerStyle={styles.notificationList}
+        data={notificaciones}
+        renderItem={renderNotification}
+        keyExtractor={(item) => item.id.toString()}
+        ListEmptyComponent={<Text style={styles.emptyText}>No hay notificaciones</Text>}
+      />
       <NavbarLow />
     </View>
   );
@@ -77,19 +68,19 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5F5F5',
   },
   notificationList: {
-    flex: 1,
     paddingHorizontal: 20,
     paddingVertical: 20,
+    paddingBottom: 80, // Deja espacio para la navbar
   },
   notificationContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#FFF',
-    borderRadius: 20,
+    borderRadius: 15,
     padding: 15,
     marginVertical: 10,
-    elevation: 3, // Sombra para Android
-    shadowColor: '#000', // Sombra para iOS
+    elevation: 2, 
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 2,
@@ -98,9 +89,9 @@ const styles = StyleSheet.create({
     marginRight: 15,
   },
   icon: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
   },
   textContainer: {
     flex: 1,
@@ -114,16 +105,14 @@ const styles = StyleSheet.create({
     color: '#666',
     marginTop: 5,
   },
-  emptyContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   emptyText: {
     fontSize: 18,
     color: '#757575',
+    textAlign: 'center',
+    marginTop: 20,
   },
 });
 
 export default Notificaciones;
+
 
