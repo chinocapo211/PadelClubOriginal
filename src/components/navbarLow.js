@@ -19,11 +19,11 @@ const NavbarLow = () => {
           <Feather name="home" size={24} color="black" />
           <Text style={styles.navText}>Home</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('TabBar', {screen: 'Historial'})}>
+        <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('HistorialStack', {screen: 'Historial'})}>
           <Feather name="book-open" size={24} color="black" />
           <Text style={styles.navText}>Historial</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('TabBar', {screen: 'Ajustes'})}>
+        <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('AjustesStack', {screen: 'Ajustes'})}>
           <Feather name="settings" size={24} color="black" />
           <Text style={styles.navText}>Ajustes</Text>
         </TouchableOpacity>

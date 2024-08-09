@@ -22,7 +22,7 @@ const LoginStack = createStackNavigator();
 const TabBarStack = createStackNavigator();
 const NavBarStack = createStackNavigator();
 const HomeStack = createStackNavigator();
-const PlayStack = createStackNavigator();
+const JugarStack = createStackNavigator();
 const AmigosStack = createStackNavigator();
 const AppStack = createStackNavigator();
 const PerfilStack = createStackNavigator();
@@ -43,43 +43,43 @@ function LoginStackScreen() {
   );
 }
 function NotificacionesStackScreen(){
-  <NotificacionesStack.Navigator>
+  <NotificacionesStack.Navigator screenOptions={{ headerShown: false }}>
     <NotificacionesStack.Screen name="Notificaciones" component={Notificaciones} />
   </NotificacionesStack.Navigator>
 }
 function AjustesStackScreen(){
-  <AjustesStack.Navigator>
+  <AjustesStack.Navigator screenOptions={{ headerShown: false }}>
     <AjustesStack.Screen name="Ajustes" component={Ajustes}/>
   </AjustesStack.Navigator>
 }
 function HistorialStackScreen(){
-  <HistorialStack.Navigator>
+  <HistorialStack.Navigator screenOptions={{ headerShown: false }}>
     <HistorialStack.Screen name="Historial" component={Historial}/>
   </HistorialStack.Navigator>
 }
 function PerfilStackScreen(){
-  <PerfilStack.Navigator>
+  <PerfilStack.Navigator screenOptions={{ headerShown: false }}>
     <PerfilStack.Screen name="Perfil" component={Perfil} />
   </PerfilStack.Navigator>
 }
 function AmigosStackScreen(){
-  <AmigosStack.Navigator>
+  <AmigosStack.Navigator screenOptions={{ headerShown: false }}>
     <AmigosStack.Screen name="Amigos" component={Amigos} />
   </AmigosStack.Navigator>
 }
-function PlayStackScreen() {
+function JugarStackScreen() {
   return (
-    <PlayStack.Navigator screenOptions={{ headerShown: false }}>
-      <PlayStack.Screen name="InicioJugar" component={InicioJugar} />
-      <PlayStack.Screen name="MostrarJugadores" component={MostrarJugadores} />
-    </PlayStack.Navigator>
+    <JugarStack.Navigator screenOptions={{ headerShown: false }}>
+      <JugarStack.Screen name="InicioJugar" component={InicioJugar} />
+      <JugarStack.Screen name="MostrarJugadores" component={MostrarJugadores} />
+    </JugarStack.Navigator>
   );
 }
 function HomeStackScreen() {
   return (
     <HomeStack.Navigator screenOptions={{ headerShown: false }}>
       <HomeStack.Screen name="HomeMain" component={Home} />
-      <HomeStack.Screen name="PlayStack" component={PlayStackScreen} />
+      <HomeStack.Screen name="JugarStack" component={JugarStackScreen} />
       {/*ACA VA TORNEOS*/}
       <HomeStack.Screen name="AmigosStack" component={AmigosStackScreen} />
     </HomeStack.Navigator>
@@ -88,8 +88,8 @@ function HomeStackScreen() {
 function NavBarStackScreen() {
   return (
     <NavBarStack.Navigator screenOptions={{ headerShown: false }}>
-      <NavBarStack.Screen name="PerfilStack" component={PerfilStackScreen} />
       <NavBarStack.Screen name="NotificacionesStack" component={NotificacionesStackScreen} />
+      <NavBarStack.Screen name="PerfilStack" component={PerfilStackScreen} />
     </NavBarStack.Navigator>
   );
 }
@@ -97,8 +97,8 @@ function TabBarStackScreen() {
   return (
     <TabBarStack.Navigator screenOptions={{ headerShown: false }}>
       <TabBarStack.Screen name="HomeStack" component={HomeStackScreen} />
-      <TabBarStack.Screen name="AjustesStack" component={AjustesStackScreen} />
       <TabBarStack.Screen name="HistorialStack" component={HistorialStackScreen} />
+      <TabBarStack.Screen name="AjustesStack" component={AjustesStackScreen} />
     </TabBarStack.Navigator>
   );
 }

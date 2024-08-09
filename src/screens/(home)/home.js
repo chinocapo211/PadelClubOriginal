@@ -44,19 +44,20 @@ const Home = ({ navigation }) => {
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           style={[styles.button, styles.buttonFriends]}
-          onPress={() => navigation.navigate('InicioJugar')}
+          onPress={() => navigation.navigate('JugarStack', {screen: 'InicioJugar'})}
         >
           <Text style={styles.buttonText}>Jugar</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.button, styles.buttonTournaments]}
           onPress={() => navigation.navigate('Torneos')}
+          /*TORNEOS NO ESTA HECHA, FALTA HACER LA PANTALLA Y AJUSTAR ESTA NAVEGACION*/
         >
           <Text style={styles.buttonText}>Torneos</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.button, styles.buttonPlay]}
-          onPress={() => navigation.navigate('Amigos')}
+          onPress={() => navigation.navigate('AmigosStack', {screen: 'Amigos'})}
         >
           <Text style={styles.buttonText}>Amigos</Text>
         </TouchableOpacity>

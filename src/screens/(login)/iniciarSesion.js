@@ -21,7 +21,7 @@ const IniciarSesion = ({ navigation }) => {
       if (result.status === 200) {
         const token = result.data.access_Token;
         login(token);
-        navigation.navigate('TabBar', { screen: "Home" });
+        navigation.navigate('TabBar', { screen: "HomeStack" });
       } else {
         setErrorMessage('Error de login');
       }
