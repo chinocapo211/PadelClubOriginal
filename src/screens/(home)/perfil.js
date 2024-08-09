@@ -1,57 +1,84 @@
-import React from 'react';
-import { View, Text, Image, StyleSheet, Dimensions } from 'react-native';
-import { ProgressBar } from 'react-native-paper';
-import NavbarHigh from '../../components/navbarHigh';
-import NavbarLow from '../../components/navbarLow';
+  import React, {useState, useEffect} from 'react';
+  import { View, Text, Image, StyleSheet, Dimensions } from 'react-native';
+  import { ProgressBar } from 'react-native-paper';
+  import NavbarHigh from '../../components/navbarHigh';
+  import NavbarLow from '../../components/navbarLow';
+  import AsyncStorage from '@react-native-async-storage/async-storage';
+  import userApi from '../../api/userApi';
 
-const { width, height } = Dimensions.get('window'); // Obtén las dimensiones de la pantalla
 
-const Perfil = () => {
-  const userName = 'Raul Molonuense';
-  const userImage = 'https://this-person-does-not-exist.com/img/avatar-gen380139fdb51dce1eb3e9104fed532cff.jpg'; // URL de la imagen de perfil
-  const points = 1200;
-  const matches = 200;
-  const victories = 132;
-  const defeats = 68;
-  const ranking = 34;
+  const { width, height } = Dimensions.get('window'); // Obtén las dimensiones de la pantalla
 
-  return (
-    <View style={styles.container}>
-      <NavbarHigh />
-      <View style={styles.innerContainer}>
-        <Image source={{ uri: userImage }} style={styles.profileImage} />
-        <Text style={styles.userName}>{userName}</Text>
-        <View style={styles.progressBarContainer}>
-          <Text style={styles.progressText}>0</Text>
-          <ProgressBar progress={0.75} color="#FFD700" style={styles.progressBar} /> {/* Ajusta el progreso según sea necesario */}
-          <Text style={styles.progressText}>100</Text>
+  const Perfil = ({ navigation }) => {
+    const [userData, setUserData] = useState(null);
+  
+    useEffect(() => {
+      const fetchTokenAndData = async () => {
+        try {
+          const storedToken = await AsyncStorage.getItem('@AccessToken');
+          if (storedToken) {
+            const response = await userApi.ObtenerInfoJugador(storedToken);
+            if (!response.error) {
+              setUserData(response);
+            } else {
+              console.error('Error en la solicitud:', response.error);
+            }
+          } else {
+            console.log('Token no encontrado');
+          }
+        } catch (error) {
+          console.error('Failed to fetch user data or token:', error);
+        }
+      };
+      fetchTokenAndData();
+    }, []);
+  
+    if (!userData) {
+      return (
+        <View style={styles.loadingContainer}>
+          <Text>Cargando...</Text>
         </View>
-        <View style={styles.statsContainer}>
-          <View style={[styles.statBox, styles.pointsBox]}>
-            <Text style={styles.statNumber}>{points}</Text>
-            <Text style={styles.statText}>Puntos</Text>
-            <Image source={('../../assets/trophy.png')} style={styles.icon} /> {/* Icono de trofeo */}
+      );
+    }
+  
+    
+  
+    return (
+      <View style={styles.container}>
+        <NavbarHigh />
+        <View style={styles.innerContainer}>
+          <Image source={{ uri: userData.Usuario.Foto }} style={styles.profileImage} />
+          <Text style={styles.userName}>{userData.Usuario.Nombre}</Text>
+          <View style={styles.progressBarContainer}>
+            <Text style={styles.progressText}>0</Text>
+            <ProgressBar progress={userData.Usuario.Puntos} color="#FFD700" style={styles.progressBar} />
+            <Text style={styles.progressText}>100</Text>
           </View>
-          <View style={[styles.statBox, styles.matchesBox]}>
-            <Text style={styles.statNumber}>{matches}</Text>
-            <Text style={styles.statText}>
-              Partidos
-              {"\n"}
-              {victories} Victorias - {defeats} Derrotas
-            </Text>
-            <Image source={('../../assets/racket.png')} style={styles.icon} /> {/* Icono de raqueta */}
-          </View>
-          <View style={[styles.statBox, styles.rankingBox]}>
-            <Text style={styles.statNumber}>#{ranking}</Text>
-            <Text style={styles.statText}>Ranking general</Text>
-            <Image source={('../../assets/ranking.png')} style={styles.icon} /> {/* Icono de ranking */}
+          <View style={styles.statsContainer}>
+            <View style={[styles.statBox, styles.pointsBox]}>
+              <Text style={styles.statNumber}>{userData.Usuario.Puntos}</Text>
+              <Text style={styles.statText}>Puntos  </Text>
+              <Image source={('../../assets/trophy.png')} style={styles.icon} />
+            </View>
+            <View style={[styles.statBox, styles.matchesBox]}>
+              <Text style={styles.statNumber}>{}</Text>
+              <Text style={styles.statText}>
+                Partidos{"\n"}
+                {} Victorias - {} Derrotas
+              </Text>
+              <Image source={('../../assets/racket.png')} style={styles.icon} />
+            </View>
+            <View style={[styles.statBox, styles.rankingBox]}>
+              <Text style={styles.statNumber}>#{}</Text>
+              <Text style={styles.statText}>Ranking general</Text>
+              <Image source={('../../assets/ranking.png')} style={styles.icon} />
+            </View>
           </View>
         </View>
+        <NavbarLow />
       </View>
-      <NavbarLow />
-    </View>
-  );
-};
+    );
+  };
 
 const styles = StyleSheet.create({
   container: {
