@@ -42,31 +42,47 @@ function LoginStackScreen() {
     </LoginStack.Navigator>
   );
 }
-function NotificacionesStackScreen(){
-  <NotificacionesStack.Navigator screenOptions={{ headerShown: false }}>
-    <NotificacionesStack.Screen name="Notificaciones" component={Notificaciones} />
-  </NotificacionesStack.Navigator>
+
+function NotificacionesStackScreen() {
+  return (
+    <NotificacionesStack.Navigator screenOptions={{ headerShown: false }}>
+      <NotificacionesStack.Screen name="Notificaciones" component={Notificaciones} />
+    </NotificacionesStack.Navigator>
+  );
 }
-function AjustesStackScreen(){
-  <AjustesStack.Navigator screenOptions={{ headerShown: false }}>
-    <AjustesStack.Screen name="Ajustes" component={Ajustes}/>
-  </AjustesStack.Navigator>
+
+function AjustesStackScreen() {
+  return (
+    <AjustesStack.Navigator screenOptions={{ headerShown: false }}>
+      <AjustesStack.Screen name="Ajustes" component={Ajustes} />
+    </AjustesStack.Navigator>
+  );
 }
-function HistorialStackScreen(){
-  <HistorialStack.Navigator screenOptions={{ headerShown: false }}>
-    <HistorialStack.Screen name="Historial" component={Historial}/>
-  </HistorialStack.Navigator>
+
+function HistorialStackScreen() {
+  return (
+    <HistorialStack.Navigator screenOptions={{ headerShown: false }}>
+      <HistorialStack.Screen name="Historial" component={Historial} />
+    </HistorialStack.Navigator>
+  );
 }
-function PerfilStackScreen(){
-  <PerfilStack.Navigator screenOptions={{ headerShown: false }}>
-    <PerfilStack.Screen name="Perfil" component={Perfil} />
-  </PerfilStack.Navigator>
+
+function PerfilStackScreen() {
+  return (
+    <PerfilStack.Navigator screenOptions={{ headerShown: false }}>
+      <PerfilStack.Screen name="Perfil" component={Perfil} />
+    </PerfilStack.Navigator>
+  );
 }
-function AmigosStackScreen(){
-  <AmigosStack.Navigator screenOptions={{ headerShown: false }}>
-    <AmigosStack.Screen name="Amigos" component={Amigos} />
-  </AmigosStack.Navigator>
+
+function AmigosStackScreen() {
+  return (
+    <AmigosStack.Navigator screenOptions={{ headerShown: false }}>
+      <AmigosStack.Screen name="Amigos" component={Amigos} />
+    </AmigosStack.Navigator>
+  );
 }
+
 function JugarStackScreen() {
   return (
     <JugarStack.Navigator screenOptions={{ headerShown: false }}>
@@ -75,16 +91,17 @@ function JugarStackScreen() {
     </JugarStack.Navigator>
   );
 }
+
 function HomeStackScreen() {
   return (
     <HomeStack.Navigator screenOptions={{ headerShown: false }}>
       <HomeStack.Screen name="HomeMain" component={Home} />
       <HomeStack.Screen name="JugarStack" component={JugarStackScreen} />
-      {/*ACA VA TORNEOS*/}
       <HomeStack.Screen name="AmigosStack" component={AmigosStackScreen} />
     </HomeStack.Navigator>
   );
 }
+
 function NavBarStackScreen() {
   return (
     <NavBarStack.Navigator screenOptions={{ headerShown: false }}>
@@ -93,6 +110,7 @@ function NavBarStackScreen() {
     </NavBarStack.Navigator>
   );
 }
+
 function TabBarStackScreen() {
   return (
     <TabBarStack.Navigator screenOptions={{ headerShown: false }}>
@@ -111,7 +129,7 @@ function AppNavigator() {
       {!isAuthenticated ? (
         <>
           <AppStack.Screen name="TabBar" component={TabBarStackScreen} />
-          <AppStack.Screen name="NavBar" component={NavBarStackScreen} />
+          <AppStack.Screen name="NabBar" component={NavBarStackScreen} />
         </>
       ) : (
         <AppStack.Screen name="Login" component={LoginStackScreen} />
@@ -119,7 +137,6 @@ function AppNavigator() {
     </AppStack.Navigator>
   );
 }
-
 
 export default function App() {
   return (
@@ -130,6 +147,3 @@ export default function App() {
     </AuthProvider>
   );
 }
-  /*
-        <LoginStack.Screen name="MostrarJugadores" component={MostrarJugadores} />
-  */

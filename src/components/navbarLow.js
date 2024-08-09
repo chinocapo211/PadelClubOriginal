@@ -15,15 +15,15 @@ const NavbarLow = () => {
         style={styles.gradient}
       />
       <View style={styles.navbar}>
-        <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('HomeStack', {screen: 'HomeMain'})}>
+        <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('TabBar', {screen: 'HomeStack'})}>
           <Feather name="home" size={24} color="black" />
           <Text style={styles.navText}>Home</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('HistorialStack', {screen: 'Historial'})}>
+        <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('TabBar', {screen: 'HistorialStack'})}>
           <Feather name="book-open" size={24} color="black" />
           <Text style={styles.navText}>Historial</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('AjustesStack', {screen: 'Ajustes'})}>
+        <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('TabBar', {screen: 'AjustesStack'})}>
           <Feather name="settings" size={24} color="black" />
           <Text style={styles.navText}>Ajustes</Text>
         </TouchableOpacity>
