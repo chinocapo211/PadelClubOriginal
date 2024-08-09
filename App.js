@@ -29,6 +29,8 @@ const PerfilStack = createStackNavigator();
 const NotificacionesStack = createStackNavigator();
 const AjustesStack = createStackNavigator();
 const HistorialStack = createStackNavigator();
+const LoggedStack = createStackNavigator();
+const NotLoggedStack = createStackNavigator();
 
 function LoginStackScreen() {
   return (
@@ -121,20 +123,39 @@ function TabBarStackScreen() {
   );
 }
 
+function LoggedStackScreen() {
+return ( 
+  <LoggedStack.Navigator screenOptions={{ headerShown: false }}>
+    <LoggedStack.Screen name="TabBar" component={TabBarStackScreen} />
+    <LoggedStack.Screen name="NabBar" component={NavBarStackScreen} />
+</LoggedStack.Navigator>
+)
+}
+function NotLoggedStackScreen() {
+  return ( 
+    <NotLoggedStack.Navigator screenOptions={{ headerShown: false }}>
+      <NotLoggedStack.Screen name="Login" component={LoginStackScreen} />
+  </NotLoggedStack.Navigator>
+  )
+  }
+
+
 function AppNavigator() {
   const { isAuthenticated } = useAuth();
 
   return (
-    <AppStack.Navigator screenOptions={{ headerShown: false }}>
-      {isAuthenticated == true ? (
-        <>
-          <AppStack.Screen name="TabBar" component={TabBarStackScreen} />
-          <AppStack.Screen name="NabBar" component={NavBarStackScreen} />
-        </>
-      ) : (
-        <AppStack.Screen name="Login" component={LoginStackScreen} />
-      )}
-    </AppStack.Navigator>
+     <AppStack.Navigator screenOptions={{ headerShown: false }}>
+       {isAuthenticated ? (
+         <>
+           <AppStack.Screen name="TabBar" component={TabBarStackScreen} />
+           <AppStack.Screen name="NabBar" component={NavBarStackScreen} />
+         </>
+       ) : (
+         <AppStack.Screen name="Login" component={LoginStackScreen} />
+       )}
+     </AppStack.Navigator>
+    
+
   );
 }
 
