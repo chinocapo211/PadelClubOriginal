@@ -126,7 +126,7 @@ function AppNavigator() {
 
   return (
     <AppStack.Navigator screenOptions={{ headerShown: false }}>
-      {isAuthenticated == true ? (
+      {!isAuthenticated == true ? (
         <>
           <AppStack.Screen name="TabBar" component={TabBarStackScreen} />
           <AppStack.Screen name="NabBar" component={NavBarStackScreen} />

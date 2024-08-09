@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet } from 'react-native'; 
+import { View, Text, StyleSheet, FlatList, Image } from 'react-native'; 
 import NavbarHigh from '../../components/navbarHigh';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import NavbarLow from '../../components/navbarLow';
@@ -14,7 +14,7 @@ const Notificaciones = ({ navigation }) => {
         const storedToken = await AsyncStorage.getItem('@AccessToken');
         if (storedToken) {
           const response = await NotificacionesApi(storedToken);
-          
+
           // Verifica la respuesta de la API
           console.log('Respuesta de la API:', response);
 
@@ -37,42 +37,82 @@ const Notificaciones = ({ navigation }) => {
     fetchNotifications();
   }, []);
 
+  // Renderizar cada notificación en un componente
+  const renderNotification = ({ item }) => (
+    <View style={styles.notificationContainer} key={item.id}>
+      <Image source={{ uri: item.icon }} style={styles.icon} />
+      <View style={styles.textContainer}>
+        <Text style={styles.notificationText}>{item.Mensaje}</Text>
+        <Text style={styles.dateText}>{new Date(item.Fecha).toLocaleString()}</Text>
+      </View>
+    </View>
+  );
+
   return (
     <View style={styles.container}>
       <NavbarHigh />
-      {notificaciones.length > 0 ? (
-        notificaciones.map((notificacion) => (
-          <View key={notificacion.id}>
-            <Text>{notificacion.Mensaje}</Text>
+      <View style={styles.notificationList}>
+        {notificaciones.length > 0 ? (
+          <FlatList
+            data={notificaciones}
+            renderItem={renderNotification}
+            keyExtractor={(item) => item.id.toString()}
+          />
+        ) : (
+          <View style={styles.emptyContainer}>
+            <Text style={styles.emptyText}>No hay notificaciones</Text>
           </View>
-        ))
-      ) : (
-        <Text>No hay notificaciones</Text>
-      )}
+        )}
+      </View>
       <NavbarLow />
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#F5F5F5',
+  },
+  notificationList: {
+    flex: 1,
+    paddingHorizontal: 10,
+    paddingVertical: 20,
+  },
+  notificationContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#E0E0E0',
+    borderRadius: 20,
+    padding: 15,
+    marginVertical: 5,
+  },
+  icon: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    marginRight: 10,
+  },
+  textContainer: {
+    flex: 1,
+  },
+  notificationText: {
+    fontSize: 16,
+    color: '#000',
+  },
+  dateText: {
+    fontSize: 12,
+    color: '#757575',
+    marginTop: 5,
+  },
+  emptyContainer: {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    height:'100%',
   },
-  button: {
-    backgroundColor: '#d3d3d3',
-    width: '75%',
-    height: 50, // Define a fixed height for better centering
-    padding: 10, // Adjust padding as needed
-    marginVertical: 10,
-    alignItems: 'center',
-    justifyContent: 'center', // Center content vertically
-    borderRadius: 15,
-  },
-  buttonText: {
-    color: 'black',
-    fontSize: 16,
+  emptyText: {
+    fontSize: 18,
+    color: '#757575',
   },
 });
 
