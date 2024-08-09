@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native'; // Asegúrate de importar FlatList aquí
+import { View, Text, StyleSheet } from 'react-native'; 
 import NavbarHigh from '../../components/navbarHigh';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import NavbarLow from '../../components/navbarLow';
@@ -14,11 +14,19 @@ const Notificaciones = ({ navigation }) => {
         const storedToken = await AsyncStorage.getItem('@AccessToken');
         if (storedToken) {
           const response = await NotificacionesApi(storedToken);
-          if (response.error) {
-            console.error('Error en la solicitud:', response.error);
-            return;
+          
+          // Verifica la respuesta de la API
+          console.log('Respuesta de la API:', response);
+
+          if (Array.isArray(response.data)) {
+            setNotificaciones(response.data);
+          } else if (response && Array.isArray(response.notificaciones)) {
+            // Ajusta esto según la estructura real de la respuesta
+            setNotificaciones(response.notificaciones);
+          } else {
+            console.error('Respuesta inesperada:', response);
+            setNotificaciones([]); // Asegúrate de que `notificaciones` siempre sea un array
           }
-          setNotificaciones(response.notifications || []); // Asegúrate de que `response.notifications` es un array
         } else {
           console.log('Token no encontrado');
         }
@@ -29,21 +37,18 @@ const Notificaciones = ({ navigation }) => {
     fetchNotifications();
   }, []);
 
-  const renderNotification = ({ item }) => (
-    <View style={styles.notificationItem}>
-      <Text style={styles.notificationText}>{item.mensaje}</Text> {/* Ajusta esto según la estructura de tu notificación */}
-    </View>
-  );
-
   return (
     <View style={styles.container}>
       <NavbarHigh />
-      <FlatList
-        data={notificaciones}
-        renderItem={renderNotification}
-        keyExtractor={(item) => item.id.toString()} // Ajusta esto según el formato de tu notificación
-        contentContainerStyle={styles.list}
-      />
+      {notificaciones.length > 0 ? (
+        notificaciones.map((notificacion) => (
+          <View key={notificacion.id}>
+            <Text>{notificacion.Mensaje}</Text>
+          </View>
+        ))
+      ) : (
+        <Text>No hay notificaciones</Text>
+      )}
       <NavbarLow />
     </View>
   );
