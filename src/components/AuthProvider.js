@@ -8,57 +8,49 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  useEffect(() => {
-    const loadToken = async () => {
-      const storedToken = await AsyncStorage.getItem('@AccessToken');
-      if (storedToken) {
-        setIsAuthenticated(true);
+  useEffect(() => {const checkAuth = async () => {
+    try {
+      const token = await AsyncStorage.getItem('@AccessToken');
+      console.log(token);
+      if (token != null) {
+        const decodedToken = await userApi.ObtenerInfoJugador(token);
+        const currentTime = Date.now() / 1000;
+        if (decodedToken.exp < currentTime) {
+          await AsyncStorage.removeItem('@AccessToken');
+          setIsAuthenticated(false);
+        } else {
+          setIsAuthenticated(true);
+        }
       } else {
         setIsAuthenticated(false);
       }
-    };
-    loadToken();
-  }, []);
-
+    } catch (error) {
+      console.error('Error checking authentication:', error);
+      setIsAuthenticated(false);
+    }
+  };checkAuth();
+},[]);
+  
   const login = async (newToken) => {
-    await AsyncStorage.setItem('@AccessToken', newToken);
-    setIsAuthenticated(true);
+    try {
+      await AsyncStorage.setItem('@AccessToken', newToken);
+      await checkAuth(); 
+    } catch (error) {
+      console.error('Error logging in:', error);
+    }
   };
 
   const logout = async () => {
-    await AsyncStorage.removeItem('@AccessToken');
-    setIsAuthenticated(false);
+    try {
+      await AsyncStorage.removeItem('@AccessToken');
+      setIsAuthenticated(false);
+    } catch (error) {
+      console.error('Error logging out:', error);
+    }
   };
 
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const token = await AsyncStorage.getItem('@AccessToken');
-        if (token) {
-          const decodedToken = await userApi.ObtenerInfoJugador(token);
-          const currentTime = Date.now() / 1000;
-    
-          if (decodedToken.exp < currentTime) {
-            
-            setIsAuthenticated(false);
-            await AsyncStorage.removeItem('@AccessToken');
-          } else {
-            
-            setIsAuthenticated(true);
-          }
-        } else {
-          setIsAuthenticated(false);
-        }
-      } catch (error) {
-        console.error('Error checking authentication:', error);
-        setIsAuthenticated(false);
-      }
-    };
-    checkAuth();
-  }, []);
-  
   return (
-    <AuthContext.Provider value={{ isAuthenticated,setIsAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

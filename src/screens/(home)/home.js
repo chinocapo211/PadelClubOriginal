@@ -21,7 +21,7 @@ const Home = ({ navigation }) => {
           const response = await userApi.ObtenerInfoJugador(storedToken);
           if (response.error) {
             console.error('Error en la solicitud:', response.error);
-            navigation.navigate('Login', { screen: "IniciarSesion" })
+            navigation.navigate('Login', { screen: "Home" })
           }
           setUserData(response);
           console.log('User data:', response);
@@ -44,20 +44,19 @@ const Home = ({ navigation }) => {
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           style={[styles.button, styles.buttonFriends]}
-          onPress={() => navigation.navigate('JugarStack', {screen: 'InicioJugar'})}
+          onPress={() => navigation.navigate('InicioJugar')}
         >
           <Text style={styles.buttonText}>Jugar</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.button, styles.buttonTournaments]}
           onPress={() => navigation.navigate('Torneos')}
-          /*TORNEOS NO ESTA HECHA, FALTA HACER LA PANTALLA Y AJUSTAR ESTA NAVEGACION*/
         >
           <Text style={styles.buttonText}>Torneos</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.button, styles.buttonPlay]}
-          onPress={() => navigation.navigate('AmigosStack', {screen: 'Amigos'})}
+          onPress={() => navigation.navigate('Amigos')}
         >
           <Text style={styles.buttonText}>Amigos</Text>
         </TouchableOpacity>
