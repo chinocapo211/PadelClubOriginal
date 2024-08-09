@@ -3,8 +3,12 @@ import userApi from './userApi';
 
 export const NotificacionesApi = async (token) => {
   const Token = await userApi.ObtenerInfoJugador(token);
+  const headers = {
+    "Content-Type": "application/json",
+    "Authorization": `Bearer ${token}`,  
+  };
   try {
-    const result = await apiManager("GET", token, {}, `Notificaciones/:${Token.Usuario.id}`);
+    const result = await apiManager("GET", headers, {}, `Notificaciones/${Token.Usuario.id}`);
     console.log(result);
     return result;
   } catch (error) {

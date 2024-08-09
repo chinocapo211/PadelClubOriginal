@@ -7,14 +7,14 @@ const NavbarHigh = () => {
     return (
       <View style={styles.container}>
         <View style={styles.topSection}>
-        <TouchableOpacity onPress={() => navigation.navigate('NavBar', {screen: 'Notificaciones'})}>
+        <TouchableOpacity onPress={() => navigation.navigate('NavBar', {screen: 'NotificacionesStack'})}>
           <Feather name="bell" size={24} color="black" />
         </TouchableOpacity>
         <Image
             source={require('../../assets/images/logo.jpg')}
             style={styles.logo}
           />
-          <TouchableOpacity onPress={() => navigation.navigate('NavBar', {screen: 'Perfil'})}>
+          <TouchableOpacity onPress={() => navigation.navigate('NavBar', {screen: 'PerfilStack'})}>
             <Feather name="user" size={26} color="black"/>
           </TouchableOpacity>
         </View>
