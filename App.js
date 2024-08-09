@@ -14,13 +14,21 @@ import IngresarCodigo from './src/screens/(login)/ingresarCodigo';
 import CrearNuevaContraseña from './src/screens/(login)/crearNuevaContraseña';
 import ContraseñaExitosa from './src/screens/(login)/contraseñaExitosa';
 import Amigos from './src/screens/(home)/amigos';
+import InicioJugar from './src/screens/(jugar)/inicioJugar';
+import MostrarJugadores from './src/screens/(jugar)/mostrarJugadores';
 import { AuthProvider, useAuth } from './src/components/AuthProvider';
 
 const LoginStack = createStackNavigator();
 const TabBarStack = createStackNavigator();
 const NavBarStack = createStackNavigator();
 const HomeStack = createStackNavigator();
+const PlayStack = createStackNavigator();
+const AmigosStack = createStackNavigator();
 const AppStack = createStackNavigator();
+const PerfilStack = createStackNavigator();
+const NotificacionesStack = createStackNavigator();
+const AjustesStack = createStackNavigator();
+const HistorialStack = createStackNavigator();
 
 function LoginStackScreen() {
   return (
@@ -34,31 +42,63 @@ function LoginStackScreen() {
     </LoginStack.Navigator>
   );
 }
-
+function NotificacionesStackScreen(){
+  <NotificacionesStack.Navigator>
+    <NotificacionesStack.Screen name="Notificaciones" component={Notificaciones} />
+  </NotificacionesStack.Navigator>
+}
+function AjustesStackScreen(){
+  <AjustesStack.Navigator>
+    <AjustesStack.Screen name="Ajustes" component={Ajustes}/>
+  </AjustesStack.Navigator>
+}
+function HistorialStackScreen(){
+  <HistorialStack.Navigator>
+    <HistorialStack.Screen name="Historial" component={Historial}/>
+  </HistorialStack.Navigator>
+}
+function PerfilStackScreen(){
+  <PerfilStack.Navigator>
+    <PerfilStack.Screen name="Perfil" component={Perfil} />
+  </PerfilStack.Navigator>
+}
+function AmigosStackScreen(){
+  <AmigosStack.Navigator>
+    <AmigosStack.Screen name="Amigos" component={Amigos} />
+  </AmigosStack.Navigator>
+}
+function PlayStackScreen() {
+  return (
+    <PlayStack.Navigator screenOptions={{ headerShown: false }}>
+      <PlayStack.Screen name="InicioJugar" component={InicioJugar} />
+      <PlayStack.Screen name="MostrarJugadores" component={MostrarJugadores} />
+    </PlayStack.Navigator>
+  );
+}
 function HomeStackScreen() {
   return (
     <HomeStack.Navigator screenOptions={{ headerShown: false }}>
       <HomeStack.Screen name="HomeMain" component={Home} />
+      <HomeStack.Screen name="PlayStack" component={PlayStackScreen} />
+      {/*ACA VA TORNEOS*/}
+      <HomeStack.Screen name="AmigosStack" component={AmigosStackScreen} />
     </HomeStack.Navigator>
   );
 }
-
 function NavBarStackScreen() {
   return (
     <NavBarStack.Navigator screenOptions={{ headerShown: false }}>
-      <NavBarStack.Screen name="Perfil" component={Perfil} />
-      <NavBarStack.Screen name="Notificaciones" component={Notificaciones} />
+      <NavBarStack.Screen name="PerfilStack" component={PerfilStackScreen} />
+      <NavBarStack.Screen name="NotificacionesStack" component={NotificacionesStackScreen} />
     </NavBarStack.Navigator>
   );
 }
-
 function TabBarStackScreen() {
   return (
     <TabBarStack.Navigator screenOptions={{ headerShown: false }}>
       <TabBarStack.Screen name="HomeStack" component={HomeStackScreen} />
-      <TabBarStack.Screen name="Ajustes" component={Ajustes} />
-      <TabBarStack.Screen name="Historial" component={Historial} />
-      <TabBarStack.Screen name="Amigos" component={Amigos} />
+      <TabBarStack.Screen name="AjustesStack" component={AjustesStackScreen} />
+      <TabBarStack.Screen name="HistorialStack" component={HistorialStackScreen} />
     </TabBarStack.Navigator>
   );
 }
@@ -68,7 +108,7 @@ function AppNavigator() {
 
   return (
     <AppStack.Navigator screenOptions={{ headerShown: false }}>
-      {isAuthenticated ? (
+      {!isAuthenticated ? (
         <>
           <AppStack.Screen name="TabBar" component={TabBarStackScreen} />
           <AppStack.Screen name="NavBar" component={NavBarStackScreen} />
@@ -91,7 +131,5 @@ export default function App() {
   );
 }
   /*
-        <LoginStack.Screen name="InicioJugar" component={InicioJugar} />
         <LoginStack.Screen name="MostrarJugadores" component={MostrarJugadores} />
-        <LoginStack.Screen name="Amigos" component={Amigos} />
   */
