@@ -19,12 +19,12 @@ const Home = ({ navigation }) => {
           setToken(storedToken);
 
           const response = await userApi.ObtenerInfoJugador(storedToken);
+          
           if (response.error) {
             console.error('Error en la solicitud:', response.error);
             navigation.navigate('Login', { screen: "Home" })
           }
           setUserData(response);
-          console.log('User data:', response);
         } else {
           console.log('Token no encontrado');
         }
@@ -35,6 +35,9 @@ const Home = ({ navigation }) => {
     fetchTokenAndData();
   }, []);
 
+
+  
+
   return (
     <View style={styles.container}>
       <NavbarHigh />
@@ -44,7 +47,7 @@ const Home = ({ navigation }) => {
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           style={[styles.button, styles.buttonFriends]}
-          onPress={() => navigation.navigate('InicioJugar')}
+          onPress={() => navigation.navigate('JugarStack', {screen: "InicioJugar"})}
         >
           <Text style={styles.buttonText}>Jugar</Text>
         </TouchableOpacity>

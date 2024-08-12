@@ -125,21 +125,7 @@ function TabBarStackScreen() {
   );
 }
 
-function LoggedStackScreen() {
-return ( 
-  <LoggedStack.Navigator screenOptions={{ headerShown: false }}>
-    <LoggedStack.Screen name="TabBar" component={TabBarStackScreen} />
-    <LoggedStack.Screen name="NabBar" component={NavBarStackScreen} />
-</LoggedStack.Navigator>
-)
-}
-function NotLoggedStackScreen() {
-  return ( 
-    <NotLoggedStack.Navigator screenOptions={{ headerShown: false }}>
-      <NotLoggedStack.Screen name="Login" component={LoginStackScreen} />
-  </NotLoggedStack.Navigator>
-  )
-  }
+
   function AppNavigator() {
     const { isAuthenticated } = useAuth();
   
