@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F5F5F5',
     alignItems: 'center',
-    paddingTop: '30%', // Ajusta esto según la altura de la NavbarHigh para evitar que el contenido se superponga
+    paddingTop: 15, // Ajusta esto según la altura de la NavbarHigh para evitar que el contenido se superponga
   },
   backButton: {
     position: 'absolute',

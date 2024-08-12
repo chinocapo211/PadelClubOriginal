@@ -38,13 +38,10 @@ const Home = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <NavbarHigh />
-      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-        <Text style={styles.backButtonText}>{'<'}</Text>
-      </TouchableOpacity>
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           style={[styles.button, styles.buttonFriends]}
-          onPress={() => navigation.navigate('InicioJugar')}
+          onPress={() => navigation.navigate('JugarStack')}
         >
           <Text style={styles.buttonText}>Jugar</Text>
         </TouchableOpacity>
@@ -56,7 +53,7 @@ const Home = ({ navigation }) => {
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.button, styles.buttonPlay]}
-          onPress={() => navigation.navigate('Amigos')}
+          onPress={() => navigation.navigate('AmigosStack')}
         >
           <Text style={styles.buttonText}>Amigos</Text>
         </TouchableOpacity>
@@ -81,6 +78,7 @@ const styles = StyleSheet.create({
     width: '80%',
     maxWidth: screenWidth * 0.8,
     paddingHorizontal: screenWidth * 0.05,
+    marginTop:50,
   },
   button: {
     height: screenHeight * 0.15,

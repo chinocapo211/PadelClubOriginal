@@ -26,8 +26,8 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
     width: '100%',
-    height: '15%',   
-    top: 0,
+    height: '15%',  
+    top: 40,
     left: 0,
     right: 0,
     position:'absolute',
@@ -43,6 +43,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: '20%',  // Espaciado horizontal para los elementos
     left:0,
+    margintop: 7, 
     top:0,
   },
   logo: {
