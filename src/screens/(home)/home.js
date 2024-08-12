@@ -1,39 +1,45 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect ,} from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import NavbarHigh from '../../components/navbarHigh';
 import NavbarLow from '../../components/navbarLow';
 import userApi from '../../api/userApi';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useAuth } from '../../components/AuthProvider';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 const Home = ({ navigation }) => {
   const [userData, setUserData] = useState(null);
+  const { isAuthenticated, logout } = useAuth();
   const [token, setToken] = useState(null);
 
   useEffect(() => {
     const fetchTokenAndData = async () => {
       try {
-        const storedToken = await AsyncStorage.getItem('@AccessToken');
-        if (storedToken) {
-          setToken(storedToken);
-
-          const response = await userApi.ObtenerInfoJugador(storedToken);
-          
-          if (response.error) {
-            console.error('Error en la solicitud:', response.error);
-            navigation.navigate('Login', { screen: "Home" })
+        if(isAuthenticated)
+        {
+          const storedToken = await AsyncStorage.getItem('@AccessToken');
+          if (storedToken) {
+            setToken(storedToken);
+  
+            const response = await userApi.ObtenerInfoJugador(storedToken);
+            
+            if (response.error) {
+              console.error('Error en la solicitud:', response.error);
+              navigation.navigate('Login', { screen: "Home" })
+            }
+            setUserData(response);
+          } else {
+            console.log('Token no encontrado');
           }
-          setUserData(response);
-        } else {
-          console.log('Token no encontrado');
         }
       } catch (error) {
         console.error('Failed to fetch user data or token:', error);
+        logout();
       }
     };
     fetchTokenAndData();
-  }, []);
+  }, [isAuthenticated, navigation, logout]);
 
 
   

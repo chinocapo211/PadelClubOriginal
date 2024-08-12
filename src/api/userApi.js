@@ -1,5 +1,5 @@
 import apiManager from "./apiManger";
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const user_login = async (data) => {
   try {
     const result = await apiManager('POST', null, data, 'auth/login');
@@ -27,8 +27,31 @@ const ObtenerInfoJugador = async (token) => {
     return result.data;
   } catch (error) {
     console.error('Error en ObtenerInfoJugador:', error.message);
+    await AsyncStorage.removeItem('@AccessToken');
     return { error: error.message };
   }
 };
 
-export default { user_login, ObtenerInfoJugador };
+
+const ObtenerJugadores = async(token) =>
+{
+  console.log('Token:', token);
+  const method = "GET";
+  const headers = {
+    "Content-Type": "application/json",
+    "Authorization": `Bearer ${token}`,  
+  };
+  const data = {};
+  const path = "Jugador";
+  try {
+    const result = await apiManager(method, headers, data, path);
+    console.log('User info response:', result.data);  
+    return result.data;
+  } catch (error) {
+    console.error('Error en ObtenerInfoJugador:', error.message);
+    await AsyncStorage.removeItem('@AccessToken');
+    return { error: error.message };
+  }
+}
+
+export default { user_login, ObtenerInfoJugador, ObtenerJugadores };

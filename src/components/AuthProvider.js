@@ -1,6 +1,7 @@
-import React, { createContext, useState, useEffect, useContext } from 'react';
+import React, { createContext, useState, useEffect, useContext, useCallback } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import userApi from '../api/userApi';
+
 
 
 const AuthContext = createContext();
@@ -8,7 +9,7 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  useEffect(() => {const checkAuth = async () => {
+  const checkAuth = useCallback(async () => {
     try {
       const token = await AsyncStorage.getItem('@AccessToken');
       console.log(token);
@@ -28,8 +29,11 @@ export const AuthProvider = ({ children }) => {
       console.error('Error checking authentication:', error);
       setIsAuthenticated(false);
     }
-  };checkAuth();
-},[]);
+  }, []);
+
+  useEffect(() => {
+    checkAuth(); // Check authentication when the provider mounts
+  }, [checkAuth]);
   
   const login = async (newToken) => {
     try {

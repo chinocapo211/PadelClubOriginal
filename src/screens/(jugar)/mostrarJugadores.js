@@ -1,12 +1,31 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import NavbarHigh from '../../components/navbarHigh';
+import userApi from '../../api/userApi';
+import { useEffect } from 'react';
+import { useSafeAreaFrame } from 'react-native-safe-area-context';
 const MostrarJugadores = ({ navigation }) => {
-  const userName = 'Borja';
-  const userRank = 'Rango XVII';
-  const userName2 = 'Merentiel';
-  const userRank2 = 'Rango XI';
+  const [jugadores, setJugadores] = useState([]);
+  const [token, setToken] = useState(null);
 
+  useEffect(() => 
+  { const BuscarJugadores = async () =>
+    {
+      try{
+        const storedToken = await AsyncStorage.getItem('@AccessToken');
+          if (storedToken) {
+            setToken(storedToken);
+            const response = await userApi.ObtenerJugadores(storedToken);
+            setJugadores(response);
+          }
+      }
+      catch(error)
+      {
+        console.error('Failed to fetch user data or token:', error);
+      }
+    }
+   
+  })
   return (
     
     <View style={styles.container}>
@@ -22,8 +41,8 @@ const MostrarJugadores = ({ navigation }) => {
       <View style={styles.innerContainer}>
         <View style={styles.profileContainer}>
           <View style={styles.userInfo}>
-            <Text style={styles.userName}>{userName}</Text>
-            <Text style={styles.userRank}>{userRank}</Text>
+            <Text style={styles.userName}>{}</Text>
+            <Text style={styles.userRank}>{}</Text>
             <TouchableOpacity
           style={styles.addButton}
           onPress={() => navigation.navigate('')}
@@ -34,8 +53,8 @@ const MostrarJugadores = ({ navigation }) => {
         </View>
         <View style={styles.profileContainer}>
           <View style={styles.userInfo}>
-            <Text style={styles.userName}>{userName2}</Text>
-            <Text style={styles.userRank}>{userRank2}</Text>
+            <Text style={styles.userName}>{}</Text>
+            <Text style={styles.userRank}>{}</Text>
             <TouchableOpacity
           style={styles.addButton}
           onPress={() => navigation.navigate('')}

@@ -1,39 +1,64 @@
 import React, {useState, useEffect} from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import NavbarHigh from '../../components/navbarHigh';
-import userApi from '../../api/userApi';
-import grupoApi from '../../api/grupoApi';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import GruposApi from '../../api/GruposApi';
 
 const InicioJugar = ({ navigation }) => {
-  const [GroupData, setGroupData] = useState(null);
+  const [groupData, setGroupData] = useState(null);
+  const [jugadores, setJugadores] = useState([]);
   const [token, setToken] = useState(null);
+  const [idGrupo, setIdGrupo] = useState(null);
 
-
-  useEffect(() =>
-  {
-    const CreateGrupo = async () => 
-    {
-      
-      try{
+  useEffect(() => {
+    const createGrupo = async () => {
+      try {
         const storedToken = await AsyncStorage.getItem('@AccessToken');
         if (storedToken) {
           setToken(storedToken);
+
+          const response = await GruposApi.grupoApi(storedToken);
+          
+          if (response.data && response.data.idGrupo) {
+            await AsyncStorage.setItem('@GrupoId', response.data.idGrupo);
+            setIdGrupo(response.data.idGrupo);
+          }
+
+          setGroupData(response.data);
         }
-        const response = await grupoApi(storedToken);
-        console.log(response);
-        setGroupData(response);
-      }
-      catch (error)
-      {
+      } catch (error) {
         console.error('Failed to fetch user data or token:', error);
       }
     };
-    CreateGrupo(); 
-  },[]);
 
+    createGrupo();
+  }, []);
 
+  useEffect(() => {
+    const obtenerInfoGrupo = async () => {
+      try {
+        const storedToken = await AsyncStorage.getItem('@AccessToken');
+        const storedIdGrupo = await AsyncStorage.getItem('@GrupoId');
+        
+        if (storedToken && storedIdGrupo) {
+          const response = await GruposApi.ObtenerInfoGrupo(storedToken, storedIdGrupo);
+          console.log(response.data);
 
+          if (response.data && response.data.jugadores) {
+            setJugadores(response.data.jugadores); // Guardar los jugadores en el estado
+          }
+
+          setGroupData(response.data);
+        }
+      } catch (error) {
+        console.error('Failed to fetch group data:', error);
+      }
+    };
+
+    if (idGrupo) {
+      obtenerInfoGrupo();
+    }
+  }, [idGrupo]);
 
   return (
     <View style={styles.container}>
@@ -44,8 +69,13 @@ const InicioJugar = ({ navigation }) => {
       <View style={styles.innerContainer}>
         <View style={styles.profileContainer}>
           <View style={styles.userInfo}>
-            <Text style={styles.userName}>{}</Text>
-            <Text style={styles.userRank}>{}</Text>
+            {jugadores.map((jugador, index) => (
+              <View key={index} style={styles.jugadorContainer}>
+                <Text style={styles.userName}>{jugador.Nombre}</Text>
+                <Text style={styles.userRank}>Rango: {jugador.Rango}</Text>
+                {/* Muestra más información del jugador si es necesario */}
+              </View>
+            ))}
           </View>
         </View>
         <TouchableOpacity
