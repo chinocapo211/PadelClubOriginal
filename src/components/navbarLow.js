@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 5,
     width: '100%',
-    height: '8.4%',
+    height: '8.7%',
     alignItems: 'center',
   },
   gradient: {
@@ -45,6 +45,7 @@ const styles = StyleSheet.create({
     bottom: -5,
     width: '100%',
     height: 100, // Altura del contenedor de fondo
+    borderRadius:5,
   },
   navbar: {
     backgroundColor: 'white',
