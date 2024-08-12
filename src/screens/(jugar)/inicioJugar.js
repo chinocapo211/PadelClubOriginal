@@ -1,10 +1,39 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import NavbarHigh from '../../components/navbarHigh';
+import userApi from '../../api/userApi';
+import grupoApi from '../../api/grupoApi';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const InicioJugar = ({ navigation }) => {
-  const userName = 'Raul Molonuense';
-  const userRank = 'Rango XVII';
+  const [GroupData, setGroupData] = useState(null);
+  const [token, setToken] = useState(null);
+
+
+  useEffect(() =>
+  {
+    const CreateGrupo = async () => 
+    {
+      
+      try{
+        const storedToken = await AsyncStorage.getItem('@AccessToken');
+        if (storedToken) {
+          setToken(storedToken);
+        }
+        const response = await grupoApi(storedToken);
+        console.log(response);
+        setGroupData(response);
+      }
+      catch (error)
+      {
+        console.error('Failed to fetch user data or token:', error);
+      }
+    };
+    CreateGrupo(); 
+  },[]);
+
+
+
 
   return (
     <View style={styles.container}>
@@ -15,8 +44,8 @@ const InicioJugar = ({ navigation }) => {
       <View style={styles.innerContainer}>
         <View style={styles.profileContainer}>
           <View style={styles.userInfo}>
-            <Text style={styles.userName}>{userName}</Text>
-            <Text style={styles.userRank}>{userRank}</Text>
+            <Text style={styles.userName}>{}</Text>
+            <Text style={styles.userRank}>{}</Text>
           </View>
         </View>
         <TouchableOpacity
