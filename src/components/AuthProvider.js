@@ -8,8 +8,7 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  const checkAuth = useCallback(async () => {
+  useEffect(() => {const checkAuth = async () => {
     try {
       const token = await AsyncStorage.getItem('@AccessToken');
       console.log(token);
@@ -29,11 +28,10 @@ export const AuthProvider = ({ children }) => {
       console.error('Error checking authentication:', error);
       setIsAuthenticated(false);
     }
-  }, []);
+  };checkAuth();
+},[]);
+ 
 
-  useEffect(() => {
-    checkAuth(); // Check authentication when the provider mounts
-  }, [checkAuth]);
   
   const login = async (newToken) => {
     try {

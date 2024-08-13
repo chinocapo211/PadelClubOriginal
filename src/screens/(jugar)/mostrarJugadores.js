@@ -1,142 +1,142 @@
-import React, {useEffect} from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView } from 'react-native';
 import NavbarHigh from '../../components/navbarHigh';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import userApi from '../../api/userApi';
-import { useEffect } from 'react';
-import { useSafeAreaFrame } from 'react-native-safe-area-context';
+import GruposApi from '../../api/GruposApi';
+
 const MostrarJugadores = ({ navigation }) => {
   const [jugadores, setJugadores] = useState([]);
   const [token, setToken] = useState(null);
 
-  useEffect(() => 
-  { const BuscarJugadores = async () =>
-    {
-      try{
+  useEffect(() => {
+    const fetchJugadores = async () => {
+      try {
         const storedToken = await AsyncStorage.getItem('@AccessToken');
-          if (storedToken) {
-            setToken(storedToken);
-            const response = await userApi.ObtenerJugadores(storedToken);
-            setJugadores(response);
+        if (storedToken) {
+          setToken(storedToken);
+          const response = await userApi.ObtenerJugadores(storedToken);
+          if (response && Array.isArray(response)) {
+            setJugadores(response); 
+          } else {
+            console.error('Response structure is not as expected:', response);
           }
+        }
+      } catch (error) {
+        console.error('Failed to fetch players or token:', error);
+      }
+    };
+
+    fetchJugadores();
+  }, []);
+
+
+  useEffect(() =>
+  {
+    const updateGrupo = async() =>{
+
+      try
+      {
+        const storedToken = await AsyncStorage.getItem('@AccessToken');
+        if(storedToken)
+        {
+          setToken(storedToken);
+          const response = await GruposApi.updateGrupo(token,)
+        }
       }
       catch(error)
       {
-        console.error('Failed to fetch user data or token:', error);
+        console.error(error);
       }
     }
-   
   })
+
   return (
-    
     <View style={styles.container}>
-      <NavbarHigh>
-      </NavbarHigh>
+      <NavbarHigh />
       <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
         <Image
-            source={require('../../../assets/images/back.png')}
-            style={styles.backButton}
-          />
-        </TouchableOpacity>
-       
-      <View style={styles.innerContainer}>
-        <View style={styles.profileContainer}>
-          <View style={styles.userInfo}>
-            <Text style={styles.userName}>{}</Text>
-            <Text style={styles.userRank}>{}</Text>
-            <TouchableOpacity
-          style={styles.addButton}
-          onPress={() => navigation.navigate('')}
-        >
-          <Text style={styles.addButtonText}>+</Text>
-        </TouchableOpacity>
-          </View>
-        </View>
-        <View style={styles.profileContainer}>
-          <View style={styles.userInfo}>
-            <Text style={styles.userName}>{}</Text>
-            <Text style={styles.userRank}>{}</Text>
-            <TouchableOpacity
-          style={styles.addButton}
-          onPress={() => navigation.navigate('')}
-        >
-          <Text style={styles.addButtonText}>+</Text>
-        </TouchableOpacity>
-          </View>
-        </View>
-      
+          source={require('../../../assets/images/back.png')}
+          style={styles.backButton}
+        />
+      </TouchableOpacity>
+
+      <View style={styles.scrollContainer}>
+        <ScrollView contentContainerStyle={styles.scrollContent}>
+          {jugadores.map((item) => (
+            <View key={item.id} style={styles.profileContainer}>
+              <View style={styles.userInfo}>
+                <Text style={styles.userName}>{item.Nombre}</Text>
+                <Text style={styles.userRank}>{item.Rango}</Text>
+                <TouchableOpacity
+                  style={styles.addButton}
+                  onPress={() => navigation.navigate('SomeScreen', { playerId: item.id })}
+                >
+                  <Text style={styles.addButtonText}>+</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          ))}
+        </ScrollView>
       </View>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5F5F5', // Color de fondo para el contenedor principal
-    
-},
-backButton: {
-  alignSelf: 'flex-start',
-  width: 30,
-  height: 30,
-},
-  innerContainer: {
-    backgroundColor: 'white', // Color de fondo para el contenedor interno
-    borderRadius: 10,
-    marginTop:60,
-    padding: 20,
-    shadowColor: '#000',
-    height: 650,
-    width:500,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
+    backgroundColor: '#F5F5F5',
+  },
+  backButton: {
+    width: 30,
+    height: 30,
+    marginLeft: 10,
+    marginTop: 10,
+    zIndex: 1, // Asegura que el botón de volver esté sobre el ScrollView
+  },
+  scrollContainer: {
+    flex: 1, // Ocupa todo el espacio disponible
+    marginTop: 20, // Espacio desde el top (puedes ajustarlo según tu diseño)
+    marginBottom: 20, // Espacio en la parte inferior
+    overflow: 'hidden', // Asegura que cualquier contenido extra fuera de este contenedor no se vea
+  },
+  scrollContent: {
+    paddingVertical: 10,
+    paddingHorizontal: 15,
   },
   profileContainer: {
-    alignItems: 'center',
-    marginBottom: 20,
-    borderRadius: 15,
-    backgroundColor: 'white',
-    shadowOffset: {
-        width: 0,
-        height: 2,
-      },
-      shadowOpacity: 0.85,
-      shadowRadius: 3.84,
-      elevation: 5,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 10,
+    padding: 20,
+    marginBottom: 15,
+    elevation: 3,
   },
   userInfo: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
   },
   userName: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 5,
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#333',
   },
   userRank: {
-    fontSize: 18,
-    color: 'gray',
+    fontSize: 16,
+    color: '#666',
   },
   addButton: {
-    backgroundColor: '#00BFFF',
-    width: 60,
-    height: 60,
-    borderRadius: 40,
+    backgroundColor: '#007BFF',
+    borderRadius: 50,
+    width: 30,
+    height: 30,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 20, // Margen superior para separarlo del contenedor anterior
-
   },
   addButtonText: {
-    fontSize: 30,
-    fontStyle: 'bold',
-    color: 'white',
+    color: '#FFFFFF',
+    fontSize: 18,
   },
 });
 

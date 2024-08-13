@@ -4,45 +4,37 @@ import NavbarHigh from '../../components/navbarHigh';
 import NavbarLow from '../../components/navbarLow';
 import userApi from '../../api/userApi';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useAuth } from '../../components/AuthProvider';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 const Home = ({ navigation }) => {
   const [userData, setUserData] = useState(null);
-  const { isAuthenticated, logout } = useAuth();
   const [token, setToken] = useState(null);
 
   useEffect(() => {
     const fetchTokenAndData = async () => {
       try {
-        if(isAuthenticated)
-        {
-          const storedToken = await AsyncStorage.getItem('@AccessToken');
-          if (storedToken) {
-            setToken(storedToken);
-  
-            const response = await userApi.ObtenerInfoJugador(storedToken);
-            
-            if (response.error) {
-              console.error('Error en la solicitud:', response.error);
-              navigation.navigate('Login', { screen: "Home" })
-            }
-            setUserData(response);
-          } else {
-            console.log('Token no encontrado');
+        const storedToken = await AsyncStorage.getItem('@AccessToken');
+        if (storedToken) {
+          setToken(storedToken);
+          console.log(storedToken);
+          const response = await userApi.ObtenerInfoJugador(storedToken);
+          if (response.error) {
+            console.error('Error en la solicitud:', response.error);
+            navigation.navigate('Login', { screen: "Home" })
           }
+          setUserData(response);
+          console.log('User data:', response);
+        } else {
+          console.log('Token no encontrado');
+          navigation.navigate('Login', { screen: "IniciarSesion" })
         }
       } catch (error) {
         console.error('Failed to fetch user data or token:', error);
-        logout();
       }
     };
     fetchTokenAndData();
-  }, [isAuthenticated, navigation, logout]);
-
-
-  
+  }, []);
 
   return (
     <View style={styles.container}>

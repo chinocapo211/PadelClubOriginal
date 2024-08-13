@@ -44,5 +44,31 @@ const ObtenerInfoGrupo = async(token,storedIdGrupo) =>
 };
 
 
+const UpdateGrupo = async(token,storedIdGrupo,id2,id3,id4) =>
+{
+  const Token = await userApi.ObtenerInfoJugador(token);
+    const headers = {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,  
+      };
+      const data = 
+  {
+    id2: id2,
+    id3: id3,
+    id4: id4
+  }
+      try
+      {
+        const response = await apiManager("PATCH", headers, data,`GrupoXJugador/${storedIdGrupo}` )
+        return response;
+      }
+      catch(error)
+      {
+        console.error('Error en la solicitud:', error);
+        return { error: error.message };
+      }
+}
 
-export default {grupoApi, ObtenerInfoGrupo}
+
+
+export default {grupoApi, ObtenerInfoGrupo,UpdateGrupo}

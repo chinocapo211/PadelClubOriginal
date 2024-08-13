@@ -29,8 +29,7 @@ const PerfilStack = createStackNavigator();
 const NotificacionesStack = createStackNavigator();
 const AjustesStack = createStackNavigator();
 const HistorialStack = createStackNavigator();
-const LoggedStack = createStackNavigator();
-const NotLoggedStack = createStackNavigator();
+
 
 
 
@@ -131,7 +130,7 @@ function TabBarStackScreen() {
   
     return (
       <AppStack.Navigator screenOptions={{ headerShown: false }}>
-        {!isAuthenticated ? (
+        {isAuthenticated ? (
           <>
             <AppStack.Screen name="TabBar" component={TabBarStackScreen} />
             <AppStack.Screen name="NabBar" component={NavBarStackScreen} />
