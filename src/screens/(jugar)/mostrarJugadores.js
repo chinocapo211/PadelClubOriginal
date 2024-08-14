@@ -31,40 +31,45 @@ const MostrarJugadores = ({ navigation }) => {
     fetchJugadores();
   }, []);
 
-
-
   const UpdateGrupo = async (selectedPlayerId) => {
     try {
       const storedToken = await AsyncStorage.getItem('@AccessToken');
       const storedIdGrupo = await AsyncStorage.getItem('@GrupoId');
-  
+      console.log("idDelGrupo" + storedIdGrupo);
+      
       if (storedToken && storedIdGrupo) {
-        
+        // Obtener la información actual del grupo
         const grupoResponse = await GruposApi.ObtenerInfoGrupo(storedToken, storedIdGrupo);
-  
+       
+        // Verificar y actualizar el grupo
         if (grupoResponse) {
-          if (grupoResponse.id2 == 0) {
-            id2 = selectedPlayerId; 
-          } else if (grupoResponse.id3 == 0) {
-            id3 = selectedPlayerId; 
-          } else if (grupoResponse.id4 == 0) {
-            id4 = selectedPlayerId; 
+          if (grupoResponse.data.grupo.id2 == 0) {
+            grupoResponse.data.grupo.id2 = selectedPlayerId; 
+          } else if (grupoResponse.data.grupo.id3 == 0) {
+            grupoResponse.data.grupo.id3 = selectedPlayerId; 
+          } else if (grupoResponse.data.grupo.id4 == 0) {
+            grupoResponse.data.grupo.id4 = selectedPlayerId; 
           } else {
             console.warn('No hay espacio en el grupo');
             return;
           }
-
-        
-          const response = await GruposApi.UpdateGrupo(storedToken, storedIdGrupo,grupoResponse );
   
-          if (response && response.success) {
-            console.log('Grupo actualizado:', response);
+          // Enviar la actualización del grupo
+          const updateResponse = await GruposApi.UpdateGrupo(storedToken, storedIdGrupo, grupoResponse);
+          
+          if (updateResponse && updateResponse.success) {
+            console.log('Grupo actualizado:', updateResponse);
             
+            // Eliminar el jugador de la lista de jugadores
+            setJugadores(prevJugadores => prevJugadores.filter(jugador => jugador.id !== selectedPlayerId));
+            
+            // Navegar de regreso o actualizar la pantalla actual
+            navigation.goBack(); 
           } else {
-            console.error('Error al actualizar el grupo:', response);
+            console.error('Error al actualizar el grupo:', updateResponse);
           }
         } else {
-          console.error('Error al obtener la información del grupo:', grupoResponse);
+          console.error('Grupo no encontrado en la respuesta:', grupoResponse);
         }
       } else {
         console.warn('Token o ID del grupo no disponible');
@@ -74,36 +79,35 @@ const MostrarJugadores = ({ navigation }) => {
     }
   };
   
-
   return (
     <SafeAreaView style={styles.safeArea}>
-    <View style={styles.container}>
-      <NavbarHigh />
-      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-        <Image
-          source={require('../../../assets/images/back.png')}
-          style={styles.backButton}
-        />
-      </TouchableOpacity>
-      <View style={styles.scrollContainer}>
-        <ScrollView contentContainerStyle={styles.scrollContent}>
-          {jugadores.map((item) => (
-            <View key={item.id} style={styles.profileContainer}>
-              <View style={styles.userInfo}>
-                <Text style={styles.userName}>{item.Nombre}</Text>
-                <Text style={styles.userRank}>{item.Rango}</Text>
-                <TouchableOpacity
-                  style={styles.addButton}
-                  onPress={() => UpdateGrupo(item.id)}
-                >
-                  <Text style={styles.addButtonText}>+</Text>
-                </TouchableOpacity>
+      <View style={styles.container}>
+        <NavbarHigh />
+        <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+          <Image
+            source={require('../../../assets/images/back.png')}
+            style={styles.backButton}
+          />
+        </TouchableOpacity>
+        <View style={styles.scrollContainer}>
+          <ScrollView contentContainerStyle={styles.scrollContent}>
+            {jugadores.map((item) => (
+              <View key={item.id} style={styles.profileContainer}>
+                <View style={styles.userInfo}>
+                  <Text style={styles.userName}>{item.Nombre}</Text>
+                  <Text style={styles.userRank}>{item.Rango}</Text>
+                  <TouchableOpacity
+                    style={styles.addButton}
+                    onPress={() => UpdateGrupo(item.id)}
+                  >
+                    <Text style={styles.addButtonText}>+</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
-            </View>
-          ))}
-        </ScrollView>
+            ))}
+          </ScrollView>
+        </View>
       </View>
-    </View>
     </SafeAreaView>
   );
 };
