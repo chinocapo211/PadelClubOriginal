@@ -1,9 +1,11 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import Logo from '../../../assets/images/verif.jpg';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const ContraseñaExitosa = ({ navigation }) => {
   return (
+    <SafeAreaView style={styles.safeArea}>
     <View style={styles.container}>
       <View style={styles.topBackground}>
       <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
@@ -32,10 +34,14 @@ const ContraseñaExitosa = ({ navigation }) => {
         </TouchableOpacity>
       </View>
     </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex:1,
+  },
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF',

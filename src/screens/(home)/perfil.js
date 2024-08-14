@@ -5,6 +5,7 @@
   import NavbarLow from '../../components/navbarLow';
   import AsyncStorage from '@react-native-async-storage/async-storage';
   import userApi from '../../api/userApi';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 
   const { width, height } = Dimensions.get('window'); // Obtén las dimensiones de la pantalla
@@ -44,6 +45,7 @@
     
   
     return (
+      <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
         <NavbarHigh />
         <View style={styles.innerContainer}>
@@ -77,10 +79,14 @@
         </View>
         <NavbarLow />
       </View>
+      </SafeAreaView>
     );
   };
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex:1,
+  },
   container: {
     flex: 1,
     backgroundColor: '#F5F5F5',

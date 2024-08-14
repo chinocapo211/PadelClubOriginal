@@ -4,6 +4,7 @@ import NavbarHigh from '../../components/navbarHigh';
 import NavbarLow from '../../components/navbarLow';
 import userApi from '../../api/userApi';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
@@ -37,6 +38,7 @@ const Home = ({ navigation }) => {
   }, []);
 
   return (
+  <SafeAreaView style={styles.safeArea}>
     <View style={styles.container}>
       <NavbarHigh />
       <View style={styles.buttonContainer}>
@@ -61,15 +63,18 @@ const Home = ({ navigation }) => {
       </View>
       <NavbarLow />
     </View>
+  </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex:1,
+  },
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: screenHeight * 0.05,
     paddingBottom: screenHeight * 0.05,
   },
   buttonContainer: {

@@ -4,6 +4,7 @@ import NavbarHigh from '../../components/navbarHigh';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import NavbarLow from '../../components/navbarLow';
 import NotificacionesApi from '../../api/NotificacionesApi';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const Notificaciones = ({ navigation }) => {
   const [notificaciones, setNotificaciones] = useState([]);
@@ -48,6 +49,7 @@ const Notificaciones = ({ navigation }) => {
   );
 
   return (
+    <SafeAreaView style={styles.safeArea}>
     <View style={styles.container}>
       <NavbarHigh />
       <FlatList
@@ -59,10 +61,14 @@ const Notificaciones = ({ navigation }) => {
       />
       <NavbarLow />
     </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex:1,
+  },
   container: {
     flex: 1,
     backgroundColor: '#F5F5F5',
