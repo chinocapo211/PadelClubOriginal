@@ -16,6 +16,7 @@ import ContraseñaExitosa from './src/screens/(login)/contraseñaExitosa';
 import Amigos from './src/screens/(home)/amigos';
 import InicioJugar from './src/screens/(jugar)/inicioJugar';
 import MostrarJugadores from './src/screens/(jugar)/mostrarJugadores';
+import PuntajeJugar from './src/screens/(jugar)/puntajeJugar';
 import { AuthProvider, useAuth } from './src/components/AuthProvider';
 
 const LoginStack = createStackNavigator();
@@ -91,6 +92,7 @@ function JugarStackScreen() {
     <JugarStack.Navigator screenOptions={{ headerShown: false }}>
       <JugarStack.Screen name="InicioJugar" component={InicioJugar} />
       <JugarStack.Screen name="MostrarJugadores" component={MostrarJugadores} />
+      <JugarStack.Screen name="PuntajeJugar" component={PuntajeJugar}/>
     </JugarStack.Navigator>
   );
 }
