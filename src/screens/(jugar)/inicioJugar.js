@@ -14,20 +14,31 @@ const InicioJugar = ({ navigation }) => {
     const createGrupo = async () => {
       try {
         const storedToken = await AsyncStorage.getItem('@AccessToken');
+        const storedIdGrupo = await AsyncStorage.getItem('@IdGrupo');
+
         if (storedToken) {
           setToken(storedToken);
 
-          const response = await GruposApi.grupoApi(storedToken);
-          
-          if (response.data && response.data.idGrupo) {
-            await AsyncStorage.setItem('@GrupoId', response.data.idGrupo);
-            setIdGrupo(response.data.idGrupo);
-          }
+          if (storedIdGrupo) {
+            // Si ya hay un grupo existente, usa ese ID
+            setIdGrupo(storedIdGrupo);
+            console.log('Grupo existente encontrado:', storedIdGrupo);
+          } else {
+            // Si no hay un grupo existente, crea uno nuevo
+            const response = await GruposApi.grupoApi(storedToken);
 
-          setGroupData(response.data);
+            if (response && response.data && response.data.idGrupo) {
+              await AsyncStorage.setItem('@GrupoId', response.data.idGrupo);
+              setIdGrupo(response.data.idGrupo);
+              setGroupData(response.data);
+              console.log('Nuevo grupo creado:', response.data.idGrupo);
+            } else {
+              console.error('Error al crear grupo:', response);
+            }
+          }
         }
       } catch (error) {
-        console.error('Failed to fetch user data or token:', error);
+        console.error('Error al inicializar grupo o token:', error);
       }
     };
 
@@ -39,7 +50,7 @@ const InicioJugar = ({ navigation }) => {
       try {
         const storedToken = await AsyncStorage.getItem('@AccessToken');
         const storedIdGrupo = await AsyncStorage.getItem('@GrupoId');
-        
+
         if (storedToken && storedIdGrupo) {
           const response = await GruposApi.ObtenerInfoGrupo(storedToken, storedIdGrupo);
           console.log(response.data);
@@ -47,11 +58,10 @@ const InicioJugar = ({ navigation }) => {
           if (response.data && response.data.jugadores) {
             setJugadores(response.data.jugadores); // Guardar los jugadores en el estado
           }
-
           setGroupData(response.data);
         }
       } catch (error) {
-        console.error('Failed to fetch group data:', error);
+        console.error('Error al obtener la información del grupo:', error);
       }
     };
 

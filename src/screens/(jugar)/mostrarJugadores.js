@@ -31,25 +31,48 @@ const MostrarJugadores = ({ navigation }) => {
   }, []);
 
 
-  useEffect(() =>
-  {
-    const updateGrupo = async() =>{
 
-      try
-      {
-        const storedToken = await AsyncStorage.getItem('@AccessToken');
-        if(storedToken)
-        {
-          setToken(storedToken);
-          const response = await GruposApi.updateGrupo(token,)
+  const UpdateGrupo = async (selectedPlayerId) => {
+    try {
+      const storedToken = await AsyncStorage.getItem('@AccessToken');
+      const storedIdGrupo = await AsyncStorage.getItem('@GrupoId');
+  
+      if (storedToken && storedIdGrupo) {
+        
+        const grupoResponse = await GruposApi.ObtenerInfoGrupo(storedToken, storedIdGrupo);
+  
+        if (grupoResponse) {
+          if (grupoResponse.id2 == 0) {
+            id2 = selectedPlayerId; 
+          } else if (grupoResponse.id3 == 0) {
+            id3 = selectedPlayerId; 
+          } else if (grupoResponse.id4 == 0) {
+            id4 = selectedPlayerId; 
+          } else {
+            console.warn('No hay espacio en el grupo');
+            return;
+          }
+
+        
+          const response = await GruposApi.UpdateGrupo(storedToken, storedIdGrupo,grupoResponse );
+  
+          if (response && response.success) {
+            console.log('Grupo actualizado:', response);
+            
+          } else {
+            console.error('Error al actualizar el grupo:', response);
+          }
+        } else {
+          console.error('Error al obtener la información del grupo:', grupoResponse);
         }
+      } else {
+        console.warn('Token o ID del grupo no disponible');
       }
-      catch(error)
-      {
-        console.error(error);
-      }
+    } catch (error) {
+      console.error('Error al actualizar el grupo:', error);
     }
-  })
+  };
+  
 
   return (
     <View style={styles.container}>
@@ -70,7 +93,7 @@ const MostrarJugadores = ({ navigation }) => {
                 <Text style={styles.userRank}>{item.Rango}</Text>
                 <TouchableOpacity
                   style={styles.addButton}
-                  onPress={() => navigation.navigate('SomeScreen', { playerId: item.id })}
+                  onPress={() => UpdateGrupo(item.id)}
                 >
                   <Text style={styles.addButtonText}>+</Text>
                 </TouchableOpacity>
