@@ -22,7 +22,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
         if (result.status === 200) {
           const token = result.data.access_Token;
           login(token);
-          navigation.navigate('Logged', { screen: "HomeStack" });
+          navigation.navigate('Login', { screen: "IniciarSesion" });
         } else {
           setErrorMessage('Error de login');
         }

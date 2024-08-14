@@ -15,7 +15,7 @@ const InicioJugar = ({ navigation }) => {
     const createGrupo = async () => {
       try {
         const storedToken = await AsyncStorage.getItem('@AccessToken');
-        const storedIdGrupo = await AsyncStorage.getItem('@IdGrupo');
+        const storedIdGrupo = await AsyncStorage.getItem('@GrupoId');
 
         if (storedToken) {
           setToken(storedToken);
@@ -51,11 +51,11 @@ const InicioJugar = ({ navigation }) => {
       try {
         const storedToken = await AsyncStorage.getItem('@AccessToken');
         const storedIdGrupo = await AsyncStorage.getItem('@GrupoId');
-
+  
         if (storedToken && storedIdGrupo) {
           const response = await GruposApi.ObtenerInfoGrupo(storedToken, storedIdGrupo);
           console.log(response.data);
-
+  
           if (response.data && response.data.jugadores) {
             setJugadores(response.data.jugadores); // Guardar los jugadores en el estado
           }
@@ -65,10 +65,11 @@ const InicioJugar = ({ navigation }) => {
         console.error('Error al obtener la información del grupo:', error);
       }
     };
-
+  
     if (idGrupo) {
       obtenerInfoGrupo();
     }
+  
   }, [idGrupo]);
 
   return (

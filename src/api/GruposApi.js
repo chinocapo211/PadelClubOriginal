@@ -44,16 +44,24 @@ const ObtenerInfoGrupo = async(token,storedIdGrupo) =>
 };
 
 
-const UpdateGrupo = async (token,idGrupo,grupoResponse) => {
+const UpdateGrupo = async (token, idGrupo, grupoResponse) => {
   const Token = await userApi.ObtenerInfoJugador(token);
   console.log(Token);
+
   const headers = {
     "Content-Type": "application/json",
-    "Authorization": `Bearer ${token}`,  
+    "Authorization": `Bearer ${token}`,
+  };
+
+  // Asegúrate de que `grupoResponse` contenga solo los campos necesarios.
+  const dataToSend = {
+    id2: grupoResponse.data.grupo.id2,
+    id3: grupoResponse.data.grupo.id3,
+    id4: grupoResponse.data.grupo.id4,
   };
 
   try {
-    const result = await apiManager("POST", headers, grupoResponse , `GrupoXJugador/${idGrupo}`);
+    const result = await apiManager("PATCH", headers, dataToSend, `GrupoXJugador/${idGrupo}`);
     return result;
   } catch (error) {
     console.error('Error en la solicitud:', error);
