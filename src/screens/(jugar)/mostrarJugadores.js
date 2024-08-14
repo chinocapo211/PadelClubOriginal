@@ -9,6 +9,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 const MostrarJugadores = ({ navigation }) => {
   const [jugadores, setJugadores] = useState([]);
   const [token, setToken] = useState(null);
+  const [grupoData, setGrupoData] = useState(null);
 
   useEffect(() => {
     const fetchJugadores = async () => {
@@ -16,9 +17,22 @@ const MostrarJugadores = ({ navigation }) => {
         const storedToken = await AsyncStorage.getItem('@AccessToken');
         if (storedToken) {
           setToken(storedToken);
+
+          // Obtener la información del grupo para filtrar jugadores
+          const storedIdGrupo = await AsyncStorage.getItem('@GrupoId');
+          if (storedIdGrupo) {
+            const grupoResponse = await GruposApi.ObtenerInfoGrupo(storedToken, storedIdGrupo);
+            if (grupoResponse && grupoResponse.data) {
+              setGrupoData(grupoResponse.data.grupo);
+            }
+          }
+
           const response = await userApi.ObtenerJugadores(storedToken);
           if (response && Array.isArray(response)) {
-            setJugadores(response); 
+            // Filtrar jugadores que ya están en el grupo
+            const jugadoresEnGrupo = [grupoData?.id2, grupoData?.id3, grupoData?.id4].filter(id => id !== 0);
+            const jugadoresFiltrados = response.filter(jugador => !jugadoresEnGrupo.includes(jugador.id));
+            setJugadores(jugadoresFiltrados);
           } else {
             console.error('Response structure is not as expected:', response);
           }
@@ -29,42 +43,41 @@ const MostrarJugadores = ({ navigation }) => {
     };
 
     fetchJugadores();
-  }, []);
+  }, []); // Dependencia en grupoData para ejecutar el efecto cuando grupoData cambie
 
   const UpdateGrupo = async (selectedPlayerId) => {
     try {
       const storedToken = await AsyncStorage.getItem('@AccessToken');
       const storedIdGrupo = await AsyncStorage.getItem('@GrupoId');
       console.log("idDelGrupo" + storedIdGrupo);
-      
+
       if (storedToken && storedIdGrupo) {
         // Obtener la información actual del grupo
         const grupoResponse = await GruposApi.ObtenerInfoGrupo(storedToken, storedIdGrupo);
-       
-        // Verificar y actualizar el grupo
+
         if (grupoResponse) {
-          if (grupoResponse.data.grupo.id2 == 0) {
-            grupoResponse.data.grupo.id2 = selectedPlayerId; 
-          } else if (grupoResponse.data.grupo.id3 == 0) {
-            grupoResponse.data.grupo.id3 = selectedPlayerId; 
-          } else if (grupoResponse.data.grupo.id4 == 0) {
-            grupoResponse.data.grupo.id4 = selectedPlayerId; 
+          const grupo = grupoResponse.data.grupo;
+
+          // Encuentra la posición disponible en el grupo y actualiza
+          if (grupo.id2 === 0) {
+            grupo.id2 = selectedPlayerId;
+          } else if (grupo.id3 === 0) {
+            grupo.id3 = selectedPlayerId;
+          } else if (grupo.id4 === 0) {
+            grupo.id4 = selectedPlayerId;
           } else {
             console.warn('No hay espacio en el grupo');
             return;
           }
-  
+
           // Enviar la actualización del grupo
           const updateResponse = await GruposApi.UpdateGrupo(storedToken, storedIdGrupo, grupoResponse);
-          
-          if (updateResponse && updateResponse.success) {
+
+          if (updateResponse) {
             console.log('Grupo actualizado:', updateResponse);
-            
+
             // Eliminar el jugador de la lista de jugadores
             setJugadores(prevJugadores => prevJugadores.filter(jugador => jugador.id !== selectedPlayerId));
-            
-            // Navegar de regreso o actualizar la pantalla actual
-            navigation.goBack(); 
           } else {
             console.error('Error al actualizar el grupo:', updateResponse);
           }
@@ -78,7 +91,7 @@ const MostrarJugadores = ({ navigation }) => {
       console.error('Error al actualizar el grupo:', error);
     }
   };
-  
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
@@ -111,7 +124,6 @@ const MostrarJugadores = ({ navigation }) => {
     </SafeAreaView>
   );
 };
-
 const styles = StyleSheet.create({
   safeArea: {
     flex:1,

@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import NavbarHigh from '../../components/navbarHigh';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import GruposApi from '../../api/GruposApi';
@@ -21,11 +21,9 @@ const InicioJugar = ({ navigation }) => {
           setToken(storedToken);
 
           if (storedIdGrupo) {
-            // Si ya hay un grupo existente, usa ese ID
             setIdGrupo(storedIdGrupo);
             console.log('Grupo existente encontrado:', storedIdGrupo);
           } else {
-            // Si no hay un grupo existente, crea uno nuevo
             const response = await GruposApi.grupoApi(storedToken);
 
             if (response && response.data && response.data.idGrupo) {
@@ -51,11 +49,11 @@ const InicioJugar = ({ navigation }) => {
       try {
         const storedToken = await AsyncStorage.getItem('@AccessToken');
         const storedIdGrupo = await AsyncStorage.getItem('@GrupoId');
-  
+
         if (storedToken && storedIdGrupo) {
           const response = await GruposApi.ObtenerInfoGrupo(storedToken, storedIdGrupo);
           console.log(response.data);
-  
+
           if (response.data && response.data.jugadores) {
             setJugadores(response.data.jugadores); // Guardar los jugadores en el estado
           }
@@ -65,44 +63,99 @@ const InicioJugar = ({ navigation }) => {
         console.error('Error al obtener la información del grupo:', error);
       }
     };
-  
+
     if (idGrupo) {
       obtenerInfoGrupo();
     }
-  
+
   }, [idGrupo]);
+
+  const UpdateGrupo = async (selectedPlayerId) => {
+    try {
+      const storedToken = await AsyncStorage.getItem('@AccessToken');
+      const storedIdGrupo = await AsyncStorage.getItem('@GrupoId');
+      console.log("idDelGrupo" + storedIdGrupo);
+
+      if (storedToken && storedIdGrupo) {
+        // Obtener la información actual del grupo
+        const grupoResponse = await GruposApi.ObtenerInfoGrupo(storedToken, storedIdGrupo);
+
+        // Verificar y actualizar el grupo
+        if (grupoResponse) {
+          const grupo = grupoResponse.data.grupo;
+
+          // Encuentra la posición del jugador a eliminar
+          if (grupo.id2 === selectedPlayerId) {
+            grupo.id2 = 0;
+          } else if (grupo.id3 === selectedPlayerId) {
+            grupo.id3 = 0;
+          } else if (grupo.id4 === selectedPlayerId) {
+            grupo.id4 = 0;
+          } else {
+            console.warn('El jugador no se encuentra en el grupo');
+            return;
+          }
+
+          // Enviar la actualización del grupo
+          const updateResponse = await GruposApi.UpdateGrupo(storedToken, storedIdGrupo, grupoResponse);
+
+          if (updateResponse ) {
+            console.log('Grupo actualizado:', updateResponse);
+
+            // Eliminar el jugador de la lista de jugadores
+            setJugadores(prevJugadores => prevJugadores.filter(jugador => jugador.id !== selectedPlayerId));
+
+            // Navegar de regreso o actualizar la pantalla actual
+            navigation.goBack();
+          } else {
+            console.error('Error al actualizar el grupo:', updateResponse);
+          }
+        } else {
+          console.error('Grupo no encontrado en la respuesta:', grupoResponse);
+        }
+      } else {
+        console.warn('Token o ID del grupo no disponible');
+      }
+    } catch (error) {
+      console.error('Error al actualizar el grupo:', error);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.safeArea}>
-    <View style={styles.container}>
-      <NavbarHigh />
-      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-        <Text style={styles.backButtonText}>{'<'}</Text>
-      </TouchableOpacity>
-      <View style={styles.innerContainer}>
-        <View style={styles.profileContainer}>
-          <View style={styles.userInfo}>
-            {jugadores.map((jugador, index) => (
-              <View key={index} style={styles.jugadorContainer}>
-                <Text style={styles.userName}>{jugador.Nombre}</Text>
-                <Text style={styles.userRank}>Rango: {jugador.Rango}</Text>
-                {/* Muestra más información del jugador si es necesario */}
-              </View>
-            ))}
-          </View>
-        </View>
-        <TouchableOpacity
-          style={styles.addButton}
-          onPress={() => navigation.navigate('MostrarJugadores')}
-        >
-          <Text style={styles.addButtonText}>+</Text>
+      <View style={styles.container}>
+        <NavbarHigh />
+        <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+          <Text style={styles.backButtonText}>{'<'}</Text>
         </TouchableOpacity>
+        <View style={styles.innerContainer}>
+          <View style={styles.profileContainer}>
+            <View style={styles.userInfo}>
+              {jugadores.map((jugador) => (
+                <View key={jugador.id} style={styles.jugadorContainer}>
+                  <Text style={styles.userName}>{jugador.Nombre}</Text>
+                  <Text style={styles.userRank}>Rango: {jugador.Rango}</Text>
+                  <TouchableOpacity
+                    style={styles.crossButton}
+                    onPress={() => UpdateGrupo(jugador.id)} // Llama a UpdateGrupo con ID del jugador como 0
+                  >
+                    <Text style={styles.crossIcon}> - </Text>
+                  </TouchableOpacity>
+                </View>
+              ))}
+            </View>
+          </View>
+          <TouchableOpacity
+            style={styles.addButton}
+            onPress={() => navigation.navigate('MostrarJugadores')}
+          >
+            <Text style={styles.addButtonText}>+</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
     </SafeAreaView>
   );
 }
-
 const styles = StyleSheet.create({
   safeArea: {
     flex:1,
@@ -178,6 +231,10 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: 'bold',
     color: 'white',
+  },
+  crossIcon: {
+    width: 24,
+    height: 24
   },
 });
 
