@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Dimensions, Image } from 'react-native';
 import { Entypo } from '@expo/vector-icons'; // Importa el ícono de Entypo
 import NavbarHigh from '../../components/navbarHigh';
+import { SafeAreaView } from 'react-native-web';
 
 const { width, height } = Dimensions.get('window'); // Obtén las dimensiones de la pantalla
 
@@ -15,6 +16,7 @@ const Amigos = ({ navigation }) => {
   const userProfileImage2 = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTGA6ie41S3pVc3qKVfbXoAuE71BZy67h0t6mJcwxdOPXYA5kDbnrVnb7AxIs66GEIj0o4&usqp=CAU'; // URL de la imagen de perfil de Merentiel
 
   return (
+    <SafeAreaView style={styles.safeArea}>
     <View style={styles.container}>
       <NavbarHigh />
       <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
@@ -47,10 +49,14 @@ const Amigos = ({ navigation }) => {
         </View>
       </View>
     </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex:1,
+  },
   container: {
     flex: 1,
     backgroundColor: '#F5F5F5', // Color de fondo para el contenedor principal

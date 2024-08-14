@@ -42,8 +42,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: '20%',  // Espaciado horizontal para los elementos
+    marginTop: 7,
     left:0,
-    margintop: 7, 
     top:0,
   },
   logo: {

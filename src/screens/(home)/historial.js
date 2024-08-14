@@ -2,9 +2,11 @@ import React from 'react';
 import { View, Text, Image, StyleSheet, Button, Dimensions } from 'react-native';
 import NavbarHigh from '../../components/navbarHigh';
 import NavbarLow from '../../components/navbarLow';
+import { SafeAreaView } from 'react-native-safe-area-context';
 const { height } = Dimensions.get('window');
 const Historial = () => {
   return (
+    <SafeAreaView style={styles.safeArea}>
     <View style={styles.container}>
       <NavbarHigh/>
       <View style={styles.matchContainer}>
@@ -67,10 +69,14 @@ const Historial = () => {
       </View>
       <NavbarLow/>
     </View>
+  </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex:1,
+  },
   container: {
     flex: 1,
     padding: 10,

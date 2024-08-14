@@ -4,6 +4,7 @@ import NavbarHigh from '../../components/navbarHigh';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import userApi from '../../api/userApi';
 import GruposApi from '../../api/GruposApi';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const MostrarJugadores = ({ navigation }) => {
   const [jugadores, setJugadores] = useState([]);
@@ -52,6 +53,7 @@ const MostrarJugadores = ({ navigation }) => {
   })
 
   return (
+    <SafeAreaView style={styles.safeArea}>
     <View style={styles.container}>
       <NavbarHigh />
       <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
@@ -60,7 +62,6 @@ const MostrarJugadores = ({ navigation }) => {
           style={styles.backButton}
         />
       </TouchableOpacity>
-
       <View style={styles.scrollContainer}>
         <ScrollView contentContainerStyle={styles.scrollContent}>
           {jugadores.map((item) => (
@@ -80,10 +81,14 @@ const MostrarJugadores = ({ navigation }) => {
         </ScrollView>
       </View>
     </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex:1,
+  },
   container: {
     flex: 1,
     backgroundColor: '#F5F5F5',
