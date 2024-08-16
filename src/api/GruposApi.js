@@ -7,7 +7,7 @@ import userApi from './userApi';
   const headers = {
     "Content-Type": "application/json",
     "Authorization": `Bearer ${token}`,  
-    "ngrok-skip-browser-warning": 3005, 
+    "ngrok-skip-browser-warning": true, 
   };
   const data = 
   {

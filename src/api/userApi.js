@@ -2,10 +2,12 @@ import apiManager from "./apiManger";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 const user_login = async (data) => {
   const headers = {
+    "Content-Type": "application/json",
     "ngrok-skip-browser-warning": true,  
   };
   try {
-    const result = await apiManager('POST', null, data, 'auth/login');
+    console.log
+    const result = await apiManager('GET', headers, data, 'auth/H');
     console.log(result);
     return result;
   } catch (error) {
@@ -20,7 +22,7 @@ const ObtenerInfoJugador = async (token) => {
   const headers = {
     "Content-Type": "application/json",
     "Authorization": `Bearer ${token}`,
-    "ngrok-skip-browser-warning": 3005,  
+    "ngrok-skip-browser-warning": true,  
   };
   const data = {};  
   const path = "auth/Decode";  
@@ -44,7 +46,7 @@ const ObtenerJugadores = async(token) =>
   const headers = {
     "Content-Type": "application/json",
     "Authorization": `Bearer ${token}`,  
-    "ngrok-skip-browser-warning": 3005, 
+    "ngrok-skip-browser-warning": true, 
   };
   const data = {};
   const path = "Jugador";
