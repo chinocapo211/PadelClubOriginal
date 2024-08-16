@@ -29,7 +29,7 @@ const InicioJugar = ({ navigation }) => {
             const response = await GruposApi.grupoApi(storedToken);
 
             if (response && response.data && response.data.idGrupo) {
-              await AsyncStorage.setItem('@GrupoId', response.data.idGrupo);
+              await AsyncStorage.setItem('@GrupoId', response.data.idGrupo.toString());
               setIdGrupo(response.data.idGrupo);
               setGroupData(response.data);
               console.log('Nuevo grupo creado:', response.data.idGrupo);
@@ -96,7 +96,7 @@ const InicioJugar = ({ navigation }) => {
         if (grupoResponse) {
           const grupo = grupoResponse.data.grupo;
 
-          if (grupo.id2 === selectedPlayerId) {
+          if (grupoResponse.data.grupo.id2 === selectedPlayerId) {
             grupo.id2 = 0;
           } else if (grupo.id3 === selectedPlayerId) {
             grupo.id3 = 0;

@@ -31,11 +31,12 @@ const ObtenerInfoGrupo = async(token,storedIdGrupo) =>
     const headers = {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`,  
-        "ngrok-skip-browser-warning": 3005, 
+        "ngrok-skip-browser-warning": true
+        , 
       };
       try
       {
-        const response = await apiManager("GET", headers, {},`GrupoXJugador/${storedIdGrupo}` )
+        const response = await apiManager("GET", headers, {},`GrupoXJugador/${parseInt(storedIdGrupo, 10)}` )
         return response;
       }
       catch(error)
@@ -53,7 +54,7 @@ const UpdateGrupo = async (token, idGrupo, grupoResponse) => {
   const headers = {
     "Content-Type": "application/json",
     "Authorization": `Bearer ${token}`,
-    "ngrok-skip-browser-warning": 3005, 
+    "ngrok-skip-browser-warning": true, 
   };
 
   // Asegúrate de que `grupoResponse` contenga solo los campos necesarios.
@@ -64,7 +65,7 @@ const UpdateGrupo = async (token, idGrupo, grupoResponse) => {
   };
 
   try {
-    const result = await apiManager("PATCH", headers, dataToSend, `GrupoXJugador/${idGrupo}`);
+    const result = await apiManager("PATCH", headers, dataToSend, `GrupoXJugador/${parseInt(idGrupo, 10)}`);
     return result;
   } catch (error) {
     console.error('Error en la solicitud:', error);
