@@ -186,9 +186,9 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: '#F5F5F5',
     alignItems: 'center',
-    paddingTop: 160,
+    paddingTop: 150,
   },
   backButton: {
     position: 'absolute',
@@ -200,12 +200,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   innerContainer: {
-    backgroundColor: 'black',
+    backgroundColor: 'white',
     borderRadius: 10,
     shadowColor: '#000',
     height: 200,
     width: '90%',
-    marginTop: 30,
+    marginTop: 20,
     shadowOffset: {
       width: 0,
       height: 2,
@@ -223,14 +223,14 @@ const styles = StyleSheet.create({
       width: 0,
       height: 2,
     },
-    shadowOpacity: 0.85,
-    shadowRadius: 3.84,
-    elevation: 5,
+    shadowOpacity: 0.50,
+    shadowRadius: 2.50,
     padding: 20,
     width: '100%',
   },
   userInfo: {
     alignItems: 'center',
+    
   },
   userName: {
     fontSize: 24,
@@ -262,7 +262,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 150, // Margen superior para separarlo del contenedor anterior
+    marginTop: 100, // Margen superior para separarlo del contenedor anterior
   },
   startButtonText: {
     fontSize: 20,
