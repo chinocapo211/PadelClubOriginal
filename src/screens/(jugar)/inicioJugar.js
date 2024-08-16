@@ -147,8 +147,10 @@ const InicioJugar = ({ navigation }) => {
             <View style={styles.userInfo}>
               {jugadores.map((jugador) => (
                 <View key={jugador.id} style={styles.jugadorContainer}>
+                  <View style={styles.textos}>
                   <Text style={styles.userName}>{jugador.Nombre}</Text>
                   <Text style={styles.userRank}>Rango: {jugador.Rango}</Text>
+                  </View>
                   <TouchableOpacity
                     style={styles.crossButton}
                     onPress={() => UpdateGrupo(jugador.id)} 
@@ -200,37 +202,15 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   innerContainer: {
-    backgroundColor: 'white',
-    borderRadius: 10,
-    shadowColor: '#000',
-    height: 200,
-    width: '90%',
-    marginTop: 20,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
+    marginTop: '2%',
     alignItems: 'center',
+    width:'90%'
   },
   profileContainer: {
     alignItems: 'center',
-    borderRadius: 15,
-    backgroundColor: 'white',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.50,
-    shadowRadius: 2.50,
-    padding: 20,
     width: '100%',
   },
   userInfo: {
-    alignItems: 'center',
-    
   },
   userName: {
     fontSize: 24,
@@ -273,6 +253,26 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
   },
+  jugadorContainer:{
+    backgroundColor: 'white',
+    borderRadius: 10,
+    shadowColor: '#000',
+    width: '100%',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    padding:10,
+    marginBottom:'10%',
+    flexDirection: 'row', // Alinea los elementos en una fila
+    justifyContent: 'space-between', // Distribuye los elementos para que haya espacio entre ellos
+    alignItems: 'center', // Centra los elementos verticalmente
+  },
+  textos:{
+    
+  }
 });
 
 export default InicioJugar;
