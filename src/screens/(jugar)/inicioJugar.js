@@ -186,9 +186,9 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: 'white',
     alignItems: 'center',
-    paddingTop: 150,
+    paddingTop: 160,
   },
   backButton: {
     position: 'absolute',
@@ -200,12 +200,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   innerContainer: {
-    backgroundColor: 'white',
+    backgroundColor: 'black',
     borderRadius: 10,
     shadowColor: '#000',
     height: 200,
     width: '90%',
-    marginTop: 20,
+    marginTop: 30,
     shadowOffset: {
       width: 0,
       height: 2,
@@ -262,7 +262,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 100, // Margen superior para separarlo del contenedor anterior
+    marginTop: 150, // Margen superior para separarlo del contenedor anterior
   },
   startButtonText: {
     fontSize: 20,

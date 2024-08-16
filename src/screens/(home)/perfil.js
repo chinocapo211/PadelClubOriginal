@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F5F5F5',
     alignItems: 'center',
-    paddingTop: 150,
+    paddingTop: 133,
   },
   innerContainer: {
     backgroundColor: 'white', // Color de fondo para el contenedor interno
