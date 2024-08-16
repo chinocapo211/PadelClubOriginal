@@ -145,12 +145,21 @@ const InicioJugar = ({ navigation }) => {
               ))}
             </View>
           </View>
-          <TouchableOpacity
-            style={styles.addButton}
-            onPress={() => navigation.navigate('MostrarJugadores')}
-          >
-            <Text style={styles.addButtonText}>+</Text>
-          </TouchableOpacity>
+          {jugadores.length < 4 ? (
+            <TouchableOpacity
+              style={styles.addButton}
+              onPress={() => navigation.navigate('MostrarJugadores')}
+            >
+              <Text style={styles.addButtonText}>+</Text>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              style={styles.startButton}
+              onPress={() => navigation.navigate('EmpezarPartido')} // Navega a la pantalla de Empezar Partido
+            >
+              <Text style={styles.startButtonText}>Empezar Partido</Text>
+            </TouchableOpacity>
+          )}
         </View>
       </View>
     </SafeAreaView>
@@ -158,7 +167,7 @@ const InicioJugar = ({ navigation }) => {
 }
 const styles = StyleSheet.create({
   safeArea: {
-    flex:1,
+    flex: 1,
   },
   container: {
     flex: 1,
@@ -232,9 +241,23 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'white',
   },
+  startButton: {
+    backgroundColor: '#32CD32', // Verde para indicar acción de comenzar
+    width: 150,
+    height: 50,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 100, // Margen superior para separarlo del contenedor anterior
+  },
+  startButtonText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: 'white',
+  },
   crossIcon: {
-    width: 24,
-    height: 24
+    fontSize: 20,
+    fontWeight: 'bold',
   },
 });
 
