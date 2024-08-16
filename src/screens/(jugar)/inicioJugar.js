@@ -271,13 +271,8 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   crossIcon: {
-<<<<<<< HEAD
     fontSize: 20,
     fontWeight: 'bold',
-=======
-    width: 24,
-    height: 24,
->>>>>>> e54d6d853f9dbc45749098e59f9ab366b25d1352
   },
 });
 
