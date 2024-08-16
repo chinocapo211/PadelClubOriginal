@@ -11,7 +11,7 @@ const NavbarLow = () => {
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={['#FF6F00', '#FF8E53']}
+        colors={['#0F4A8F', '#0F4A8F']}
         style={styles.gradient}
       />
       <View style={styles.navbar}>
@@ -77,4 +77,3 @@ const styles = StyleSheet.create({
 });
 
 export default NavbarLow;
-
