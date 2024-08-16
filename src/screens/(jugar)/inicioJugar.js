@@ -4,12 +4,14 @@ import NavbarHigh from '../../components/navbarHigh';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import GruposApi from '../../api/GruposApi';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useFocusEffect } from '@react-navigation/native';
 
 const InicioJugar = ({ navigation }) => {
   const [groupData, setGroupData] = useState(null);
   const [jugadores, setJugadores] = useState([]);
   const [token, setToken] = useState(null);
   const [idGrupo, setIdGrupo] = useState(null);
+  const [isGroupFull, setIsGroupFull] = useState(false);
 
   useEffect(() => {
     const createGrupo = async () => {
@@ -44,31 +46,43 @@ const InicioJugar = ({ navigation }) => {
     createGrupo();
   }, []);
 
-  useEffect(() => {
-    const obtenerInfoGrupo = async () => {
-      try {
-        const storedToken = await AsyncStorage.getItem('@AccessToken');
-        const storedIdGrupo = await AsyncStorage.getItem('@GrupoId');
-
-        if (storedToken && storedIdGrupo) {
-          const response = await GruposApi.ObtenerInfoGrupo(storedToken, storedIdGrupo);
-          console.log(response.data);
-
-          if (response.data && response.data.jugadores) {
-            setJugadores(response.data.jugadores); // Guardar los jugadores en el estado
+  useFocusEffect(
+    React.useCallback(() => {
+      const obtenerInfoGrupo = async () => {
+        try {
+          const storedToken = await AsyncStorage.getItem('@AccessToken');
+          const storedIdGrupo = await AsyncStorage.getItem('@GrupoId');
+  
+          if (storedToken && storedIdGrupo) {
+            const response = await GruposApi.ObtenerInfoGrupo(storedToken, storedIdGrupo);
+            console.log(response.data);
+  
+            if (response.data && response.data.jugadores) {
+              setJugadores(response.data.jugadores);
+              
+              // Verificar si el grupo está lleno
+              const { id2, id3, id4 } = response.data.grupo;
+              if (id2 !== 0 && id3 !== 0 && id4 !== 0) {
+                setIsGroupFull(true);
+              } else {
+                setIsGroupFull(false);
+              }
+            }
+            setGroupData(response.data);
           }
-          setGroupData(response.data);
+        } catch (error) {
+          console.error('Error al obtener la información del grupo:', error);
         }
-      } catch (error) {
-        console.error('Error al obtener la información del grupo:', error);
+      };
+  
+      if (idGrupo) {
+        obtenerInfoGrupo();
       }
-    };
-
-    if (idGrupo) {
-      obtenerInfoGrupo();
-    }
-
-  }, [idGrupo]);
+  
+      return () => {};
+  
+    }, [idGrupo])
+  );
 
   const UpdateGrupo = async (selectedPlayerId) => {
     try {
@@ -77,14 +91,11 @@ const InicioJugar = ({ navigation }) => {
       console.log("idDelGrupo" + storedIdGrupo);
 
       if (storedToken && storedIdGrupo) {
-        // Obtener la información actual del grupo
         const grupoResponse = await GruposApi.ObtenerInfoGrupo(storedToken, storedIdGrupo);
 
-        // Verificar y actualizar el grupo
         if (grupoResponse) {
           const grupo = grupoResponse.data.grupo;
 
-          // Encuentra la posición del jugador a eliminar
           if (grupo.id2 === selectedPlayerId) {
             grupo.id2 = 0;
           } else if (grupo.id3 === selectedPlayerId) {
@@ -96,17 +107,20 @@ const InicioJugar = ({ navigation }) => {
             return;
           }
 
-          // Enviar la actualización del grupo
           const updateResponse = await GruposApi.UpdateGrupo(storedToken, storedIdGrupo, grupoResponse);
 
-          if (updateResponse ) {
+          if (updateResponse) {
             console.log('Grupo actualizado:', updateResponse);
 
-            // Eliminar el jugador de la lista de jugadores
             setJugadores(prevJugadores => prevJugadores.filter(jugador => jugador.id !== selectedPlayerId));
-
-            // Navegar de regreso o actualizar la pantalla actual
-            navigation.goBack();
+            
+            // Actualizar la verificación de si el grupo está lleno
+            const { id2, id3, id4 } = grupo;
+            if (id2 !== 0 && id3 !== 0 && id4 !== 0) {
+              setIsGroupFull(true);
+            } else {
+              setIsGroupFull(false);
+            }
           } else {
             console.error('Error al actualizar el grupo:', updateResponse);
           }
@@ -137,7 +151,7 @@ const InicioJugar = ({ navigation }) => {
                   <Text style={styles.userRank}>Rango: {jugador.Rango}</Text>
                   <TouchableOpacity
                     style={styles.crossButton}
-                    onPress={() => UpdateGrupo(jugador.id)} // Llama a UpdateGrupo con ID del jugador como 0
+                    onPress={() => UpdateGrupo(jugador.id)} 
                   >
                     <Text style={styles.crossIcon}> - </Text>
                   </TouchableOpacity>
@@ -147,28 +161,35 @@ const InicioJugar = ({ navigation }) => {
           </View>
           <TouchableOpacity
             style={styles.addButton}
-            onPress={() => navigation.navigate('MostrarJugadores')}
+            onPress={() => {
+              if (isGroupFull) {
+                navigation.navigate('OtraPantalla'); // Cambia 'OtraPantalla' por la pantalla a la que quieres redirigir
+              } else {
+                navigation.navigate('MostrarJugadores');
+              }
+            }}
           >
-            <Text style={styles.addButtonText}>+</Text>
+            <Text style={styles.addButtonText}>{isGroupFull ? '>' : '+'}</Text> {/* Cambiar el texto dependiendo de si el grupo está lleno */}
           </TouchableOpacity>
         </View>
       </View>
     </SafeAreaView>
   );
-}
+};
+
 const styles = StyleSheet.create({
   safeArea: {
-    flex:1,
+    flex: 1,
   },
   container: {
     flex: 1,
     backgroundColor: '#F5F5F5',
     alignItems: 'center',
-    paddingTop: 15, // Ajusta esto según la altura de la NavbarHigh para evitar que el contenido se superponga
+    paddingTop: 150,
   },
   backButton: {
     position: 'absolute',
-    top: 40, // Ajusta esto según la altura de la NavbarHigh
+    top: 40,
     left: 20,
   },
   backButtonText: {
@@ -179,10 +200,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 10,
     shadowColor: '#000',
-    height: 200, // Ajusta la altura según sea necesario
+    height: 200,
     width: '90%',
     padding: 20,
-    marginTop: 20, // Espaciado superior para separar del botón de regreso
+    marginTop: 20,
     shadowOffset: {
       width: 0,
       height: 2,
@@ -225,7 +246,7 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 100, // Margen superior para separarlo del contenedor anterior
+    marginTop: 100,
   },
   addButtonText: {
     fontSize: 30,
@@ -234,7 +255,7 @@ const styles = StyleSheet.create({
   },
   crossIcon: {
     width: 24,
-    height: 24
+    height: 24,
   },
 });
 

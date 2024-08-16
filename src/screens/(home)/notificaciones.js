@@ -67,7 +67,7 @@ const Notificaciones = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   safeArea: {
-    flex:1,
+    flex: 1,
   },
   container: {
     flex: 1,
@@ -77,6 +77,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 20,
     paddingBottom: 80, // Deja espacio para la navbar
+    flexGrow: 1,
+    justifyContent: 'center', // Centra verticalmente cuando está vacío
   },
   notificationContainer: {
     flexDirection: 'row',
@@ -115,10 +117,8 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: '#757575',
     textAlign: 'center',
-    marginTop: 20,
+    alignSelf: 'center', // Centra horizontalmente
   },
 });
 
 export default Notificaciones;
-
-

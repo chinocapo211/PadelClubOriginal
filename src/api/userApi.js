@@ -1,6 +1,9 @@
 import apiManager from "./apiManger";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 const user_login = async (data) => {
+  const headers = {
+    "ngrok-skip-browser-warning": true,  
+  };
   try {
     const result = await apiManager('POST', null, data, 'auth/login');
     console.log(result);
@@ -16,10 +19,11 @@ const ObtenerInfoJugador = async (token) => {
   const method = "POST";
   const headers = {
     "Content-Type": "application/json",
-    "Authorization": `Bearer ${token}`,  // Asegúrate de enviar el token en el encabezado Authorization
+    "Authorization": `Bearer ${token}`,
+    "ngrok-skip-browser-warning": 3005,  
   };
-  const data = {};  // Si no necesitas enviar datos en el cuerpo de la solicitud, puedes dejarlo vacío.
-  const path = "auth/Decode";  // Asegúrate de que esta ruta es correcta y está disponible en el servidor.
+  const data = {};  
+  const path = "auth/Decode";  
   
   try {
     const result = await apiManager(method, headers, data, path);
@@ -40,6 +44,7 @@ const ObtenerJugadores = async(token) =>
   const headers = {
     "Content-Type": "application/json",
     "Authorization": `Bearer ${token}`,  
+    "ngrok-skip-browser-warning": 3005, 
   };
   const data = {};
   const path = "Jugador";

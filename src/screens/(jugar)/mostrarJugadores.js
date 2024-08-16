@@ -5,45 +5,54 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import userApi from '../../api/userApi';
 import GruposApi from '../../api/GruposApi';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useFocusEffect } from '@react-navigation/native';
 
 const MostrarJugadores = ({ navigation }) => {
   const [jugadores, setJugadores] = useState([]);
   const [token, setToken] = useState(null);
   const [grupoData, setGrupoData] = useState(null);
 
-  useEffect(() => {
-    const fetchJugadores = async () => {
-      try {
-        const storedToken = await AsyncStorage.getItem('@AccessToken');
-        if (storedToken) {
-          setToken(storedToken);
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchJugadores = async () => {
+        try {
+          const storedToken = await AsyncStorage.getItem('@AccessToken');
+          if (storedToken) {
+            setToken(storedToken);
 
-          // Obtener la información del grupo para filtrar jugadores
-          const storedIdGrupo = await AsyncStorage.getItem('@GrupoId');
-          if (storedIdGrupo) {
-            const grupoResponse = await GruposApi.ObtenerInfoGrupo(storedToken, storedIdGrupo);
-            if (grupoResponse && grupoResponse.data) {
-              setGrupoData(grupoResponse.data.grupo);
+            // Obtener la información del grupo para filtrar jugadores
+            const storedIdGrupo = await AsyncStorage.getItem('@GrupoId');
+            if (storedIdGrupo) {
+              const grupoResponse = await GruposApi.ObtenerInfoGrupo(storedToken, storedIdGrupo);
+              if (grupoResponse && grupoResponse.data) {
+                setGrupoData(grupoResponse.data.grupo);
+
+                // Obtener todos los jugadores
+                const response = await userApi.ObtenerJugadores(storedToken);
+                if (response && Array.isArray(response)) {
+                  // Filtrar jugadores que ya están en el grupo
+                  const jugadoresEnGrupo = [
+                    grupoResponse.data.grupo.id2,
+                    grupoResponse.data.grupo.id3,
+                    grupoResponse.data.grupo.id4,
+                  ].filter(id => id !== 0);
+                  
+                  const jugadoresFiltrados = response.filter(jugador => !jugadoresEnGrupo.includes(jugador.id));
+                  setJugadores(jugadoresFiltrados);
+                } else {
+                  console.error('Response structure is not as expected:', response);
+                }
+              }
             }
           }
-
-          const response = await userApi.ObtenerJugadores(storedToken);
-          if (response && Array.isArray(response)) {
-            // Filtrar jugadores que ya están en el grupo
-            const jugadoresEnGrupo = [grupoData?.id2, grupoData?.id3, grupoData?.id4].filter(id => id !== 0);
-            const jugadoresFiltrados = response.filter(jugador => !jugadoresEnGrupo.includes(jugador.id));
-            setJugadores(jugadoresFiltrados);
-          } else {
-            console.error('Response structure is not as expected:', response);
-          }
+        } catch (error) {
+          console.error('Failed to fetch players or token:', error);
         }
-      } catch (error) {
-        console.error('Failed to fetch players or token:', error);
-      }
-    };
+      };
 
-    fetchJugadores();
-  }, []); // Dependencia en grupoData para ejecutar el efecto cuando grupoData cambie
+      fetchJugadores();
+    }, []) // El efecto se ejecutará cada vez que la pantalla se enfoque
+  );
 
   const UpdateGrupo = async (selectedPlayerId) => {
     try {
@@ -144,6 +153,7 @@ const styles = StyleSheet.create({
     marginTop: 20, // Espacio desde el top (puedes ajustarlo según tu diseño)
     marginBottom: 20, // Espacio en la parte inferior
     overflow: 'hidden', // Asegura que cualquier contenido extra fuera de este contenedor no se vea
+    
   },
   scrollContent: {
     paddingVertical: 10,
