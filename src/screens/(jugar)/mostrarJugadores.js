@@ -105,15 +105,16 @@ const MostrarJugadores = ({ navigation }) => {
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
         <NavbarHigh />
-        <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-          <Image
-            source={require('../../../assets/images/back.png')}
-            style={styles.backButton}
-          />
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+        <Image
+        source={require('../../../assets/images/back.png')}
+        style={styles.backButton}
+        />
         </TouchableOpacity>
+        
         <View style={styles.scrollContainer}>
-          <ScrollView contentContainerStyle={styles.scrollContent}>
-            {jugadores.map((item) => (
+        <ScrollView contentContainerStyle={styles.scrollContent}>
+        {jugadores.map((item) => (
               <View key={item.id} style={styles.profileContainer}>
                 <View style={styles.userInfo}>
                   <Text style={styles.userName}>{item.Nombre}</Text>
@@ -135,7 +136,7 @@ const MostrarJugadores = ({ navigation }) => {
 };
 const styles = StyleSheet.create({
   safeArea: {
-    flex:1,
+    flex: 1,
   },
   container: {
     flex: 1,
@@ -146,14 +147,12 @@ const styles = StyleSheet.create({
     height: 30,
     marginLeft: 10,
     marginTop: 10,
-    zIndex: 1, // Asegura que el botón de volver esté sobre el ScrollView
+    zIndex: 1,
   },
   scrollContainer: {
-    flex: 1, // Ocupa todo el espacio disponible
-    marginTop: 20, // Espacio desde el top (puedes ajustarlo según tu diseño)
-    marginBottom: 20, // Espacio en la parte inferior
-    overflow: 'hidden', // Asegura que cualquier contenido extra fuera de este contenedor no se vea
-    
+    display: 'flex',
+    marginTop: "45%",
+    overflow: 'hidden',
   },
   scrollContent: {
     paddingVertical: 10,
@@ -162,9 +161,7 @@ const styles = StyleSheet.create({
   profileContainer: {
     backgroundColor: '#FFFFFF',
     borderRadius: 10,
-    padding: 20,
-    marginBottom: 15,
-    elevation: 3,
+    marginBottom: 10
   },
   userInfo: {
     flexDirection: 'row',

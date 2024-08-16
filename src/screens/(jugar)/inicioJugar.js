@@ -159,18 +159,21 @@ const InicioJugar = ({ navigation }) => {
               ))}
             </View>
           </View>
-          <TouchableOpacity
-            style={styles.addButton}
-            onPress={() => {
-              if (isGroupFull) {
-                navigation.navigate('OtraPantalla'); // Cambia 'OtraPantalla' por la pantalla a la que quieres redirigir
-              } else {
-                navigation.navigate('MostrarJugadores');
-              }
-            }}
-          >
-            <Text style={styles.addButtonText}>{isGroupFull ? '>' : '+'}</Text> {/* Cambiar el texto dependiendo de si el grupo está lleno */}
-          </TouchableOpacity>
+          {jugadores.length < 4 ? (
+            <TouchableOpacity
+              style={styles.addButton}
+              onPress={() => navigation.navigate('MostrarJugadores')}
+            >
+              <Text style={styles.addButtonText}>+</Text>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              style={styles.startButton}
+              onPress={() => navigation.navigate('EmpezarPartido')} // Navega a la pantalla de Empezar Partido
+            >
+              <Text style={styles.startButtonText}>Empezar Partido</Text>
+            </TouchableOpacity>
+          )}
         </View>
       </View>
     </SafeAreaView>
@@ -202,7 +205,6 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     height: 200,
     width: '90%',
-    padding: 20,
     marginTop: 20,
     shadowOffset: {
       width: 0,
@@ -221,14 +223,14 @@ const styles = StyleSheet.create({
       width: 0,
       height: 2,
     },
-    shadowOpacity: 0.85,
-    shadowRadius: 3.84,
-    elevation: 5,
+    shadowOpacity: 0.50,
+    shadowRadius: 2.50,
     padding: 20,
     width: '100%',
   },
   userInfo: {
     alignItems: 'center',
+    
   },
   userName: {
     fontSize: 24,
@@ -253,9 +255,23 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'white',
   },
+  startButton: {
+    backgroundColor: '#32CD32', // Verde para indicar acción de comenzar
+    width: 150,
+    height: 50,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 100, // Margen superior para separarlo del contenedor anterior
+  },
+  startButtonText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: 'white',
+  },
   crossIcon: {
-    width: 24,
-    height: 24,
+    fontSize: 20,
+    fontWeight: 'bold',
   },
 });
 

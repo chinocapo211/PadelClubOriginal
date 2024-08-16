@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F5F5F5',
     alignItems: 'center',
-    paddingTop: 150,
+    paddingTop: '26%',
   },
   innerContainer: {
     backgroundColor: 'white', // Color de fondo para el contenedor interno
@@ -116,18 +116,18 @@ const styles = StyleSheet.create({
     borderRadius: 60, // Hace la imagen circular
     borderColor: '#FFFFFF', // Color del borde de la imagen
     borderWidth: 2,
-    marginBottom: 10,
+    marginBottom: '10%',
   },
   userName: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginVertical: 10,
+    marginVertical: '10%',
     textAlign: 'center',
   },
   progressBarContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    width: width * 0.8, // 80% del ancho de la pantalla
+    width: width * 0.7, // 80% del ancho de la pantalla
     marginVertical: 10,
     marginRight: 50,
   },
