@@ -7,6 +7,7 @@ import userApi from './userApi';
   const headers = {
     "Content-Type": "application/json",
     "Authorization": `Bearer ${token}`,  
+    "ngrok-skip-browser-warning": 3005, 
   };
   const data = 
   {
@@ -30,6 +31,7 @@ const ObtenerInfoGrupo = async(token,storedIdGrupo) =>
     const headers = {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`,  
+        "ngrok-skip-browser-warning": 3005, 
       };
       try
       {
@@ -51,6 +53,7 @@ const UpdateGrupo = async (token, idGrupo, grupoResponse) => {
   const headers = {
     "Content-Type": "application/json",
     "Authorization": `Bearer ${token}`,
+    "ngrok-skip-browser-warning": 3005, 
   };
 
   // Asegúrate de que `grupoResponse` contenga solo los campos necesarios.

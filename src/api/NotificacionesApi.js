@@ -6,6 +6,7 @@ export const NotificacionesApi = async (token) => {
   const headers = {
     "Content-Type": "application/json",
     "Authorization": `Bearer ${token}`,  
+    "ngrok-skip-browser-warning": 3005, 
   };
   try {
     const result = await apiManager("GET", headers, {}, `Notificaciones/${Token.Usuario.id}`);
