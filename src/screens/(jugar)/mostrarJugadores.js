@@ -105,6 +105,13 @@ const MostrarJugadores = ({ navigation }) => {
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
         <NavbarHigh />
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+        <Image
+        source={require('../../../assets/images/back.png')}
+        style={styles.backButton}
+        />
+        </TouchableOpacity>
+        
         <View style={styles.scrollContainer}>
         <ScrollView contentContainerStyle={styles.scrollContent}>
         {jugadores.map((item) => (
