@@ -1,13 +1,13 @@
 import axios from "axios";
-
-const baseURL = "http://localhost:3005/";
+  
+const baseURL = "https://mouse-expert-sincerely.ngrok-free.app";
 
 const apiManager = async (method, headers, data, path) => {
   console.log('Headers:', headers);  
   try {
     const response = await axios({
       method: method,
-      url: baseURL + path,
+      url: `${baseURL}/${path}`,
       data: data,
       headers: headers,
     });
