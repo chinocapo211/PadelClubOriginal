@@ -43,7 +43,7 @@ const Home = ({ navigation }) => {
       <NavbarHigh />
       <View style={styles.buttonContainer}>
         <TouchableOpacity
-          style={[styles.button, styles.buttonFriends]}
+          style={[styles.button, styles.buttonPlay]}
           onPress={() => navigation.navigate('JugarStack', {screen: "InicioJugar"})}
         >
           <Text style={styles.buttonText}>Jugar</Text>
@@ -55,7 +55,7 @@ const Home = ({ navigation }) => {
           <Text style={styles.buttonText}>Torneos</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={[styles.button, styles.buttonPlay]}
+          style={[styles.button, styles.buttonFriends]}
           onPress={() => navigation.navigate('AmigosStack')}
         >
           <Text style={styles.buttonText}>Amigos</Text>
@@ -95,13 +95,13 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   buttonPlay: {
-    backgroundColor: '#00BFFF',
+    backgroundColor: '#8dc1ff',
   },
   buttonTournaments: {
-    backgroundColor: '#FF69B4',
+    backgroundColor: '#6CA0D4',
   },
   buttonFriends: {
-    backgroundColor: '#32CD32',
+    backgroundColor: '#3D8AD4',
   },
   buttonText: {
     color: 'white',

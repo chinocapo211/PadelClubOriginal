@@ -116,8 +116,9 @@ const styles = StyleSheet.create({
   emptyText: {
     fontSize: 18,
     color: '#757575',
+    backgroundColor: '#6CA0D4',
     textAlign: 'center',
-    alignSelf: 'center', // Centra horizontalmente
+    marginTop: 170,
   },
 });
 
