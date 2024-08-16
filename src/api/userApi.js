@@ -7,7 +7,7 @@ const user_login = async (data) => {
   };
   try {
     console.log
-    const result = await apiManager('GET', headers, data, 'auth/H');
+    const result = await apiManager('POST', headers, data, 'auth/login');
     console.log(result);
     return result;
   } catch (error) {
