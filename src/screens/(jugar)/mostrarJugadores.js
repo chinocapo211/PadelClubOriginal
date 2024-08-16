@@ -114,14 +114,14 @@ const MostrarJugadores = ({ navigation }) => {
         
         <View style={styles.scrollContainer}>
         <ScrollView contentContainerStyle={styles.scrollContent}>
-        {jugadores.map((item) => (
-              <View key={item.id} style={styles.profileContainer}>
+        {jugadores.map((jugador) => (
+              <View key={jugador.id} style={styles.profileContainer}>
                 <View style={styles.userInfo}>
-                  <Text style={styles.userName}>{item.Nombre}</Text>
-                  <Text style={styles.userRank}>{item.Rango}</Text>
+                  <Text style={styles.userName}>{jugador.Nombre}</Text>
+                  <Text style={styles.userRank}>Rango: {jugador.Rango}</Text>
                   <TouchableOpacity
                     style={styles.addButton}
-                    onPress={() => UpdateGrupo(item.id)}
+                    onPress={() => UpdateGrupo(jugador.id)}
                   >
                     <Text style={styles.addButtonText}>+</Text>
                   </TouchableOpacity>
@@ -157,11 +157,13 @@ const styles = StyleSheet.create({
   scrollContent: {
     paddingVertical: 10,
     paddingHorizontal: 15,
+    marginLeft:'5%',
+    width:'90%'
   },
   profileContainer: {
     backgroundColor: '#FFFFFF',
     borderRadius: 10,
-    marginBottom: 10
+    marginBottom: 10,
   },
   userInfo: {
     flexDirection: 'row',
@@ -169,13 +171,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   userName: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#333',
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 5,
   },
   userRank: {
-    fontSize: 16,
-    color: '#666',
+    fontSize: 18,
+    color: 'gray',
   },
   addButton: {
     backgroundColor: '#007BFF',
