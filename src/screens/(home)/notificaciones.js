@@ -52,6 +52,7 @@ const Notificaciones = ({ navigation }) => {
     <SafeAreaView style={styles.safeArea}>
     <View style={styles.container}>
       <NavbarHigh />
+      <View style={styles.flatcont}>
       <FlatList
         contentContainerStyle={styles.notificationList}
         data={notificaciones}
@@ -59,6 +60,7 @@ const Notificaciones = ({ navigation }) => {
         keyExtractor={(item) => item.id.toString()}
         ListEmptyComponent={<Text style={styles.emptyText}>No hay notificaciones</Text>}
       />
+      </View>
       <NavbarLow />
     </View>
     </SafeAreaView>
@@ -68,6 +70,9 @@ const Notificaciones = ({ navigation }) => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
+  },
+  flatcont:{
+    marginTop:'40%',
   },
   container: {
     flex: 1,
