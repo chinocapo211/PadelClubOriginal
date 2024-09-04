@@ -6,7 +6,8 @@ const user_login = async (data) => {
     "ngrok-skip-browser-warning": true,  
   };
   try {
-    console.log
+    console.log(data)
+
     const result = await apiManager('POST', headers, data, 'auth/login');
     console.log(result);
     return result;
