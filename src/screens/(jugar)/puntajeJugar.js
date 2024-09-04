@@ -7,6 +7,7 @@ const PuntajeJugar = ({ navigation }) => {
     <SafeAreaView style={styles.safeArea}>
     <View style={styles.container}>
       <NavbarHigh/>
+      
     </View>
     </SafeAreaView>
   );
