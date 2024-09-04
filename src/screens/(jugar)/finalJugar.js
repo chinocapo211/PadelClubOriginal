@@ -17,7 +17,7 @@ const FinalJugar = ({ navigation }) => {
             style={styles.progress}
           />
         </View>
-        <View style={styles.trophyContainer}>
+        {/* <View style={styles.trophyContainer}>
           <Image
             source={require('./path/to/trophy-icon.png')} // Reemplaza con la ruta de tu icono de trofeo
             style={styles.trophyIcon}
@@ -26,7 +26,7 @@ const FinalJugar = ({ navigation }) => {
             source={require('./path/to/trophy-icon.png')} // Reemplaza con la ruta de tu icono de trofeo
             style={styles.trophyIcon}
           />
-        </View>
+        </View> */}
         <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Home')}>
           <Text style={styles.buttonText}>Volver al inicio</Text>
         </TouchableOpacity>

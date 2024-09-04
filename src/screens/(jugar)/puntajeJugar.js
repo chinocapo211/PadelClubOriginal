@@ -30,6 +30,12 @@ const PuntajeJugar = () => {
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
         <NavbarHigh />
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+        <Image
+        source={require('../../../assets/images/back.png')}
+        style={styles.backButton}
+        />
+        </TouchableOpacity>
         <View style={styles.scoreWrapper}>
           {sets.map((set, index) => (
             <View key={index} style={styles.scoreContainer}>
