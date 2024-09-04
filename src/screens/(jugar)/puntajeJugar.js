@@ -68,16 +68,11 @@ const styles = StyleSheet.create({
   },
   scoreWrapper: {
     borderRadius: 15,
-<<<<<<< HEAD
     width: '80%', // 80% del ancho de la pantalla
     display: 'flex',
     justifyContent: 'flex-start',
     alignContent: 'center',
     marginTop: '40%',
-=======
-    marginBottom: 20,
-    width: '80%',
->>>>>>> 110b05fe4fd247e55a84fc5ec39d150ad6a35229
   },
   scoreContainer: {
     backgroundColor: '#ffffff',
