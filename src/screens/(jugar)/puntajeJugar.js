@@ -3,9 +3,12 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import NavbarHigh from '../../components/navbarHigh';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import { useNavigation } from '@react-navigation/native';
+import CargarPuntos from './cargarPuntos';
 
-const PuntajeJugar = ({ navigation }) => {
+const PuntajeJugar = () => {
   const [sets, setSets] = useState(['Set 1']);
+  const navigation = useNavigation();
 
   const addSet = () => {
     if (sets.length < 3) {
@@ -19,31 +22,24 @@ const PuntajeJugar = ({ navigation }) => {
     }
   };
 
+  const handleCargarPuntos = (setNumber) => {
+    navigation.navigate('CargarPuntos', { setNumber });
+  };
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
         <NavbarHigh />
         <View style={styles.scoreWrapper}>
-          {/* Primer set fijo */}
-          <View style={styles.scoreContainer}>
-            <Text style={styles.scoreText}>Set 1</Text>
-            <Text style={styles.scoreText}>0 - 0</Text>
-            <TouchableOpacity style={styles.button}>
-              <Text style={styles.buttonText}>Cargar puntos</Text>
-            </TouchableOpacity>
-          </View>
-          {/* Sets adicionales */}
-          <View style={styles.additionalSets}>
-            {sets.slice(1).map((set, index) => (
-              <View key={index + 1} style={styles.scoreContainer}>
-                <Text style={styles.scoreText}>{set}</Text>
-                <Text style={styles.scoreText}>0 - 0</Text>
-                <TouchableOpacity style={styles.button}>
-                  <Text style={styles.buttonText}>Cargar puntos</Text>
-                </TouchableOpacity>
-              </View>
-            ))}
-          </View>
+          {sets.map((set, index) => (
+            <View key={index} style={styles.scoreContainer}>
+              <Text style={styles.scoreText}>{set}</Text>
+              <Text style={styles.scoreText}>0 - 0</Text>
+              <TouchableOpacity style={styles.button} onPress={() => CargarPuntos(set)}>
+                <Text style={styles.buttonText}>Cargar puntos</Text>
+              </TouchableOpacity>
+            </View>
+          ))}
         </View>
         <View style={styles.iconContainer}>
           <TouchableOpacity onPress={addSet}>
@@ -71,10 +67,10 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 15,
     marginBottom: 20,
-    width: '80%', // 80% del ancho de la pantalla
+    width: '80%',
   },
   scoreContainer: {
-    backgroundColor: '#ffffff', // Fondo gris claro para cada set
+    backgroundColor: '#ffffff',
     padding: 15,
     borderRadius: 10,
     marginBottom: 10,
@@ -86,7 +82,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   button: {
-    backgroundColor: '#00bfff', // Color celeste
+    backgroundColor: '#00bfff',
     width: '100%',
     paddingVertical: 10,
     justifyContent: 'center',
@@ -100,12 +96,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   iconContainer: {
-    flexDirection: 'row', // Alineación horizontal
+    flexDirection: 'row',
     justifyContent: 'space-between',
-    width: '40%', // Ajusta el ancho según sea necesario
-  },
-  additionalSets: {
-    marginTop: 20, // Espacio entre el primer set y los adicionales
+    width: '40%',
   },
 });
 

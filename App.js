@@ -19,6 +19,7 @@ import MostrarJugadores from './src/screens/(jugar)/mostrarJugadores';
 import PuntajeJugar from './src/screens/(jugar)/puntajeJugar';
 import FinalJugar from './src/screens/(jugar)/finalJugar';
 import { AuthProvider, useAuth } from './src/components/AuthProvider';
+import CargarPuntos from './src/screens/(jugar)/cargarPuntos';
 
 const LoginStack = createStackNavigator();
 const TabBarStack = createStackNavigator();
@@ -95,6 +96,7 @@ function JugarStackScreen() {
       <JugarStack.Screen name="MostrarJugadores" component={MostrarJugadores} />
       <JugarStack.Screen name="PuntajeJugar" component={PuntajeJugar}/>
       <JugarStack.Screen name="FinalJugar" component={FinalJugar}/>
+      <JugarStack.Screen name="CargarPuntos" component={CargarPuntos}/>
     </JugarStack.Navigator>
   );
 }
