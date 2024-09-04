@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import NavbarHigh from '../../components/navbarHigh';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AntDesign from '@expo/vector-icons/AntDesign';
@@ -30,13 +30,19 @@ const PuntajeJugar = () => {
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
         <NavbarHigh />
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+        <Image
+        source={require('../../../assets/images/back.png')}
+        style={styles.backButton}
+        />
+        </TouchableOpacity>
         <View style={styles.scoreWrapper}>
           {sets.map((set, index) => (
             <View key={index} style={styles.scoreContainer}>
               <Text style={styles.scoreText}>{set}</Text>
               <Text style={styles.scoreText}>0 - 0</Text>
               <TouchableOpacity style={styles.button} onPress={() => CargarPuntos(set)}>
-                <Text style={styles.buttonText}>Cargar puntos</Text>
+                <Text style={styles.buttonText} onPress={handleCargarPuntos}>Cargar puntos</Text>
               </TouchableOpacity>
             </View>
           ))}
@@ -118,6 +124,13 @@ const styles = StyleSheet.create({
   },
   botonMenos:{
     marginLeft:'42%'
+  },
+  backButton: {
+    width: 30,
+    height: 30,
+    marginRight: '80%',
+    marginTop: 10,
+    zIndex: 1,
   },
 });
 
