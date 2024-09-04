@@ -45,13 +45,17 @@ const PuntajeJugar = ({ navigation }) => {
             ))}
           </View>
         </View>
-        <View style={styles.iconContainer}>
-          <TouchableOpacity onPress={addSet}>
-            <AntDesign name="pluscircleo" size={24} color="green" />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={removeSet}>
-            <AntDesign name="minuscircleo" size={24} color="red" />
-          </TouchableOpacity>
+        <View style={[styles.iconContainer, sets.length === 1 && styles.centerIconContainer]}>
+          {sets.length < 3 && (
+            <TouchableOpacity onPress={addSet} style={styles.botonMas}>
+              <AntDesign name="pluscircleo" size={24} color="green" />
+            </TouchableOpacity>
+          )}
+          {sets.length > 1 && (
+            <TouchableOpacity onPress={removeSet} style={styles.botonMenos}>
+              <AntDesign name="minuscircleo" size={24} color="red" />
+            </TouchableOpacity>
+          )}
         </View>
       </View>
     </SafeAreaView>
@@ -64,22 +68,23 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
   },
   scoreWrapper: {
-    padding: 20,
     borderRadius: 15,
-    marginBottom: 20,
     width: '80%', // 80% del ancho de la pantalla
+    display: 'flex',
+    justifyContent: 'flex-start',
+    alignContent: 'center',
+    marginTop: '40%',
   },
   scoreContainer: {
     backgroundColor: '#ffffff', // Fondo gris claro para cada set
     padding: 15,
     borderRadius: 10,
-    marginBottom: 10,
     width: '100%',
     alignItems: 'center',
+    marginBottom: '8%',
   },
   scoreText: {
     fontSize: 24,
@@ -101,11 +106,22 @@ const styles = StyleSheet.create({
   },
   iconContainer: {
     flexDirection: 'row', // Alineación horizontal
-    justifyContent: 'space-between',
+    justifyContent: 'space-between', // Distribuir el espacio entre los botones
     width: '40%', // Ajusta el ancho según sea necesario
+    marginTop: 20, // Espacio entre los sets y los íconos
+  },
+  centerIconContainer: {
+    justifyContent: 'center', // Centra los íconos
   },
   additionalSets: {
-    marginTop: 20, // Espacio entre el primer set y los adicionales
+    // Aquí puedes agregar estilos adicionales si es necesario
+  },
+  botonMas:{
+    display:'flex',
+    alignContent:'flex-start'
+  },
+  botonMenos:{
+    marginLeft:'42%'
   },
 });
 
