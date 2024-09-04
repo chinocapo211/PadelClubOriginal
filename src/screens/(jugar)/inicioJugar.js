@@ -171,7 +171,7 @@ const InicioJugar = ({ navigation }) => {
           ) : (
             <TouchableOpacity
               style={styles.startButton}
-              onPress={() => navigation.navigate('EmpezarPartido')} // Navega a la pantalla de Empezar Partido
+              onPress={() => navigation.navigate('PuntajeJugar')} 
             >
               <Text style={styles.startButtonText}>Empezar Partido</Text>
             </TouchableOpacity>
