@@ -19,7 +19,6 @@ import MostrarJugadores from './src/screens/(jugar)/mostrarJugadores';
 import PuntajeJugar from './src/screens/(jugar)/puntajeJugar';
 import FinalJugar from './src/screens/(jugar)/finalJugar';
 import { AuthProvider, useAuth } from './src/components/AuthProvider';
-import CargarPuntos from './src/screens/(jugar)/cargarPuntos';
 
 const LoginStack = createStackNavigator();
 const TabBarStack = createStackNavigator();
@@ -61,6 +60,7 @@ function AjustesStackScreen() {
   return (
     <AjustesStack.Navigator screenOptions={{ headerShown: false }}>
       <AjustesStack.Screen name="Ajustes" component={Ajustes} />
+      <AjustesStack.Screen name='Login' component={LoginStackScreen} />
     </AjustesStack.Navigator>
   );
 }

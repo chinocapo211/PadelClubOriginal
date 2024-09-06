@@ -4,7 +4,6 @@ import NavbarHigh from '../../components/navbarHigh';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { useNavigation } from '@react-navigation/native';
-import CargarPuntos from './cargarPuntos';
 
 const PuntajeJugar = () => {
   const [sets, setSets] = useState(['Set 1']);
