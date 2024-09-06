@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'flex-start',
     alignContent: 'center',
-    marginTop: '40%',
+    marginTop: '25%',
   },
   scoreContainer: {
     backgroundColor: '#ffffff',

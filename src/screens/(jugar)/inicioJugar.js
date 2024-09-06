@@ -13,6 +13,8 @@ const InicioJugar = ({ navigation }) => {
   const [token, setToken] = useState(null);
   const [idGrupo, setIdGrupo] = useState(null);
   const [isGroupFull, setIsGroupFull] = useState(false);
+  const [equipo1, setEquipo1] = useState([]);
+  const [equipo2, setEquipo2] = useState([]);
 
   useEffect(() => {
     const createGrupo = async () => {
@@ -60,6 +62,7 @@ const InicioJugar = ({ navigation }) => {
   
             if (response.data && response.data.jugadores) {
               setJugadores(response.data.jugadores);
+
               // Verificar si el grupo está lleno
               const { id2, id3, id4 } = response.data.grupo;
               if (id2 !== 0 && id3 !== 0 && id4 !== 0) {
@@ -67,6 +70,14 @@ const InicioJugar = ({ navigation }) => {
               } else {
                 setIsGroupFull(false);
               }
+
+              // Dividir jugadores en dos equipos
+              const jugadoresList = response.data.jugadores;
+              const equipo1 = jugadoresList.slice(0, 2); // Primeros 2 jugadores
+              const equipo2 = jugadoresList.slice(2, 4); // Siguientes 2 jugadores
+
+              setEquipo1(equipo1);
+              setEquipo2(equipo2);
             }
             setGroupData(response.data);
           }
@@ -121,6 +132,14 @@ const InicioJugar = ({ navigation }) => {
             } else {
               setIsGroupFull(false);
             }
+            
+            // Actualizar la división de equipos
+            const jugadoresList = jugadores.filter(jugador => jugador.id !== selectedPlayerId);
+            const nuevoEquipo1 = jugadoresList.slice(0, 2);
+            const nuevoEquipo2 = jugadoresList.slice(2, 4);
+
+            setEquipo1(nuevoEquipo1);
+            setEquipo2(nuevoEquipo2);
           } else {
             console.error('Error al actualizar el grupo:', updateResponse);
           }
@@ -144,12 +163,30 @@ const InicioJugar = ({ navigation }) => {
         </TouchableOpacity>
         <View style={styles.innerContainer}>
           <View style={styles.profileContainer}>
-            <View style={styles.userInfo}>
-              {jugadores.map((jugador) => (
+            <View style={styles.equipoContainer}>
+              <Text style={styles.title}>Equipo 1</Text>
+              {equipo1.map((jugador) => (
                 <View key={jugador.id} style={styles.jugadorContainer}>
                   <View style={styles.textos}>
-                  <Text style={styles.userName}>{jugador.Nombre}</Text>
-                  <Text style={styles.userRank}>Rango: {jugador.Rango}</Text>
+                    <Text style={styles.userName}>{jugador.Nombre}</Text>
+                    <Text style={styles.userRank}>Rango: {jugador.Rango}</Text>
+                  </View>
+                  <TouchableOpacity
+                    style={styles.crossButton}
+                    onPress={() => UpdateGrupo(jugador.id)} 
+                  >
+                    <Text style={styles.crossIcon}> - </Text>
+                  </TouchableOpacity>
+                </View>
+              ))}
+            </View>
+            <View style={styles.equipoContainer}>
+              <Text style={styles.title}>Equipo 2</Text>
+              {equipo2.map((jugador) => (
+                <View key={jugador.id} style={styles.jugadorContainer}>
+                  <View style={styles.textos}>
+                    <Text style={styles.userName}>{jugador.Nombre}</Text>
+                    <Text style={styles.userRank}>Rango: {jugador.Rango}</Text>
                   </View>
                   <TouchableOpacity
                     style={styles.crossButton}
@@ -190,7 +227,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F5F5F5',
     alignItems: 'center',
-    paddingTop: 150,
+    paddingTop: 120,
   },
   backButton: {
     position: 'absolute',
@@ -210,7 +247,25 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
   },
-  userInfo: {
+  equipoContainer: {
+    marginBottom: 20,
+    backgroundColor: 'lightblue',
+    borderRadius: 10,
+    shadowColor: '#000',
+    width: '100%',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    padding:10,
+    
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 10,
   },
   userName: {
     fontSize: 24,
@@ -236,12 +291,12 @@ const styles = StyleSheet.create({
   },
   startButton: {
     backgroundColor: '#32CD32', // Verde para indicar acción de comenzar
-    width: 175,
-    height: 75,
+    width: 150,
+    height: 50,
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: "10%", // Margen superior para separarlo del contenedor anterior
+    marginTop: '3%', // Margen superior para separarlo del contenedor anterior
   },
   startButtonText: {
     fontSize: 15,
