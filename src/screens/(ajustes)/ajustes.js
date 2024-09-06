@@ -29,13 +29,12 @@ const Ajustes = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
-        <NavbarHigh />
+        <NavbarHigh/>
         <View style={styles.content}>
-          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('MisClubes')}>
+          <TouchableOpacity 
+          style={[styles.button, styles.buttonClubes]}
+          onPress={() => navigation.navigate('Clubes')}>
             <Text style={styles.buttonText}>Mis Clubes</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('PreguntasFrecuentes')}>
-            <Text style={styles.buttonText}>Preguntas Frecuentes</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('TerminosCondiciones')}>
             <Text style={styles.buttonText}>Términos y Condiciones</Text>
@@ -56,7 +55,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    justifyContent: 'space-between', // Para asegurar que la NavbarLow esté en la parte inferior
+    alignItems: 'center',
   },
   content: {
     flex: 1,
@@ -65,17 +64,22 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: '#d3d3d3',
-    width: '75%',
-    height: '10%',
+    width: '150%',
+    height: '15%',
     padding: '6%',
     marginVertical: 10,
     alignItems: 'center',
+    justifyContent: 'center',
     borderRadius: 5,
+  },
+  buttonClub: {
+    backgroundColor: 'black',
   },
   buttonText: {
     color: 'black',
     fontSize: 16,
-  },
+    marginBottom: '3%'
+  },  
 });
 
 export default Ajustes;
