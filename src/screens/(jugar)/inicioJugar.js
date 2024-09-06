@@ -248,6 +248,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     color: 'white',
+    marginTop: -3.5,
   },
   crossIcon: {
     fontSize: 20,
