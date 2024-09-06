@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
   progressText: {
     fontSize: 14,
     color: '#888888',
-    marginHorizontal: 5,
+    marginHorizontal: 40,
   },
   progressBar: {
     flex: 1,
@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
   },
   statsContainer: {
     width: width * 0.8, // 80% del ancho de la pantalla
-    marginTop: 20,
+    
   },
   statBox: {
     backgroundColor: '#FFFFFF',
