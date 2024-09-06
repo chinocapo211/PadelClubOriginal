@@ -96,7 +96,6 @@ function JugarStackScreen() {
       <JugarStack.Screen name="MostrarJugadores" component={MostrarJugadores} />
       <JugarStack.Screen name="PuntajeJugar" component={PuntajeJugar}/>
       <JugarStack.Screen name="FinalJugar" component={FinalJugar}/>
-      <JugarStack.Screen name="CargarPuntos" component={CargarPuntos}/>
     </JugarStack.Navigator>
   );
 }
