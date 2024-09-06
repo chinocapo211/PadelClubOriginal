@@ -3,7 +3,9 @@ import React, {useEffect} from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Home from './src/screens/(home)/home';
-import Ajustes from './src/screens/(home)/ajustes';
+import Ajustes from './src/screens/(ajustes)/ajustes';
+import Clubes from './src/screens/(ajustes)/clubes';
+import Terminos from './src/screens/(ajustes)/terminos';
 import Historial from './src/screens/(home)/historial';
 import Perfil from './src/screens/(home)/perfil';
 import Notificaciones from './src/screens/(home)/notificaciones';
@@ -59,8 +61,10 @@ function NotificacionesStackScreen() {
 function AjustesStackScreen() {
   return (
     <AjustesStack.Navigator screenOptions={{ headerShown: false }}>
-      <AjustesStack.Screen name="Ajustes" component={Ajustes} />
-      <AjustesStack.Screen name='Login' component={LoginStackScreen} />
+      <AjustesStack.Screen name="Ajustes" component={Ajustes}/>
+      <AjustesStack.Screen name='Clubes' component={Clubes}/>
+      <AjustesStack.Screen name='TerminosCondiciones' component={Terminos}/>
+      <AjustesStack.Screen name='Login' component={LoginStackScreen}/>
     </AjustesStack.Navigator>
   );
 }
