@@ -8,6 +8,7 @@ import CargarPuntos from './cargarPuntos';
 
 const PuntajeJugar = () => {
   const [sets, setSets] = useState(['Set 1']);
+  const [number, setNumber] = useState([]);
   const navigation = useNavigation();
 
   const addSet = () => {
