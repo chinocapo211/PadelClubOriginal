@@ -242,7 +242,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 50, // Margen superior para separarlo del contenedor anterior
+    marginTop: 70, // Margen superior para separarlo del contenedor anterior
   },
   startButtonText: {
     fontSize: 20,
