@@ -5,6 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import GruposApi from '../../api/GruposApi';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect } from '@react-navigation/native';
+import AntDesign from '@expo/vector-icons/AntDesign';
 
 const InicioJugar = ({ navigation }) => {
   const [groupData, setGroupData] = useState(null);
@@ -166,7 +167,7 @@ const InicioJugar = ({ navigation }) => {
               style={styles.addButton}
               onPress={() => navigation.navigate('MostrarJugadores')}
             >
-              <Text style={styles.addButtonText}>+</Text>
+              <AntDesign name="pluscircle" size={40} color="#6CA0D4" />
             </TouchableOpacity>
           ) : (
             <TouchableOpacity
@@ -222,13 +223,12 @@ const styles = StyleSheet.create({
     color: 'gray',
   },
   addButton: {
-    backgroundColor: '#00BFFF',
     width: 60,
     height: 60,
     borderRadius: 30,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 100,
+    marginTop: "5%",
   },
   addButtonText: {
     fontSize: 30,
@@ -237,15 +237,15 @@ const styles = StyleSheet.create({
   },
   startButton: {
     backgroundColor: '#32CD32', // Verde para indicar acción de comenzar
-    width: 150,
-    height: 50,
+    width: 175,
+    height: 75,
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 70, // Margen superior para separarlo del contenedor anterior
+    marginTop: "10%", // Margen superior para separarlo del contenedor anterior
   },
   startButtonText: {
-    fontSize: 20,
+    fontSize: 15,
     fontWeight: 'bold',
     color: 'white',
     marginTop: -3.5,

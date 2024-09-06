@@ -27,8 +27,6 @@ const Historial = () => {
             <Text style={styles.playerName}>Humberta</Text>
           </View>
           <View style={styles.scoreContainer}>
-            <Text style={styles.score}> - </Text>
-            <Text style={styles.scoreDetails}>6-4 1-6</Text>
           </View>
           <View style={styles.playerContainer}>
             <Text style={styles.playerName}>Merentiel</Text>
@@ -54,14 +52,12 @@ const Historial = () => {
             <Text style={styles.playerName}>Humberta</Text>
           </View>
           <View style={styles.scoreContainer}>
-            <Text style={styles.score}> - </Text>
-            <Text style={styles.scoreDetails}>6-4 1-6</Text>
           </View>
           <View style={styles.playerContainer}>
             <Text style={styles.playerName}>Merentiel</Text>
           </View>
         </View>
-        <Button title="Reportar" onPress={() => {}} style={styles.reportButton} />
+        <Button title="Reportar" onPress={() => {}} style={styles.reportButton}/>
       </View>
       <View style={styles.matchContainer}>
       </View>
@@ -79,13 +75,12 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    padding: 10,
     verticalAlign: 'middle'
   },
   matchContainer: {
     backgroundColor: '#fff',
-    marginTop: height * 0.15,
-    marginBottom: height * -0.099,
+    marginTop: height * 0.17,
+    marginBottom: height * -0.15,
     padding: 15,
     borderRadius: 10,
     shadowColor: '#000',
