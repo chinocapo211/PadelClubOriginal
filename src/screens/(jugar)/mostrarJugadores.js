@@ -107,18 +107,18 @@ const MostrarJugadores = ({ navigation }) => {
       <View style={styles.container}>
         <NavbarHigh />
         <TouchableOpacity onPress={() => navigation.goBack()}>
-        <Image
-        source={require('../../../assets/images/back.png')}
-        style={styles.backButton}
-        />
+          <Image
+            source={require('../../../assets/images/back.png')}
+            style={styles.backButton}
+          />
         </TouchableOpacity>
         
         <View style={styles.scrollContainer}>
-        <ScrollView contentContainerStyle={styles.scrollContent}>
-        {jugadores.map((jugador) => (
+          <ScrollView contentContainerStyle={styles.scrollContent}>
+            {jugadores.map((jugador) => (
               <View key={jugador.id} style={styles.profileContainer}>
+                <Text style={styles.userName}>{jugador.Nombre}</Text>
                 <View style={styles.userInfo}>
-                  <Text style={styles.userName}>{jugador.Nombre}</Text>
                   <Text style={styles.userRank}>Rango: {jugador.Rango}</Text>
                   <TouchableOpacity
                     style={styles.addButton}
@@ -135,6 +135,7 @@ const MostrarJugadores = ({ navigation }) => {
     </SafeAreaView>
   );
 };
+
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
@@ -151,34 +152,46 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   scrollContainer: {
-    display: 'flex',
+    flex: 1,
     marginTop: "45%",
     overflow: 'hidden',
   },
   scrollContent: {
     paddingVertical: 10,
     paddingHorizontal: 15,
-    marginLeft:'5%',
-    width:'90%'
+    width: '90%',
+    marginLeft: '5%',
   },
   profileContainer: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 10,
-    marginBottom: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between', // Alinea los elementos al inicio y al final
+    alignItems: 'center',
+    marginBottom: 20,
+    borderRadius: 15,
+    backgroundColor: 'white',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.85,
+    shadowRadius: 3.84,
+    elevation: 10,
+    padding: 20,
   },
   userInfo: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
   },
   userName: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 5,
+    flex: 1, // Ocupa el espacio restante
   },
   userRank: {
     fontSize: 18,
     color: 'gray',
+    marginRight: 10,
   },
   addButton: {
     borderRadius: 50,
@@ -186,10 +199,6 @@ const styles = StyleSheet.create({
     height: 30,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  addButtonText: {
-    color: '#FFFFFF',
-    fontSize: 18,
   },
 });
 
