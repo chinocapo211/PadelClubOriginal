@@ -1,103 +1,180 @@
-import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import NavbarHigh from '../../components/navbarHigh';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import AntDesign from '@expo/vector-icons/AntDesign';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
-const FinalJugar = ({ navigation }) => {
+const FinalJugar = () => {
+  const navigation = useNavigation();
+  const route = useRoute();
+  const { teamA, teamB, resultado } = route.params; // Supongamos que los datos del equipo y resultados son pasados como params
+  const [sets, setSets] = useState(['Set 1']);
+
+  const calculateElo = (Ra, Rb, Sa, Sb, Ka, Kb) => {
+    // Calcular expectativas
+    const Ea = 1 / (1 + Math.pow(10, (Rb - Ra) / 400));
+    const Eb = 1 / (1 + Math.pow(10, (Ra - Rb) / 400));
+
+    // Calcular nuevos rankings
+    const newRa = Ra + Ka * (Sa - Ea);
+    const newRb = Rb + Kb * (Sb - Eb);
+
+    return { newRa, newRb };
+  };
+
+  const getKFactor = (playerRating, matchesPlayed) => {
+    if (matchesPlayed < 30 || playerRating < 2300) {
+      return 40;
+    } else if (playerRating >= 2400) {
+      return 10;
+    } else {
+      return 20;
+    }
+  };
+
+  const calculateTeamRankings = () => {
+    // Sumar los rankings de los jugadores de cada equipo
+    const Ra = teamA.player1.rating + teamA.player2.rating;
+    const Rb = teamB.player1.rating + teamB.player2.rating;
+
+    // Obtener el factor K para cada equipo
+    const Ka = (getKFactor(teamA.player1.rating, teamA.player1.matches) + getKFactor(teamA.player2.rating, teamA.player2.matches)) / 2;
+    const Kb = (getKFactor(teamB.player1.rating, teamB.player1.matches) + getKFactor(teamB.player2.rating, teamB.player2.matches)) / 2;
+
+    // Asignar los resultados (1 = victoria, 0.5 = empate, 0 = derrota)
+    const { Sa, Sb } = resultado;
+
+    // Calcular los nuevos rankings
+    const { newRa, newRb } = calculateElo(Ra, Rb, Sa, Sb, Ka, Kb);
+
+    // Dividir el nuevo ranking del equipo entre los dos jugadores
+    const updatedTeamAPlayer1 = newRa / 2;
+    const updatedTeamAPlayer2 = newRa / 2;
+    const updatedTeamBPlayer1 = newRb / 2;
+    const updatedTeamBPlayer2 = newRb / 2;
+
+    // Aquí podrías actualizar el estado con los nuevos valores de ranking de cada jugador
+  };
+
   return (
-    <View style={styles.container}>
-      <View style={styles.card}>
-        <Text style={styles.title}>Ganaste</Text>
-        <Image
-          source={{ uri: 'https://randomuser.me/api/portraits/men/32.jpg' }} // Reemplaza con la URL de la imagen del usuario
-          style={styles.profileImage}
-        />
-        <View style={styles.progressContainer}>
-          <LinearGradient
-            colors={['#FDD835', '#FBC02D']} // Colores del gradiente (amarillo)
-            style={styles.progress}
-          />
-        </View>
-        {/* <View style={styles.trophyContainer}>
+    <SafeAreaView style={styles.safeArea}>
+      <View style={styles.container}>
+        <NavbarHigh />
+        <TouchableOpacity onPress={() => navigation.goBack()}>
           <Image
-            source={require('./path/to/trophy-icon.png')} // Reemplaza con la ruta de tu icono de trofeo
-            style={styles.trophyIcon}
+            source={require('../../../assets/images/back.png')}
+            style={styles.backButton}
           />
-          <Image
-            source={require('./path/to/trophy-icon.png')} // Reemplaza con la ruta de tu icono de trofeo
-            style={styles.trophyIcon}
-          />
-        </View> */}
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Home')}>
-          <Text style={styles.buttonText}>Volver al inicio</Text>
         </TouchableOpacity>
+        <View style={styles.scoreWrapper}>
+          {sets.map((set, index) => (
+            <View key={index} style={styles.scoreContainer}>
+              <Text style={styles.scoreText}>{set}</Text>
+              <Text style={styles.scoreText}>0 - 0</Text>
+              <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('CargarPuntos', { index })}>
+                <Text style={styles.buttonText}>Cargar puntos</Text>
+              </TouchableOpacity>
+            </View>
+          ))}
+        </View>
+        <View style={[styles.iconContainer, sets.length === 1 && styles.centerIconContainer]}>
+          {sets.length < 3 && (
+            <TouchableOpacity onPress={addSet} style={styles.botonMas}>
+              <AntDesign name="pluscircleo" size={24} color="green" />
+            </TouchableOpacity>
+          )}
+          {sets.length > 1 && (
+            <TouchableOpacity onPress={removeSet} style={styles.botonMenos}>
+              <AntDesign name="minuscircleo" size={24} color="red" />
+            </TouchableOpacity>
+          )}
+        </View>
+        {sets.length === 3 && (
+          <TouchableOpacity style={styles.subirPartidoButton} onPress={calculateTeamRankings}>
+            <Text style={styles.subirPartidoText}>Subir partido</Text>
+          </TouchableOpacity>
+        )}
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+  },
   container: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F5F5F5',
   },
-  card: {
+  scoreWrapper: {
+    borderRadius: 15,
     width: '80%',
-    backgroundColor: '#FFF',
-    borderRadius: 20,
-    paddingVertical: 30,
-    paddingHorizontal: 20,
-    alignItems: 'center',
-    elevation: 5,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
+    display: 'flex',
+    justifyContent: 'flex-start',
+    alignContent: 'center',
+    marginTop: '40%',
   },
-  title: {
+  scoreContainer: {
+    backgroundColor: '#ffffff',
+    padding: 15,
+    borderRadius: 10,
+    width: '100%',
+    alignItems: 'center',
+    marginBottom: '8%',
+  },
+  scoreText: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 20,
-  },
-  profileImage: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    marginBottom: 20,
-  },
-  progressContainer: {
-    width: '100%',
-    height: 20,
-    backgroundColor: '#E0E0E0',
-    borderRadius: 10,
-    overflow: 'hidden',
-    marginBottom: 20,
-  },
-  progress: {
-    width: '70%', // Ajusta el porcentaje para simular progreso
-    height: '100%',
-    borderRadius: 10,
-  },
-  trophyContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '80%',
-    marginBottom: 20,
-  },
-  trophyIcon: {
-    width: 40,
-    height: 40,
   },
   button: {
-    backgroundColor: '#00B0FF',
-    borderRadius: 10,
+    backgroundColor: '#00bfff',
+    width: '100%',
     paddingVertical: 10,
-    paddingHorizontal: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+    marginTop: 10,
   },
   buttonText: {
-    color: '#FFF',
-    fontSize: 18,
+    color: 'black',
+    fontSize: 16,
+    textAlign: 'center',
+  },
+  iconContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '40%',
+    marginTop: 20,
+  },
+  centerIconContainer: {
+    justifyContent: 'center',
+  },
+  botonMas: {
+    display: 'flex',
+    alignContent: 'flex-start',
+  },
+  botonMenos: {
+    marginLeft: '42%',
+  },
+  backButton: {
+    width: 30,
+    height: 30,
+    marginRight: '80%',
+    marginTop: 10,
+    zIndex: 1,
+  },
+  subirPartidoButton: {
+    marginTop: 20,
+    backgroundColor: '#00ff00',
+    paddingVertical: 10,
+    paddingHorizontal: 40,
+    borderRadius: 10,
+  },
+  subirPartidoText: {
+    color: 'white',
+    fontSize: 16,
     fontWeight: 'bold',
   },
 });

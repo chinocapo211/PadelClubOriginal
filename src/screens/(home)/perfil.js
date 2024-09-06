@@ -54,7 +54,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
           <View style={styles.progressBarContainer}>
             <Text style={styles.progressText}>0</Text>
             <ProgressBar progress={userData.Usuario.Puntos} color="#FFD700" style={styles.progressBar} />
-            <Text style={styles.progressText}>100</Text>
+            <Text style={styles.progressText2}>100</Text>
           </View>
           <View style={styles.statsContainer}>
             <View style={[styles.statBox, styles.pointsBox]}>
@@ -135,6 +135,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#888888',
     marginHorizontal: 5,
+  },
+  progressText2: {
+    fontSize: 14,
+    color: '#888888',
+    marginRight: 5,
   },
   progressBar: {
     flex: 1,

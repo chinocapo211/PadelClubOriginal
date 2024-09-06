@@ -21,7 +21,7 @@ const PuntajeJugar = () => {
   const addSet = () => {
     if (sets.length < 3) {
       setSets([...sets, `Set ${sets.length + 1}`]);
-      addNumber(0)
+      addNumber(0);
     }
   };
 
@@ -35,23 +35,28 @@ const PuntajeJugar = () => {
     navigation.navigate('CargarPuntos', { index });
   };
 
+  const handleSubirPartido = () => {
+    
+    navigation.navigate('FinalJugar');
+  };
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
         <NavbarHigh />
         <TouchableOpacity onPress={() => navigation.goBack()}>
-        <Image
-        source={require('../../../assets/images/back.png')}
-        style={styles.backButton}
-        />
+          <Image
+            source={require('../../../assets/images/back.png')}
+            style={styles.backButton}
+          />
         </TouchableOpacity>
         <View style={styles.scoreWrapper}>
           {sets.map((set, index) => (
             <View key={index} style={styles.scoreContainer}>
               <Text style={styles.scoreText}>{set}</Text>
               <Text style={styles.scoreText}>0 - 0</Text>
-              <TouchableOpacity style={styles.button} onPress={() => handleCargarPuntos(index)}> 
-                <Text style={styles.buttonText} >Cargar puntos</Text>
+              <TouchableOpacity style={styles.button} onPress={() => handleCargarPuntos(index)}>
+                <Text style={styles.buttonText}>Cargar puntos</Text>
               </TouchableOpacity>
             </View>
           ))}
@@ -68,6 +73,11 @@ const PuntajeJugar = () => {
             </TouchableOpacity>
           )}
         </View>
+        {sets.length === 3 && (
+          <TouchableOpacity style={styles.subirPartidoButton} onPress={handleSubirPartido}>
+            <Text style={styles.subirPartidoText}>Subir partido</Text>
+          </TouchableOpacity>
+        )}
       </View>
     </SafeAreaView>
   );
@@ -83,7 +93,7 @@ const styles = StyleSheet.create({
   },
   scoreWrapper: {
     borderRadius: 15,
-    width: '80%', // 80% del ancho de la pantalla
+    width: '80%',
     display: 'flex',
     justifyContent: 'flex-start',
     alignContent: 'center',
@@ -116,23 +126,20 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   iconContainer: {
-    flexDirection: 'row', // Alineación horizontal
-    justifyContent: 'space-between', // Distribuir el espacio entre los botones
-    width: '40%', // Ajusta el ancho según sea necesario
-    marginTop: 20, // Espacio entre los sets y los íconos
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '40%',
+    marginTop: 20,
   },
   centerIconContainer: {
-    justifyContent: 'center', // Centra los íconos
+    justifyContent: 'center',
   },
-  additionalSets: {
-    // Aquí puedes agregar estilos adicionales si es necesario
+  botonMas: {
+    display: 'flex',
+    alignContent: 'flex-start',
   },
-  botonMas:{
-    display:'flex',
-    alignContent:'flex-start'
-  },
-  botonMenos:{
-    marginLeft:'42%'
+  botonMenos: {
+    marginLeft: '42%',
   },
   backButton: {
     width: 30,
@@ -140,6 +147,18 @@ const styles = StyleSheet.create({
     marginRight: '80%',
     marginTop: 10,
     zIndex: 1,
+  },
+  subirPartidoButton: {
+    marginTop: 20,
+    backgroundColor: '#00ff00',
+    paddingVertical: 10,
+    paddingHorizontal: 40,
+    borderRadius: 10,
+  },
+  subirPartidoText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
 
