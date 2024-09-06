@@ -59,7 +59,7 @@ const InicioJugar = ({ navigation }) => {
   
             if (response.data && response.data.jugadores) {
               setJugadores(response.data.jugadores);
-              
+              setJugadores(jugadores.reverse());
               // Verificar si el grupo está lleno
               const { id2, id3, id4 } = response.data.grupo;
               if (id2 !== 0 && id3 !== 0 && id4 !== 0) {
