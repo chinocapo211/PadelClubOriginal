@@ -6,6 +6,7 @@ import userApi from '../../api/userApi';
 import GruposApi from '../../api/GruposApi';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect } from '@react-navigation/native';
+import AntDesign from '@expo/vector-icons/AntDesign';
 
 const MostrarJugadores = ({ navigation }) => {
   const [jugadores, setJugadores] = useState([]);
@@ -123,7 +124,7 @@ const MostrarJugadores = ({ navigation }) => {
                     style={styles.addButton}
                     onPress={() => UpdateGrupo(jugador.id)}
                   >
-                    <Text style={styles.addButtonText}>+</Text>
+                    <AntDesign name="pluscircle" size={30} color="#6CA0D4" />
                   </TouchableOpacity>
                 </View>
               </View>
@@ -180,7 +181,6 @@ const styles = StyleSheet.create({
     color: 'gray',
   },
   addButton: {
-    backgroundColor: '#007BFF',
     borderRadius: 50,
     width: 30,
     height: 30,
