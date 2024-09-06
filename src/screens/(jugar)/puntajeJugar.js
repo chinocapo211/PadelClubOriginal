@@ -8,8 +8,17 @@ import CargarPuntos from './cargarPuntos';
 
 const PuntajeJugar = () => {
   const [sets, setSets] = useState(['Set 1']);
+  const [numbers, setNumbers] = useState([]);
   const navigation = useNavigation();
 
+  const addNumber = (newNumber) => {
+    setNumbers([...numbers, newNumber]);
+  };
+  const editNumber = (index, newValue) => {
+    const updatedNumbers = [...numbers];
+    updatedNumbers[index] = parseInt(newValue);
+    setNumbers(updatedNumbers);
+  };
   const addSet = () => {
     if (sets.length < 3) {
       setSets([...sets, `Set ${sets.length + 1}`]);
@@ -41,8 +50,8 @@ const PuntajeJugar = () => {
             <View key={index} style={styles.scoreContainer}>
               <Text style={styles.scoreText}>{set}</Text>
               <Text style={styles.scoreText}>0 - 0</Text>
-              <TouchableOpacity style={styles.button} onPress={() => CargarPuntos(set)}>
-                <Text style={styles.buttonText} onPress={handleCargarPuntos}>Cargar puntos</Text>
+              <TouchableOpacity style={styles.button} onPress={() => handleCargarPuntos(index)}> 
+                <Text style={styles.buttonText} >Cargar puntos</Text>
               </TouchableOpacity>
             </View>
           ))}
