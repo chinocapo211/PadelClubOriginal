@@ -6,7 +6,6 @@ import NavbarHigh from '../../components/navbarHigh';
 import NavbarLow from '../../components/navbarLow';
 
 const Ajustes = ({ navigation }) => {
-
   const handleLogout = async () => {
     try {
       // Eliminar el token almacenado 
@@ -19,12 +18,7 @@ const Ajustes = ({ navigation }) => {
         console.log('No token found to clear');
       }
       // Navegar al inicio de sesión y reiniciar la navegación
-      navigation.dispatch(
-        CommonActions.reset({
-          index: 0,
-          routes: [{ name: 'Login', state: { routes: [{ name: 'IniciarSesion' }] } }],
-        })
-      );
+      navigation.navigate('Login')
     } catch (error) {
     
       Alert.alert('Error', 'No se pudo cerrar sesión. Intenta de nuevo.');
