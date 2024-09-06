@@ -2,23 +2,9 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-const CargarPuntos = ({ route }) => {
-  const { setNumber } = route.params; // Número del set que se está actualizando
+const CargarPuntos = ({ navigation }) => {
   const [puntos, setPuntos] = useState({ team1: '', team2: '' });
   const navigation = useNavigation();
-
-  const handleSave = async () => {
-    // Aquí va la lógica para guardar los puntos en la base de datos.
-    try {
-      // Suponiendo que tienes una función para guardar los puntos en la base de datos:
-      await savePointsToDatabase(setNumber, puntos.team1, puntos.team2);
-
-      // Después de guardar, volvemos a la pantalla anterior
-      navigation.goBack();
-    } catch (error) {
-      console.error("Error guardando los puntos:", error);
-    }
-  };
 
   return (
     <View style={styles.container}>
