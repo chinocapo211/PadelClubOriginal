@@ -81,13 +81,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     marginTop: height * 0.17,
     marginBottom: height * -0.15,
-    padding: 15,
-    borderRadius: 10,
+    padding: 25,
+    borderRadius: 20,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 5 },
     shadowOpacity: 0.1,
     shadowRadius: 10,
     elevation: 5,
+    marginLeft:15,
+    marginRight:15,
   },
   playerRow: {
     flexDirection: 'row',
@@ -120,8 +122,10 @@ const styles = StyleSheet.create({
     color: '#666',
   },
   reportButton: {
+  
     marginTop: 10,
     alignSelf: 'center',
+    
   },
 });
 
