@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import NavbarHigh from '../../components/navbarHigh';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import GruposApi from '../../api/GruposApi';
@@ -36,6 +36,16 @@ const InicioJugar = ({ navigation }) => {
               setIdGrupo(response.data.idGrupo);
               setGroupData(response.data);
               console.log('Nuevo grupo creado:', response.data.idGrupo);
+              
+              // Asignar el usuario actual al equipo 1
+              const currentUser = {
+                id: response.data.usuario.id,
+                Nombre: response.data.usuario.Nombre,
+                Rango: response.data.usuario.Rango,
+              };
+              
+              setEquipo1([currentUser]); // Agregar al equipo 1 al crear el grupo
+              console.log('Usuario actual asignado a Equipo 1:', currentUser);
             } else {
               console.error('Error al crear grupo:', response);
             }
@@ -55,11 +65,11 @@ const InicioJugar = ({ navigation }) => {
         try {
           const storedToken = await AsyncStorage.getItem('@AccessToken');
           const storedIdGrupo = await AsyncStorage.getItem('@GrupoId');
-  
+
           if (storedToken && storedIdGrupo) {
             const response = await GruposApi.ObtenerInfoGrupo(storedToken, storedIdGrupo);
             console.log(response.data);
-  
+
             if (response.data && response.data.jugadores) {
               setJugadores(response.data.jugadores);
 
@@ -73,8 +83,8 @@ const InicioJugar = ({ navigation }) => {
 
               // Dividir jugadores en dos equipos
               const jugadoresList = response.data.jugadores;
-              const equipo1 = jugadoresList.slice(0, 2); // Primeros 2 jugadores
-              const equipo2 = jugadoresList.slice(2, 4); // Siguientes 2 jugadores
+              const equipo1 = jugadoresList.filter(jugador => jugador.id === response.data.grupo.id2 || jugador.id === response.data.grupo.id3);
+              const equipo2 = jugadoresList.filter(jugador => jugador.id === response.data.grupo.id4);
 
               setEquipo1(equipo1);
               setEquipo2(equipo2);
@@ -85,13 +95,12 @@ const InicioJugar = ({ navigation }) => {
           console.error('Error al obtener la información del grupo:', error);
         }
       };
-  
+
       if (idGrupo) {
         obtenerInfoGrupo();
       }
-  
+
       return () => {};
-  
     }, [idGrupo])
   );
 
@@ -107,6 +116,7 @@ const InicioJugar = ({ navigation }) => {
         if (grupoResponse) {
           const grupo = grupoResponse.data.grupo;
 
+          // Eliminar el jugador del grupo
           if (grupoResponse.data.grupo.id2 === selectedPlayerId) {
             grupo.id2 = 0;
           } else if (grupo.id3 === selectedPlayerId) {
@@ -135,8 +145,8 @@ const InicioJugar = ({ navigation }) => {
             
             // Actualizar la división de equipos
             const jugadoresList = jugadores.filter(jugador => jugador.id !== selectedPlayerId);
-            const nuevoEquipo1 = jugadoresList.slice(0, 2);
-            const nuevoEquipo2 = jugadoresList.slice(2, 4);
+            const nuevoEquipo1 = jugadoresList.filter(jugador => jugador.id === grupo.id2 || jugador.id === grupo.id3);
+            const nuevoEquipo2 = jugadoresList.filter(jugador => jugador.id === grupo.id4);
 
             setEquipo1(nuevoEquipo1);
             setEquipo2(nuevoEquipo2);
@@ -152,6 +162,41 @@ const InicioJugar = ({ navigation }) => {
     } catch (error) {
       console.error('Error al actualizar el grupo:', error);
     }
+  };
+
+  const addPlayerToTeam = async (team) => {
+    try {
+      if (team === 1) {
+        if (equipo1.length >= 2) {
+          Alert.alert("Equipo 1 completo", "Ya hay 2 jugadores en el equipo 1.");
+          return;
+        }
+      } else if (team === 2) {
+        if (equipo2.length >= 2) {
+          Alert.alert("Equipo 2 completo", "Ya hay 2 jugadores en el equipo 2.");
+          return;
+        }
+      }
+
+      const availablePlayers = jugadores.filter(jugador => 
+        !equipo1.some(e => e.id === jugador.id) && 
+        !equipo2.some(e => e.id === jugador.id)
+      );
+
+      if (availablePlayers.length === 0) {
+        Alert.alert("No hay jugadores disponibles", "No hay jugadores disponibles para agregar.");
+        return;
+      }
+
+      // Navigate to player selection screen
+      navigation.navigate('MostrarJugadores', { team, availablePlayers });
+    } catch (error) {
+      console.error('Error al agregar jugador al equipo:', error);
+    }
+  };
+
+  const handleAddPlayer = (team) => {
+    addPlayerToTeam(team);
   };
 
   return (
@@ -173,12 +218,20 @@ const InicioJugar = ({ navigation }) => {
                   </View>
                   <TouchableOpacity
                     style={styles.crossButton}
-                    onPress={() => UpdateGrupo(jugador.id)} 
+                    onPress={() => UpdateGrupo(jugador.id)}
                   >
                     <Text style={styles.crossIcon}> - </Text>
                   </TouchableOpacity>
                 </View>
               ))}
+              {equipo1.length < 2 && (
+                <TouchableOpacity
+                  style={styles.addPlayerButton}
+                  onPress={() => handleAddPlayer(1)}
+                >
+                  <AntDesign name="pluscircle" size={30} color="#6CA0D4" />
+                </TouchableOpacity>
+              )}
             </View>
             <View style={styles.equipoContainer}>
               <Text style={styles.title}>Equipo 2</Text>
@@ -190,12 +243,20 @@ const InicioJugar = ({ navigation }) => {
                   </View>
                   <TouchableOpacity
                     style={styles.crossButton}
-                    onPress={() => UpdateGrupo(jugador.id)} 
+                    onPress={() => UpdateGrupo(jugador.id)}
                   >
                     <Text style={styles.crossIcon}> - </Text>
                   </TouchableOpacity>
                 </View>
               ))}
+              {equipo2.length < 2 && (
+                <TouchableOpacity
+                  style={styles.addPlayerButton}
+                  onPress={() => handleAddPlayer(2)}
+                >
+                  <AntDesign name="pluscircle" size={30} color="#6CA0D4" />
+                </TouchableOpacity>
+              )}
             </View>
           </View>
           {jugadores.length < 4 ? (
@@ -208,7 +269,7 @@ const InicioJugar = ({ navigation }) => {
           ) : (
             <TouchableOpacity
               style={styles.startButton}
-              onPress={() => navigation.navigate('PuntajeJugar')} 
+              onPress={() => navigation.navigate('PuntajeJugar')}
             >
               <Text style={styles.startButtonText}>Empezar Partido</Text>
             </TouchableOpacity>
@@ -241,7 +302,7 @@ const styles = StyleSheet.create({
   innerContainer: {
     marginTop: '2%',
     alignItems: 'center',
-    width:'90%'
+    width: '90%',
   },
   profileContainer: {
     alignItems: 'center',
@@ -259,8 +320,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    padding:10,
-    
+    padding: 10,
   },
   title: {
     fontSize: 24,
@@ -308,7 +368,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
   },
-  jugadorContainer:{
+  jugadorContainer: {
     backgroundColor: 'white',
     borderRadius: 10,
     shadowColor: '#000',
@@ -319,15 +379,18 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    padding:10,
-    marginBottom:'10%',
+    padding: 10,
+    marginBottom: '10%',
     flexDirection: 'row', // Alinea los elementos en una fila
     justifyContent: 'space-between', // Distribuye los elementos para que haya espacio entre ellos
     alignItems: 'center', // Centra los elementos verticalmente
   },
-  textos:{
-    
-  }
+  textos: {},
+  addPlayerButton: {
+    marginTop: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 });
 
 export default InicioJugar;
