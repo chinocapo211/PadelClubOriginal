@@ -65,6 +65,7 @@ function AjustesStackScreen() {
       <AjustesStack.Screen name='Clubes' component={Clubes}/>
       <AjustesStack.Screen name='TerminosCondiciones' component={Terminos}/>
       <AjustesStack.Screen name='Login' component={LoginStackScreen}/>
+      <AjustesStack.Screen name="Nabbar" component={NavBarStackScreen}/>
     </AjustesStack.Navigator>
   );
 }
