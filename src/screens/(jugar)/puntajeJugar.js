@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, Modal, TextInput, Pressable } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, Modal, TextInput, Pressable, Alert } from 'react-native';
 import NavbarHigh from '../../components/navbarHigh';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AntDesign from '@expo/vector-icons/AntDesign';
@@ -16,21 +16,26 @@ const PuntajeJugar = () => {
   const navigation = useNavigation();
 
   const openModal = (param, id) => {
-    setModalParam(param); // Actualiza el estado con el valor recibido
-    setSetId(id); // Actualiza el estado con el ID del set
+    setModalParam(param); 
+    setSetId(id); 
     setModalVisible(true);
   };
 
   const closeModal = () => {
     setModalVisible(false);
-    setInputValue1(''); // Limpiar el primer campo de entrada al cerrar el modal
-    setInputValue2(''); // Limpiar el segundo campo de entrada al cerrar el modal
+    setInputValue1(''); 
+    setInputValue2(''); 
   };
 
   const handleConfirm = () => {
-    if (inputValue1.trim() !== '' && inputValue2.trim() !== '') { // Verifica que todos los inputs no estén vacíos
+    const num1 = parseInt(inputValue1);
+    const num2 = parseInt(inputValue2);
+
+    if ((((num1 === 6 && num2 < 6) || (num1 < 6 && num2 === 6)) || (num1 === 7 && (num2 === 5 || num2 === 6)) || (num2 === 7 && (num1 === 5 || num1 === 6))) && !isNaN(num1) && !isNaN(num2)) {
       editNumber(setId, [inputValue1, inputValue2]); // Guarda los dos valores
       closeModal();
+    } else {
+      alert("Se tiene que cargar el puntaje correctamente. No ingresar letras y en caso de tie break poner 7-6 o 6-7.");
     }
   };
 
@@ -51,21 +56,13 @@ const PuntajeJugar = () => {
     }
   };
 
-  //const removeLastValue = () => {
-    //const updatedNumbers = [...numbers];
-    //if (updatedNumbers.length > 0) {
-      //updatedNumbers.pop();
-    //}
-    //setNumbers(updatedNumbers);
-  //};
-
-  //const removeLastValue = () => {
-    //const updatedNumbers = [...numbers];
-    //if (updatedNumbers.length > 0) {
-      //updatedNumbers.pop();
-    //}
-    //setNumbers(updatedNumbers);
-  //};
+  const removeLastValue = () => {
+    const updatedNumbers = [...numbers];
+    if (updatedNumbers.length > 0) {
+      updatedNumbers.pop();
+    }
+    setNumbers(updatedNumbers);
+  };
 
   const removeSet = () => {
     if (sets.length > 1) {
@@ -76,6 +73,10 @@ const PuntajeJugar = () => {
 
   const handleCargarPuntos = (index) => {
     openModal(`Set ${index + 1}`, index); // Pasa el valor del set y el ID como parámetro
+  };
+
+  const handleSubirPartido = () => {
+      console.log("a");
   };
 
   return (
@@ -153,11 +154,9 @@ const PuntajeJugar = () => {
             </TouchableOpacity>
           )}
         </View>
-        {sets.length === 3 && (
           <TouchableOpacity style={styles.subirPartidoButton} onPress={handleSubirPartido}>
             <Text style={styles.subirPartidoText}>Subir partido</Text>
           </TouchableOpacity>
-        )}
       </View>
     </SafeAreaView>
   );
@@ -166,6 +165,14 @@ const PuntajeJugar = () => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
+  },
+  subirPartidoButton: {
+    backgroundColor: '#3AD4E3', // Color de fondo distintivo (Tomate)
+    borderRadius: 20, // Bordes redondeados
+    paddingVertical: "4%",
+    paddingHorizontal: "5%",
+    marginTop: "5%",
+    alignItems: 'center',
   },
   container: {
     flex: 1,
@@ -181,11 +188,11 @@ const styles = StyleSheet.create({
   },
   scoreContainer: {
     backgroundColor: '#ffffff',
-    padding: 15,
+    padding: "5%",
     borderRadius: 10,
     width: '100%',
     alignItems: 'center',
-    marginBottom: '8%',
+    marginTop:"5%",
   },
   scoreText: {
     fontSize: 24,
@@ -216,16 +223,16 @@ const styles = StyleSheet.create({
   },
   botonMas: {
     display: 'flex',
-    alignContent: 'flex-start'
+    alignContent: 'flex-start',
   },
   botonMenos: {
-    marginLeft: '42%'
+    marginLeft: '42%',
   },
   backButton: {
     width: 30,
     height: 30,
     marginRight: '80%',
-    marginTop: 10,
+    marginTop: "20%",
     zIndex: 1,
   },
   modalContainer: {
@@ -235,8 +242,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)', // Fondo semitransparente
   },
   modalContent: {
-    width: 300,
-    padding: 20,
+    width: "80%",
+    padding: "5%",
     backgroundColor: 'white',
     borderRadius: 10,
     alignItems: 'center',
@@ -244,33 +251,34 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     position: 'absolute',
-    top: 10,
-    right: 10,
+    top: "10%",
+    right: "10%",
     zIndex: 1,
   },
   modalText: {
     fontSize: 18,
-    marginBottom: 15,
+    marginBottom: "4%",
   },
   inputContainer: {
     flexDirection: 'row', // Alineación horizontal de los campos
     justifyContent: 'space-between', // Espacio entre los campos
     width: '100%', // Ancho del contenedor de los campos
-    marginBottom: 15,
+    marginBottom: "4%",
   },
   input: {
-    flex: 1, // Ocupa todo el espacio disponible
-    height: 40,
+    width: '30%', // Ajusta el ancho a 30% del contenedor
+    height: "180%",
     borderColor: 'gray',
     borderWidth: 1,
     borderRadius: 5,
-    paddingHorizontal: 10,
-    marginHorizontal: 5, // Espacio entre los campos
+    paddingHorizontal: "3%",
+    marginHorizontal: "1%", // Espacio entre los campos
   },
   confirmButton: {
     backgroundColor: '#00bfff',
     width: '100%',
-    paddingVertical: 10,
+    paddingVertical: "3%",
+    marginTop:"8%",
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 10,
