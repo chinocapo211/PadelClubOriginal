@@ -6,13 +6,16 @@ import GruposApi from '../../api/GruposApi';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect } from '@react-navigation/native';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import Equipo1Api from '../../api/Equipo1Api';
+import Equipo2Api from '../../api/Equipo2Api';
 
 const InicioJugar = ({ navigation }) => {
   const [groupData, setGroupData] = useState(null);
   const [jugadores, setJugadores] = useState([]);
   const [token, setToken] = useState(null);
   const [idGrupo, setIdGrupo] = useState(null);
-  const [isGroupFull, setIsGroupFull] = useState(false);
+  const [isGroup1Full, setIsGroup1Full] = useState(false);
+  const [isGroup2Full, setIsGroup2Full] = useState(false);
   const [equipo1, setEquipo1] = useState([]);
   const [equipo2, setEquipo2] = useState([]);
 
@@ -58,27 +61,32 @@ const InicioJugar = ({ navigation }) => {
   
           if (storedToken && storedIdGrupo) {
             const response = await GruposApi.ObtenerInfoGrupo(storedToken, storedIdGrupo);
-            console.log(response.data);
+            console.log( "Respuesta info grupo" + response);
   
-            if (response.data && response.data.jugadores) {
-              setJugadores(response.data.jugadores);
-
-              // Verificar si el grupo está lleno
-              const { id2, id3, id4 } = response.data.grupo;
-              if (id2 !== 0 && id3 !== 0 && id4 !== 0) {
-                setIsGroupFull(true);
-              } else {
-                setIsGroupFull(false);
+            if (response.data) {   
+            
+              const equipo1Response = await Equipo1Api.ObtenerInfoGrupo(storedToken, storedIdGrupo);
+              console.log("Respuesta equipo1:", JSON.stringify(equipo1Response, null, 2));
+              console.log("ID equipo1" + equipo1Response.data.grupo.id2);
+              if(equipo1Response.data.grupo.id2 != 0)
+              {
+                setIsGroup1Full(true);
               }
 
-              // Dividir jugadores en dos equipos
-              const jugadoresList = response.data.jugadores;
-              const equipo1 = jugadoresList.slice(0, 2); // Primeros 2 jugadores
-              const equipo2 = jugadoresList.slice(2, 4); // Siguientes 2 jugadores
+              setEquipo1(equipo1Response.data.grupo);
 
-              setEquipo1(equipo1);
-              setEquipo2(equipo2);
+              
+              const equipo2Response = await Equipo2Api.ObtenerInfoGrupo(storedToken, storedIdGrupo);
+              if(equipo2Response.data.grupo.id3 != 0 && equipo2Response.data.grupo.id4 != 0)
+              {
+                setIsGroup1Full(true);
+              }
+
+
+              setEquipo1(equipo1Response.data.grupo); // Asigna el valor al estado de equipo1
+              setEquipo2(equipo2Response);
             }
+            console.log("Valor de equipo1 antes del renderizado:", equipo1);
             setGroupData(response.data);
           }
         } catch (error) {
@@ -94,65 +102,10 @@ const InicioJugar = ({ navigation }) => {
   
     }, [idGrupo])
   );
-
-  const UpdateGrupo = async (selectedPlayerId) => {
-    try {
-      const storedToken = await AsyncStorage.getItem('@AccessToken');
-      const storedIdGrupo = await AsyncStorage.getItem('@GrupoId');
-      console.log("idDelGrupo" + storedIdGrupo);
-
-      if (storedToken && storedIdGrupo) {
-        const grupoResponse = await GruposApi.ObtenerInfoGrupo(storedToken, storedIdGrupo);
-
-        if (grupoResponse) {
-          const grupo = grupoResponse.data.grupo;
-
-          if (grupoResponse.data.grupo.id2 === selectedPlayerId) {
-            grupo.id2 = 0;
-          } else if (grupo.id3 === selectedPlayerId) {
-            grupo.id3 = 0;
-          } else if (grupo.id4 === selectedPlayerId) {
-            grupo.id4 = 0;
-          } else {
-            console.warn('El jugador no se encuentra en el grupo');
-            return;
-          }
-
-          const updateResponse = await GruposApi.UpdateGrupo(storedToken, storedIdGrupo, grupoResponse);
-
-          if (updateResponse) {
-            console.log('Grupo actualizado:', updateResponse);
-
-            setJugadores(prevJugadores => prevJugadores.filter(jugador => jugador.id !== selectedPlayerId));
-            
-            // Actualizar la verificación de si el grupo está lleno
-            const { id2, id3, id4 } = grupo;
-            if (id2 !== 0 && id3 !== 0 && id4 !== 0) {
-              setIsGroupFull(true);
-            } else {
-              setIsGroupFull(false);
-            }
-            
-            // Actualizar la división de equipos
-            const jugadoresList = jugadores.filter(jugador => jugador.id !== selectedPlayerId);
-            const nuevoEquipo1 = jugadoresList.slice(0, 2);
-            const nuevoEquipo2 = jugadoresList.slice(2, 4);
-
-            setEquipo1(nuevoEquipo1);
-            setEquipo2(nuevoEquipo2);
-          } else {
-            console.error('Error al actualizar el grupo:', updateResponse);
-          }
-        } else {
-          console.error('Grupo no encontrado en la respuesta:', grupoResponse);
-        }
-      } else {
-        console.warn('Token o ID del grupo no disponible');
-      }
-    } catch (error) {
-      console.error('Error al actualizar el grupo:', error);
-    }
-  };
+  useEffect(() => {
+    console.log('Valor de equipo1 después de actualizarse:', equipo1);
+    console.log('Valor de equipo2 después de actualizarse:', equipo2);
+  }, [equipo1, equipo2]);
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -165,7 +118,7 @@ const InicioJugar = ({ navigation }) => {
           <View style={styles.profileContainer}>
             <View style={styles.equipoContainer}>
               <Text style={styles.title}>Equipo 1</Text>
-              {equipo1.map((jugador) => (
+              {equipo1.data.jugadores.map((jugador) => (
                 <View key={jugador.id} style={styles.jugadorContainer}>
                   <View style={styles.textos}>
                     <Text style={styles.userName}>{jugador.Nombre}</Text>
@@ -182,7 +135,7 @@ const InicioJugar = ({ navigation }) => {
             </View>
             <View style={styles.equipoContainer}>
               <Text style={styles.title}>Equipo 2</Text>
-              {equipo2.map((jugador) => (
+              {equipo2.data.jugadores.map((jugador) => (
                 <View key={jugador.id} style={styles.jugadorContainer}>
                   <View style={styles.textos}>
                     <Text style={styles.userName}>{jugador.Nombre}</Text>

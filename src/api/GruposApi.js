@@ -3,21 +3,16 @@ import userApi from './userApi';
 
  const grupoApi = async (token) => {
   const Token = await userApi.ObtenerInfoJugador(token);
+  console.log(`ID de Usuario antes de enviar: ${Token.Usuario.id} (Tipo: ${typeof Token.Usuario.id})`);
   console.log(Token);
   const headers = {
     "Content-Type": "application/json",
     "Authorization": `Bearer ${token}`,  
     "ngrok-skip-browser-warning": true, 
   };
-  const data = 
-  {
-    id1: Token.Usuario.id,
-    id2: 0,
-    id3: 0,
-    id4: 0
-  }
+  const data = {};
   try {
-    const result = await apiManager("POST", headers, data , "GrupoXJugador");
+    const result = await apiManager("POST", headers, data , `GrupoXJugador/${Token.Usuario.id}`);
     return result;
   } catch (error) {
     console.error('Error en la solicitud:', error);
@@ -47,32 +42,6 @@ const ObtenerInfoGrupo = async(token,storedIdGrupo) =>
 };
 
 
-const UpdateGrupo = async (token, idGrupo, grupoResponse) => {
-  const Token = await userApi.ObtenerInfoJugador(token);
-  console.log(Token);
-
-  const headers = {
-    "Content-Type": "application/json",
-    "Authorization": `Bearer ${token}`,
-    "ngrok-skip-browser-warning": true, 
-  };
-
-  // Asegúrate de que `grupoResponse` contenga solo los campos necesarios.
-  const dataToSend = {
-    id2: grupoResponse.data.grupo.id2,
-    id3: grupoResponse.data.grupo.id3,
-    id4: grupoResponse.data.grupo.id4,
-  };
-
-  try {
-    const result = await apiManager("PATCH", headers, dataToSend, `GrupoXJugador/${parseInt(idGrupo, 10)}`);
-    return result;
-  } catch (error) {
-    console.error('Error en la solicitud:', error);
-    return { error: error.message };
-  }
-};
 
 
-
-export default {grupoApi, ObtenerInfoGrupo,UpdateGrupo}
+export default {grupoApi, ObtenerInfoGrupo}
