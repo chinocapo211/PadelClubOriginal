@@ -35,7 +35,7 @@ const PuntajeJugar = () => {
       editNumber(setId, [inputValue1, inputValue2]); // Guarda los dos valores
       closeModal();
     } else {
-      Alert.alert("Error", "Se tiene que cargar el puntaje correctamente. No ingresar letras y en caso de tie break poner 7-6 o 6-7.");
+      alert("Se tiene que cargar el puntaje correctamente. No ingresar letras y en caso de tie break poner 7-6 o 6-7.");
     }
   };
 
@@ -154,11 +154,9 @@ const PuntajeJugar = () => {
             </TouchableOpacity>
           )}
         </View>
-        {sets.length === 3 && (
           <TouchableOpacity style={styles.subirPartidoButton} onPress={handleSubirPartido}>
             <Text style={styles.subirPartidoText}>Subir partido</Text>
           </TouchableOpacity>
-        )}
       </View>
     </SafeAreaView>
   );
@@ -169,7 +167,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   subirPartidoButton: {
-    backgroundColor: '#FF6347', // Color de fondo distintivo (Tomate)
+    backgroundColor: '#3AD4E3', // Color de fondo distintivo (Tomate)
     borderRadius: 20, // Bordes redondeados
     paddingVertical: "4%",
     paddingHorizontal: "5%",
