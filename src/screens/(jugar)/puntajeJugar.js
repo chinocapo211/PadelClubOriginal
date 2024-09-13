@@ -76,7 +76,19 @@ const PuntajeJugar = () => {
   };
 
   const handleSubirPartido = () => {
-      console.log("a");
+    const validSets = sets.reduce((acc, _, index) => {
+      const setScore = numbers[index] || [0, 0];
+      return acc && (index % 2 === 0 || numbers[index - 1]); 
+    }, true);
+
+    const hasValidScores = numbers.some(score => score[0] !== 0 || score[1] !== 0);
+
+    if (validSets && hasValidScores) {
+      alert("El partido ha sido enviado correctamente.");
+      navigation.navigate('FinalJugar', { puntaje: numbers })
+    } else {
+      alert("No se puede subir el partido. Asegúrate de ingresar puntajes válidos y que los sets estén completos.");
+    }
   };
 
   return (

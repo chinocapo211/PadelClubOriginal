@@ -5,10 +5,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
-const FinalJugar = () => {
+const FinalJugar = ({ puntaje }) => {
   const navigation = useNavigation();
   const route = useRoute();
-  const { teamA, teamB, resultado } = route.params; // Supongamos que los datos del equipo y resultados son pasados como params
   const [sets, setSets] = useState(['Set 1']);
 
   const calculateElo = (Ra, Rb, Sa, Sb, Ka, Kb) => {
@@ -80,7 +79,7 @@ const FinalJugar = () => {
         </View>
         <View style={[styles.iconContainer, sets.length === 1 && styles.centerIconContainer]}>
           {sets.length < 3 && (
-            <TouchableOpacity onPress={addSet} style={styles.botonMas}>
+            <TouchableOpacity  style={styles.botonMas}>
               <AntDesign name="pluscircleo" size={24} color="green" />
             </TouchableOpacity>
           )}
