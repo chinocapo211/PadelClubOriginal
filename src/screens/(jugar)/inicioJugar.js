@@ -15,7 +15,6 @@ const InicioJugar = ({ navigation }) => {
   const [isGroupFull, setIsGroupFull] = useState(false);
   const [equipo1, setEquipo1] = useState([]);
   const [equipo2, setEquipo2] = useState([]);
-  const [primerJugadorId, setPrimerJugadorId] = useState(null); // Nuevo estado para el primer jugador
 
   useEffect(() => {
     const createGrupo = async () => {
@@ -37,16 +36,6 @@ const InicioJugar = ({ navigation }) => {
               setIdGrupo(response.data.idGrupo);
               setGroupData(response.data);
               console.log('Nuevo grupo creado:', response.data.idGrupo);
-              
-              const jugador = await userApi.ObtenerInfoJugador(storedToken);
-              const currentUser = {
-                id: jugador.data.usuario.id,
-                Nombre: jugador.data.usuario.Nombre,
-                Rango: jugador.data.usuario.Rango,
-              };
-              setPrimerJugadorId(currentUser.id); // Guardar el ID del primer jugador
-              setEquipo1([currentUser]); // Agregar al equipo 1 al crear el grupo
-              console.log('Usuario actual asignado a Equipo 1:', currentUser);
             } else {
               console.error('Error al crear grupo:', response);
             }
@@ -82,23 +71,13 @@ const InicioJugar = ({ navigation }) => {
                 setIsGroupFull(false);
               }
 
-              // Dividir jugadores en dos equipos, asegurando que el primer jugador siempre esté en equipo1
+              // Dividir jugadores en dos equipos
               const jugadoresList = response.data.jugadores;
-              
-              const primerJugador = jugadoresList.find(jugador => jugador.id === primerJugadorId);
-              const jugadoresSinPrimer = jugadoresList.filter(jugador => jugador.id !== primerJugadorId);
-              
-              const equipo1 = [primerJugador, ...jugadoresSinPrimer.slice(0, 1)]; // Primer jugador y uno más
-              const equipo2 = jugadoresSinPrimer.slice(1, 3); // Los siguientes jugadores
+              const equipo1 = jugadoresList.slice(0, 2); // Primeros 2 jugadores
+              const equipo2 = jugadoresList.slice(2, 4); // Siguientes 2 jugadores
 
               setEquipo1(equipo1);
               setEquipo2(equipo2);
-
-              // Imprimir información en consola
-              console.log("Equipo 1:", equipo1);
-              console.log("Equipo 2:", equipo2);
-              console.log("Equipo 1 (detalle):", JSON.stringify(equipo1, null, 2));
-              console.log("Equipo 2 (detalle):", JSON.stringify(equipo2, null, 2));
             }
             setGroupData(response.data);
           }
@@ -113,7 +92,7 @@ const InicioJugar = ({ navigation }) => {
   
       return () => {};
   
-    }, [idGrupo, primerJugadorId])
+    }, [idGrupo])
   );
 
   const UpdateGrupo = async (selectedPlayerId) => {
@@ -156,17 +135,11 @@ const InicioJugar = ({ navigation }) => {
             
             // Actualizar la división de equipos
             const jugadoresList = jugadores.filter(jugador => jugador.id !== selectedPlayerId);
-            const primerJugador = jugadoresList.find(jugador => jugador.id === primerJugadorId);
-            const jugadoresSinPrimer = jugadoresList.filter(jugador => jugador.id !== primerJugadorId);
-            
-            const nuevoEquipo1 = [primerJugador, ...jugadoresSinPrimer.slice(0, 1)];
-            const nuevoEquipo2 = jugadoresSinPrimer.slice(1, 3);
+            const nuevoEquipo1 = jugadoresList.slice(0, 2);
+            const nuevoEquipo2 = jugadoresList.slice(2, 4);
 
             setEquipo1(nuevoEquipo1);
             setEquipo2(nuevoEquipo2);
-
-            console.log("Equipo 1:", nuevoEquipo1);
-            console.log("Equipo 2:", nuevoEquipo2);
           } else {
             console.error('Error al actualizar el grupo:', updateResponse);
           }
@@ -287,6 +260,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     padding:10,
+    
   },
   title: {
     fontSize: 24,
@@ -351,7 +325,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between', // Distribuye los elementos para que haya espacio entre ellos
     alignItems: 'center', // Centra los elementos verticalmente
   },
-  textos:{}
+  textos:{
+    
+  }
 });
 
 export default InicioJugar;
