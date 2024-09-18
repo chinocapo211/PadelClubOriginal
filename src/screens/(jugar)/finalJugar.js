@@ -1,14 +1,23 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import React, { useEffect } from 'react'; // Asegúrate de importar useEffect
+import { View, Text, StyleSheet, TouchableOpacity, Image, Alert } from 'react-native';
 import NavbarHigh from '../../components/navbarHigh';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
-const FinalJugar = ({ puntaje }) => {
+const FinalJugar = ({ route }) => {
   const navigation = useNavigation();
-  const route = useRoute();
-  const [sets, setSets] = useState(['Set 1']);
+  const { puntaje } = route.params || {}; // Asegúrate de obtener `puntaje` desde `route.params`
+
+  useEffect(() => {
+    if (puntaje) {
+      console.log("Valor de puntaje recibido:", puntaje);
+      // Si quieres mostrarlo en una alerta o en el UI, puedes hacerlo aquí
+      Alert.alert("Valor de puntaje", JSON.stringify(puntaje.score));
+    }
+  }, [puntaje]);
+
+  // ... El resto del código
 
   const calculateElo = (Ra, Rb, Sa, Sb, Ka, Kb) => {
     // Calcular expectativas
@@ -39,7 +48,7 @@ const FinalJugar = ({ puntaje }) => {
 
     // Obtener el factor K para cada equipo
     const Ka = (getKFactor(teamA.player1.rating, teamA.player1.matches) + getKFactor(teamA.player2.rating, teamA.player2.matches)) / 2;
-    const Kb = (getKFactor(teamB.player1.rating, teamB.player1.matches) + getKFactor(teamB.player2.rating, teamB.player2.matches)) / 2;
+    const Kb = (getKFactor(teamB.player1.rating, teamB.player2.rating) + getKFactor(teamB.player2.rating, teamB.player2.matches)) / 2;
 
     // Asignar los resultados (1 = victoria, 0.5 = empate, 0 = derrota)
     const { Sa, Sb } = resultado;
@@ -67,33 +76,18 @@ const FinalJugar = ({ puntaje }) => {
           />
         </TouchableOpacity>
         <View style={styles.scoreWrapper}>
-          {sets.map((set, index) => (
+          {puntaje.map((set, index) => (
             <View key={index} style={styles.scoreContainer}>
-              <Text style={styles.scoreText}>{set}</Text>
-              <Text style={styles.scoreText}>0 - 0</Text>
+              <Text style={styles.scoreText}>{set.name}</Text>
+              <Text style={styles.scoreText}>{set.score[0]} - {set.score[1]}</Text>
               <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('CargarPuntos', { index })}>
                 <Text style={styles.buttonText}>Cargar puntos</Text>
               </TouchableOpacity>
             </View>
           ))}
         </View>
-        <View style={[styles.iconContainer, sets.length === 1 && styles.centerIconContainer]}>
-          {sets.length < 3 && (
-            <TouchableOpacity  style={styles.botonMas}>
-              <AntDesign name="pluscircleo" size={24} color="green" />
-            </TouchableOpacity>
-          )}
-          {sets.length > 1 && (
-            <TouchableOpacity onPress={removeSet} style={styles.botonMenos}>
-              <AntDesign name="minuscircleo" size={24} color="red" />
-            </TouchableOpacity>
-          )}
-        </View>
-        {sets.length === 3 && (
-          <TouchableOpacity style={styles.subirPartidoButton} onPress={calculateTeamRankings}>
-            <Text style={styles.subirPartidoText}>Subir partido</Text>
-          </TouchableOpacity>
-        )}
+        
+       
       </View>
     </SafeAreaView>
   );

@@ -6,25 +6,24 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import { useNavigation } from '@react-navigation/native';
 
 const PuntajeJugar = () => {
-  const [sets, setSets] = useState(['Set 1']);
-  const [numbers, setNumbers] = useState([]);
+  const [sets, setSets] = useState([{ name: 'Set 1', score: [0, 0] }]);
   const [modalVisible, setModalVisible] = useState(false);
-  const [inputValue1, setInputValue1] = useState(''); // Primer campo de entrada
-  const [inputValue2, setInputValue2] = useState(''); // Segundo campo de entrada
-  const [modalParam, setModalParam] = useState(null); // Estado para el valor recibido en el modal
-  const [setId, setSetId] = useState(null); // Estado para el ID del set
+  const [inputValue1, setInputValue1] = useState('');
+  const [inputValue2, setInputValue2] = useState('');
+  const [modalParam, setModalParam] = useState(null);
+  const [setId, setSetId] = useState(null);
   const navigation = useNavigation();
 
   const openModal = (param, id) => {
-    setModalParam(param); 
-    setSetId(id); 
+    setModalParam(param);
+    setSetId(id);
     setModalVisible(true);
   };
 
   const closeModal = () => {
     setModalVisible(false);
-    setInputValue1(''); 
-    setInputValue2(''); 
+    setInputValue1('');
+    setInputValue2('');
   };
 
   const handleConfirm = () => {
@@ -32,81 +31,56 @@ const PuntajeJugar = () => {
     const num2 = parseInt(inputValue2);
 
     if ((((num1 === 6 && num2 < 6) || (num1 < 6 && num2 === 6)) || (num1 === 7 && (num2 === 5 || num2 === 6)) || (num2 === 7 && (num1 === 5 || num1 === 6))) && !isNaN(num1) && !isNaN(num2)) {
-      editNumber(setId, [inputValue1, inputValue2]); // Guarda los dos valores
+      editNumber(setId, [num1, num2]);
       closeModal();
     } else {
-      alert("Se tiene que cargar el puntaje correctamente. No ingresar letras y en caso de tie break poner 7-6 o 6-7.");
+      Alert.alert("Error", "Se tiene que cargar el puntaje correctamente. No ingresar letras y en caso de tie break poner 7-6 o 6-7.");
     }
   };
 
-  const addNumber = (newNumber) => {
-    setNumbers([...numbers, newNumber]);
-  };
-
   const editNumber = (index, newValues) => {
-    const updatedNumbers = [...numbers];
-    updatedNumbers[index] = newValues.map(value => parseInt(value));
-    setNumbers(updatedNumbers);
+    const updatedSets = [...sets];
+    updatedSets[index] = { ...updatedSets[index], score: newValues };
+    setSets(updatedSets);
   };
 
   const addSet = () => {
     if (sets.length < 3) {
-      setSets([...sets, `Set ${sets.length + 1}`]);
-      addNumber([0, 0]); // Inicializa con dos valores
+      setSets([...sets, { name: `Set ${sets.length + 1}`, score: [0, 0] }]);
     }
-  };
-
-  const removeLastValue = () => {
-    const updatedNumbers = [...numbers];
-    if (updatedNumbers.length > 0) {
-      updatedNumbers.pop();
-    }
-    setNumbers(updatedNumbers);
   };
 
   const removeSet = () => {
     if (sets.length > 1) {
       setSets(sets.slice(0, -1));
-      removeLastValue();
     }
   };
 
   const handleCargarPuntos = (index) => {
-    openModal(`Set ${index + 1}`, index); // Pasa el valor del set y el ID como parámetro
+    openModal(`Set ${index + 1}`, index);
   };
 
   const handleSubirPartido = () => {
-    const validSets = sets.reduce((acc, _, index) => {
-      const setScore = numbers[index] || [0, 0];
-      return acc && (index % 2 === 0 || numbers[index - 1]); 
-    }, true);
-
-    const hasValidScores = numbers.some(score => score[0] !== 0 || score[1] !== 0);
-
-    if (validSets && hasValidScores) {
-      alert("El partido ha sido enviado correctamente.");
-      navigation.navigate('FinalJugar', { puntaje: numbers })
-    } else {
-      alert("No se puede subir el partido. Asegúrate de ingresar puntajes válidos y que los sets estén completos.");
-    }
+    navigation.navigate('FinalJugar', { puntaje: sets }) 
+  
   };
 
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
         <NavbarHigh />
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <Image
             source={require('../../../assets/images/back.png')}
-            style={styles.backButton}
+            style={styles.backImage}
           />
         </TouchableOpacity>
         <View style={styles.scoreWrapper}>
           {sets.map((set, index) => (
             <View key={index} style={styles.scoreContainer}>
-              <Text style={styles.scoreText}>{set}</Text>
+              <Text style={styles.scoreText}>{set.name}</Text>
               <Text style={styles.scoreText}>
-                {numbers[index] ? `${numbers[index][0]} - ${numbers[index][1]}` : '0 - 0'}
+                {set.score[0]} - {set.score[1]}
               </Text>
               <TouchableOpacity style={styles.button} onPress={() => handleCargarPuntos(index)}>
                 <Text style={styles.buttonText}>Cargar puntos</Text>
@@ -115,7 +89,7 @@ const PuntajeJugar = () => {
           ))}
         </View>
         <Modal
-          animationType="fade" // Cambiado para que el modal no se deslice
+          animationType="fade"
           transparent={true}
           visible={modalVisible}
           onRequestClose={() => {
@@ -134,15 +108,15 @@ const PuntajeJugar = () => {
                   style={styles.input}
                   value={inputValue1}
                   onChangeText={setInputValue1}
-                  keyboardType='numeric' // Solo permitir números
-                  placeholder="Puntaje 1" // Placeholder para el primer campo
+                  keyboardType='numeric'
+                  placeholder="Puntaje 1"
                 />
                 <TextInput
                   style={styles.input}
                   value={inputValue2}
                   onChangeText={setInputValue2}
-                  keyboardType='numeric' // Solo permitir números
-                  placeholder="Puntaje 2" // Placeholder para el segundo campo
+                  keyboardType='numeric'
+                  placeholder="Puntaje 2"
                 />
               </View>
               <Pressable
@@ -166,9 +140,9 @@ const PuntajeJugar = () => {
             </TouchableOpacity>
           )}
         </View>
-          <TouchableOpacity style={styles.subirPartidoButton} onPress={handleSubirPartido}>
-            <Text style={styles.subirPartidoText}>Subir partido</Text>
-          </TouchableOpacity>
+        <TouchableOpacity style={styles.subirPartidoButton} onPress={handleSubirPartido}>
+          <Text style={styles.subirPartidoText}>Subir partido</Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
@@ -180,8 +154,8 @@ const styles = StyleSheet.create({
     backgroundColor:"#EBEBEB"
   },
   subirPartidoButton: {
-    backgroundColor: '#3AD4E3', // Color de fondo distintivo (Tomate)
-    borderRadius: 20, // Bordes redondeados
+    backgroundColor: '#3AD4E3',
+    borderRadius: 20,
     paddingVertical: "4%",
     paddingHorizontal: "5%",
     marginTop: "5%",
@@ -194,7 +168,6 @@ const styles = StyleSheet.create({
   scoreWrapper: {
     borderRadius: 15,
     width: '80%',
-    display: 'flex',
     justifyContent: 'flex-start',
     alignContent: 'center',
     marginTop: '25%',
@@ -205,7 +178,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: '100%',
     alignItems: 'center',
-    marginTop:"5%",
+    marginTop: "5%",
   },
   scoreText: {
     fontSize: 24,
@@ -232,7 +205,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   centerIconContainer: {
-    justifyContent: 'center', // Centra los íconos
+    justifyContent: 'center',
   },
   botonMas: {
     display: 'flex',
@@ -248,11 +221,15 @@ const styles = StyleSheet.create({
     marginTop: "20%",
     zIndex: 1,
   },
+  backImage: {
+    width: '100%',
+    height: '100%',
+  },
   modalContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Fondo semitransparente
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalContent: {
     width: "80%",
@@ -260,7 +237,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 10,
     alignItems: 'center',
-    position: 'relative', // Para que la X esté en la esquina superior derecha
+    position: 'relative',
   },
   closeButton: {
     position: 'absolute',
@@ -273,25 +250,25 @@ const styles = StyleSheet.create({
     marginBottom: "4%",
   },
   inputContainer: {
-    flexDirection: 'row', // Alineación horizontal de los campos
-    justifyContent: 'space-between', // Espacio entre los campos
-    width: '100%', // Ancho del contenedor de los campos
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
     marginBottom: "4%",
   },
   input: {
-    width: '30%', // Ajusta el ancho a 30% del contenedor
-    height: "180%",
+    width: '30%',
+    height: 40,
     borderColor: 'gray',
     borderWidth: 1,
     borderRadius: 5,
     paddingHorizontal: "3%",
-    marginHorizontal: "1%", // Espacio entre los campos
+    marginHorizontal: "1%",
   },
   confirmButton: {
     backgroundColor: '#00bfff',
     width: '100%',
     paddingVertical: "3%",
-    marginTop:"8%",
+    marginTop: "8%",
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 10,
