@@ -38,23 +38,20 @@ const InicioJugar = ({ navigation }) => {
           } else {
           
             const response1 = await GruposApi.grupoApi(storedToken);
-            
-
+          
             if (response1 && response1.data && response1.data.idGrupo) {
               await AsyncStorage.setItem('@GrupoId1', response1.data.idGrupo.toString());
               setIdGrupo1(response1.data.idGrupo);
+              await AsyncStorage.setItem('@GrupoId2', response1.data.idGrupo.toString());
+              setIdGrupo2(response1.data.idGrupo);
+              console.log('Nuevo grupo 2 creado:', response1.data.idGrupo);
               console.log('Nuevo grupo 1 creado:', response1.data.idGrupo);
             } else {
               console.error('Error al crear grupo 1:', response1);
+              console.error('Error al crear grupo 2:', response1);
             }
 
-            if (response2 && response2.data && response2.data.idGrupo) {
-              await AsyncStorage.setItem('@GrupoId2', response2.data.idGrupo.toString());
-              setIdGrupo2(response2.data.idGrupo);
-              console.log('Nuevo grupo 2 creado:', response2.data.idGrupo);
-            } else {
-              console.error('Error al crear grupo 2:', response2);
-            }
+            
           }
         }
       } catch (error) {
@@ -133,44 +130,55 @@ const InicioJugar = ({ navigation }) => {
 ) : (
   <Text>No hay jugadores en el Equipo 1</Text>
 )}
+{!(idGrupo1 && idGrupo1.id2 !== 0) && ( // Condición para mostrar el botón
+  <TouchableOpacity 
+    style={styles.addButton}
+    onPress={() => navigation.navigate('MostrarJugadoresEquipo1')}
+  >
+    <AntDesign name="pluscircle" size={30} color="#6CA0D4" />
+  </TouchableOpacity>
+)}
             </View>
+
             <View style={styles.equipoContainer}>
               <Text style={styles.title}>Equipo 2</Text>
               {equipo2 && Array.isArray(equipo2) ? (
-    equipo2.map((jugador) => (
-      <View key={jugador.id} style={styles.jugadorContainer}>
-        <View style={styles.textos}>
-          <Text style={styles.userName}>{jugador.Nombre}</Text>
-          <Text style={styles.userRank}>Rango: {jugador.Rango}</Text>
-        </View>
-        <TouchableOpacity
-          style={styles.crossButton}
-          onPress={() => UpdateGrupo(jugador.id)} 
-        >
-          <Text style={styles.crossIcon}> - </Text>
-        </TouchableOpacity>
+  equipo2.map((jugador) => (
+    <View key={jugador.id} style={styles.jugadorContainer}>
+      <View style={styles.textos}>
+        <Text style={styles.userName}>{jugador.Nombre}</Text>
+        <Text style={styles.userRank}>Rango: {jugador.Rango}</Text>
       </View>
-    ))
-  ) : (
-    <Text>No hay jugadores en el Equipo 2</Text>
-  )}
+      <TouchableOpacity
+        style={styles.crossButton}
+        onPress={() => UpdateGrupo(jugador.id)} 
+      >
+        <Text style={styles.crossIcon}> - </Text>
+      </TouchableOpacity>
+    </View>
+  ))
+) : (
+  <Text>No hay jugadores en el Equipo 2</Text>
+)}
+{!(idGrupo2 && idGrupo2.id4 !== 0) && ( // Condición para mostrar el botón
+  <TouchableOpacity 
+    style={styles.addButton}
+    onPress={() => navigation.navigate('MostrarJugadoresEquipo2')}
+  >
+    <AntDesign name="pluscircle" size={30} color="#6CA0D4" />
+  </TouchableOpacity>
+)}
             </View>
           </View>
-          {jugadores.length < 4 ? (
-            <TouchableOpacity
-              style={styles.addButton}
-              onPress={() => navigation.navigate('MostrarJugadores')}
-            >
-              <AntDesign name="pluscircle" size={40} color="#6CA0D4" />
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity
-              style={styles.startButton}
-              onPress={() => navigation.navigate('PuntajeJugar')} 
-            >
-              <Text style={styles.startButtonText}>Empezar Partido</Text>
-            </TouchableOpacity>
-          )}
+
+          {(idGrupo1 && idGrupo1.id2 !== 0) && (idGrupo2 && idGrupo2.id4 !== 0) ? (
+  <TouchableOpacity
+    style={styles.startButton}
+    onPress={() => navigation.navigate('PuntajeJugar')} 
+  >
+    <Text style={styles.startButtonText}>Empezar Partido</Text>
+  </TouchableOpacity>
+) : null}
         </View>
       </View>
     </SafeAreaView>
@@ -199,7 +207,7 @@ const styles = StyleSheet.create({
   innerContainer: {
     marginTop: '2%',
     alignItems: 'center',
-    width:'90%'
+    width: '90%'
   },
   profileContainer: {
     alignItems: 'center',
@@ -217,8 +225,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    padding:10,
-    
+    padding: 10,
   },
   title: {
     fontSize: 24,
@@ -242,31 +249,25 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: "5%",
   },
-  addButtonText: {
-    fontSize: 30,
-    fontWeight: 'bold',
-    color: 'white',
-  },
   startButton: {
-    backgroundColor: '#32CD32', // Verde para indicar acción de comenzar
+    backgroundColor: '#32CD32',
     width: 150,
     height: 50,
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: '3%', // Margen superior para separarlo del contenedor anterior
+    marginTop: '3%',
   },
   startButtonText: {
     fontSize: 15,
     fontWeight: 'bold',
     color: 'white',
-    marginTop: -3.5,
   },
   crossIcon: {
     fontSize: 20,
     fontWeight: 'bold',
   },
-  jugadorContainer:{
+  jugadorContainer: {
     backgroundColor: 'white',
     borderRadius: 10,
     shadowColor: '#000',
@@ -277,15 +278,13 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    padding:10,
-    marginBottom:'10%',
-    flexDirection: 'row', // Alinea los elementos en una fila
-    justifyContent: 'space-between', // Distribuye los elementos para que haya espacio entre ellos
-    alignItems: 'center', // Centra los elementos verticalmente
+    padding: 10,
+    marginBottom: '10%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
-  textos:{
-    
-  }
+  textos: {},
 });
 
 export default InicioJugar;

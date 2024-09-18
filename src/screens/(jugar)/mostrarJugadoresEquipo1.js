@@ -10,91 +10,78 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import Equipo1Api from '../../api/Equipo1Api';
 import Equipo2Api from '../../api/Equipo2Api';
 
-const MostrarJugadores = ({ navigation }) => {
+const MostrarJugadoresEquipo1 = ({ navigation }) => {
   const [jugadores, setJugadores] = useState([]);
   const [token, setToken] = useState(null);
-  const [equipo1, setEquipo1] = useState([]);
-  const [equipo2, setEquipo2] = useState([]);
 
   useFocusEffect(
     React.useCallback(() => {
       const fetchJugadores = async () => {
         try {
           const storedToken = await AsyncStorage.getItem('@AccessToken');
-          const idEquipo1 = await AsyncStorage.getItem('@GrupoId1');
-          const idEquipo2 = await AsyncStorage.getItem('@GrupoId2');
-          console.log( "idEquipo ALMACENADO " + idEquipo1);
-          console.log( "idEquipo2 ALMACENADO " + idEquipo2);
-          if (storedToken) {
+          const storedIdEquipo1 = await AsyncStorage.getItem('@GrupoId1');
+          const storedIdEquipo2 = await AsyncStorage.getItem('@GrupoId2');
+          console.log("Token almacenado:", storedToken);
+          console.log("ID del grupo almacenado:", storedIdEquipo1);
+
+          if (storedToken && storedIdEquipo2) {
             setToken(storedToken);
 
-  
-            const storedIdGrupo = await AsyncStorage.getItem('@GrupoId');
-            if (storedIdGrupo) {
-              const equipo1Response = await Equipo1Api.ObtenerInfoGrupo(storedToken, storedIdGrupo);
-              const equipo2Response = await Equipo2Api.ObtenerInfoGrupo(storedToken, storedIdGrupo);
-              if (equipo1Response && equipo1Response.data) {
-                const response = await userApi.ObtenerJugadores(storedToken);
-                if (response && Array.isArray(response)) {
-                  
-                  const jugadoresEnEquipo1 = [
-                    grupoResponse.data.grupo.id2,
-                  ].filter(id => id !== 0);
+            const equipo1Response = await Equipo1Api.ObtenerInfoGrupo(storedToken, storedIdEquipo1);
+            const equipo2Response = await Equipo2Api.ObtenerInfoGrupo(storedToken, storedIdEquipo2);
+            console.log("Equipo1 mostrarJugadores:", JSON.stringify(equipo1Response, null, 2));
+            if (equipo1Response && equipo2Response) {
+              const jugadoresEnEquipo1 = [equipo1Response.data.id2].filter(id => id !== 0);
+              const jugadoresEnEquipo2 = [equipo2Response.data.id3, equipo2Response.data.id4].filter(id => id !== 0);
+              
+              const response = await userApi.ObtenerJugadores(storedToken);
+              console.log("Jugadores obtenidos:", response);
 
-                  const jugadoresEnEquipo2 = [
-                    grupoResponse.data.grupo.id3,
-                    grupoResponse.data.grupo.id4,
-                  ].filter(id => id !== 0);
-                  
-                  const jugadoresFiltrados = response.filter(jugador => !jugadoresEnEquipo1.includes(jugador.id));
-                  setJugadores(jugadoresFiltrados);
-                } else {
-                  console.error('Response structure is not as expected:', response);
-                }
+              if (response && Array.isArray(response)) {
+                const jugadoresFiltrados = response.filter(jugador => 
+                  !jugadoresEnEquipo1.includes(jugador.id) && 
+                  !jugadoresEnEquipo2.includes(jugador.id)
+                );
+                setJugadores(jugadoresFiltrados);
+                console.log("Jugadores filtrados:", jugadoresFiltrados);
+              } else {
+                console.error('La estructura de respuesta no es la esperada:', response);
               }
             }
           }
         } catch (error) {
-          console.error('Failed to fetch players or token:', error);
+          console.error('Error al obtener jugadores o token:', error);
         }
       };
 
       fetchJugadores();
-    }, []) 
+    }, [])
   );
 
   const UpdateGrupo = async (selectedPlayerId) => {
     try {
       const storedToken = await AsyncStorage.getItem('@AccessToken');
-      const storedIdGrupo = await AsyncStorage.getItem('@GrupoId');
-      console.log("idDelGrupo" + storedIdGrupo);
+      const storedIdEquipo1 = await AsyncStorage.getItem('@GrupoId1');
+      console.log("ID del grupo:", storedIdEquipo1);
 
-      if (storedToken && storedIdGrupo) {
-        // Obtener la información actual del grupo
-        const grupoResponse = await GruposApi.ObtenerInfoGrupo(storedToken, storedIdGrupo);
+      if (storedToken && storedIdEquipo1) {
+        const grupoResponse = await Equipo1Api.ObtenerInfoGrupo(storedToken, storedIdEquipo1);
+        console.log(grupoResponse);
 
         if (grupoResponse) {
-          const grupo = grupoResponse.data.grupo;
+       
 
-          // Encuentra la posición disponible en el grupo y actualiza
-          if (grupo.id2 === 0) {
-            grupo.id2 = selectedPlayerId;
-          } else if (grupo.id3 === 0) {
-            grupo.id3 = selectedPlayerId;
-          } else if (grupo.id4 === 0) {
-            grupo.id4 = selectedPlayerId;
+          if (grupoResponse.data.grupo.id2 === 0) {
+            grupoResponse.data.grupo.id2 = selectedPlayerId;
           } else {
             console.warn('No hay espacio en el grupo');
             return;
           }
 
-          // Enviar la actualización del grupo
-          const updateResponse = await GruposApi.UpdateGrupo(storedToken, storedIdGrupo, grupoResponse);
 
+          const updateResponse = await Equipo1Api.UpdateGrupo(storedToken, storedIdEquipo1, grupoResponse);
           if (updateResponse) {
             console.log('Grupo actualizado:', updateResponse);
-
-            // Eliminar el jugador de la lista de jugadores
             setJugadores(prevJugadores => prevJugadores.filter(jugador => jugador.id !== selectedPlayerId));
           } else {
             console.error('Error al actualizar el grupo:', updateResponse);
@@ -123,20 +110,24 @@ const MostrarJugadores = ({ navigation }) => {
         
         <View style={styles.scrollContainer}>
           <ScrollView contentContainerStyle={styles.scrollContent}>
-            {jugadores.map((jugador) => (
-              <View key={jugador.id} style={styles.profileContainer}>
-                <Text style={styles.userName}>{jugador.Nombre}</Text>
-                <View style={styles.userInfo}>
-                  <Text style={styles.userRank}>Rango: {jugador.Rango}</Text>
-                  <TouchableOpacity
-                    style={styles.addButton}
-                    onPress={() => UpdateGrupo(jugador.id)}
-                  >
-                    <AntDesign name="pluscircle" size={30} color="#6CA0D4" />
-                  </TouchableOpacity>
+            {jugadores.length === 0 ? (
+              <Text>No hay jugadores disponibles.</Text>
+            ) : (
+              jugadores.map((jugador) => (
+                <View key={jugador.id} style={styles.profileContainer}>
+                  <Text style={styles.userName}>{jugador.Nombre}</Text>
+                  <View style={styles.userInfo}>
+                    <Text style={styles.userRank}>Rango: {jugador.Rango}</Text>
+                    <TouchableOpacity
+                      style={styles.addButton}
+                      onPress={() => UpdateGrupo(jugador.id)}
+                    >
+                      <AntDesign name="pluscircle" size={30} color="#6CA0D4" />
+                    </TouchableOpacity>
+                  </View>
                 </View>
-              </View>
-            ))}
+              ))
+            )}
           </ScrollView>
         </View>
       </View>
@@ -172,7 +163,7 @@ const styles = StyleSheet.create({
   },
   profileContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between', // Alinea los elementos al inicio y al final
+    justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 20,
     borderRadius: 15,
@@ -194,7 +185,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 5,
-    flex: 1, // Ocupa el espacio restante
+    flex: 1,
   },
   userRank: {
     fontSize: 18,
@@ -210,4 +201,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MostrarJugadores;
+export default MostrarJugadoresEquipo1;

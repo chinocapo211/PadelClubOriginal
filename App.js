@@ -17,7 +17,8 @@ import CrearNuevaContraseña from './src/screens/(login)/crearNuevaContraseña';
 import ContraseñaExitosa from './src/screens/(login)/contraseñaExitosa';
 import Amigos from './src/screens/(home)/amigos';
 import InicioJugar from './src/screens/(jugar)/inicioJugar';
-import MostrarJugadores from './src/screens/(jugar)/mostrarJugadores';
+import MostrarJugadoresEquipo1 from './src/screens/(jugar)/mostrarJugadoresEquipo1';
+import MostrarJugadoresEquipo2 from './src/screens/(jugar)/mostrarJugadoresEquipo2';
 import PuntajeJugar from './src/screens/(jugar)/puntajeJugar';
 import FinalJugar from './src/screens/(jugar)/finalJugar';
 import { AuthProvider, useAuth } from './src/components/AuthProvider';
@@ -98,7 +99,8 @@ function JugarStackScreen() {
   return (
     <JugarStack.Navigator screenOptions={{ headerShown: false }}>
       <JugarStack.Screen name="InicioJugar" component={InicioJugar} />
-      <JugarStack.Screen name="MostrarJugadores" component={MostrarJugadores} />
+      <JugarStack.Screen name="MostrarJugadoresEquipo1" component={MostrarJugadoresEquipo1} />
+      <JugarStack.Screen name="MostrarJugadoresEquipo2" component={MostrarJugadoresEquipo2} />
       <JugarStack.Screen name="PuntajeJugar" component={PuntajeJugar}/>
       <JugarStack.Screen name="FinalJugar" component={FinalJugar}/>
     </JugarStack.Navigator>
