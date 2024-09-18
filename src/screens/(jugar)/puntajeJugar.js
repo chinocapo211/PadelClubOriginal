@@ -177,6 +177,7 @@ const PuntajeJugar = () => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
+    backgroundColor:"#EBEBEB"
   },
   subirPartidoButton: {
     backgroundColor: '#3AD4E3', // Color de fondo distintivo (Tomate)

@@ -188,12 +188,13 @@ const InicioJugar = ({ navigation }) => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
+    backgroundColor:"#EBEBEB"
   },
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
+    backgroundColor:"#EBEBEB",
     alignItems: 'center',
-    paddingTop: 120,
+    paddingTop: "32%",
   },
   backButton: {
     position: 'absolute',

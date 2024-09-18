@@ -67,13 +67,13 @@ Si tiene alguna pregunta sobre estos Términos y Condiciones, puede contactarnos
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
+    backgroundColor:"#EBEBEB"
   },
   navbarHigh: {
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
-    height: 60,
     zIndex: 1,
   },
   scrollContainer: {
@@ -111,7 +111,6 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    height: 60,
   },
 });
 

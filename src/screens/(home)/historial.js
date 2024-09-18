@@ -72,6 +72,7 @@ const Historial = () => {
 const styles = StyleSheet.create({
   safeArea: {
     flex:1,
+    backgroundColor:"#EBEBEB"
   },
   container: {
     flex: 1,

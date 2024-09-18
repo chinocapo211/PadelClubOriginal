@@ -102,10 +102,12 @@ const FinalJugar = ({ puntaje }) => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
+    backgroundColor:"#EBEBEB"
   },
   container: {
     flex: 1,
     alignItems: 'center',
+    backgroundColor:"#EBEBEB"
   },
   scoreWrapper: {
     borderRadius: 15,

@@ -56,10 +56,11 @@ const Amigos = ({ navigation }) => {
 const styles = StyleSheet.create({
   safeArea: {
     flex:1,
+    backgroundColor:"#EBEBEB"
   },
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5', // Color de fondo para el contenedor principal
+    backgroundColor: '#EBEBEB', // Color de fondo para el contenedor principal
   },
   backButton: {
     alignSelf: 'flex-start',

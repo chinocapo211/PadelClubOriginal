@@ -70,13 +70,14 @@ const Notificaciones = ({ navigation }) => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
+    backgroundColor:"#EBEBEB"
   },
   flatcont:{
-    marginTop:'40%',
+    marginTop:'30%',
   },
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
+    backgroundColor:"#EBEBEB",
   },
   notificationList: {
     paddingHorizontal: 20,
