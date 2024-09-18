@@ -8,7 +8,7 @@ import Clubes from './src/screens/(ajustes)/clubes';
 import Terminos from './src/screens/(ajustes)/terminos';
 import Historial from './src/screens/(home)/historial';
 import Perfil from './src/screens/(home)/perfil';
-import Notificaciones from './src/screens/(home)/notificaciones';
+import Notificaciones from './src/screens/(notificaciones)/notificaciones';
 import IniciarSesion from './src/screens/(login)/iniciarSesion';
 import Registro from './src/screens/(login)/registro';
 import OlvidasteContraseña from './src/screens/(login)/olvidasteContraseña';
@@ -120,6 +120,7 @@ function NavBarStackScreen() {
     <NavBarStack.Navigator screenOptions={{ headerShown: false }}>
       <NavBarStack.Screen name="NotificacionesStack" component={NotificacionesStackScreen} />
       <NavBarStack.Screen name="PerfilStack" component={PerfilStackScreen} />
+      <NavBarStack.Screen name="AjustesStack" component={AjustesStackScreen}/>
     </NavBarStack.Navigator>
   );
 }

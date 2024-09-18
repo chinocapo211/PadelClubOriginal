@@ -80,32 +80,24 @@ const styles = StyleSheet.create({
   innerContainer: {
     borderRadius: 10,
     padding: 20,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
     flex:1,
     justifyContent: 'center',
     alignItems: 'center',
   },
   profileImage: {
-    width: 170,
-    height: 170,
+    width: "50%",
+    height: "50%",
     borderRadius: 100,
     borderColor: '#FFFFFF',
     borderWidth: 2,
-    marginTop: '10%',
     display:"flex",
     alignSelf:"center",
+    marginRight:"2%"
   },
   userName: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginVertical: '10%',
+    
     textAlign: 'center',
   },
   progressBarContainer: {
