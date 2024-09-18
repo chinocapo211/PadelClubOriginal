@@ -130,7 +130,7 @@ const InicioJugar = ({ navigation }) => {
 ) : (
   <Text>No hay jugadores en el Equipo 1</Text>
 )}
-{!(idGrupo1 && idGrupo1.id2 !== 0) && ( // Condición para mostrar el botón
+{!(idGrupo1 && idGrupo1.id2 === 0) ? null : (
   <TouchableOpacity 
     style={styles.addButton}
     onPress={() => navigation.navigate('MostrarJugadoresEquipo1')}
@@ -160,7 +160,7 @@ const InicioJugar = ({ navigation }) => {
 ) : (
   <Text>No hay jugadores en el Equipo 2</Text>
 )}
-{!(idGrupo2 && idGrupo2.id4 !== 0) && ( // Condición para mostrar el botón
+{!(idGrupo2 && idGrupo2.id4 === 0) ? null : (
   <TouchableOpacity 
     style={styles.addButton}
     onPress={() => navigation.navigate('MostrarJugadoresEquipo2')}
@@ -171,7 +171,7 @@ const InicioJugar = ({ navigation }) => {
             </View>
           </View>
 
-          {(idGrupo1 && idGrupo1.id2 !== 0) && (idGrupo2 && idGrupo2.id4 !== 0) ? (
+          {(idGrupo1 && idGrupo1.id2 !== 0 && idGrupo2 && idGrupo2.id4 !== 0) ? (
   <TouchableOpacity
     style={styles.startButton}
     onPress={() => navigation.navigate('PuntajeJugar')} 

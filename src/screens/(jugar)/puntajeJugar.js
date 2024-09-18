@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, Modal, TextInput, Pressable, Alert } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage'; // Importar AsyncStorage
 import NavbarHigh from '../../components/navbarHigh';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AntDesign from '@expo/vector-icons/AntDesign';
@@ -9,22 +10,34 @@ const PuntajeJugar = () => {
   const [sets, setSets] = useState(['Set 1']);
   const [numbers, setNumbers] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
-  const [inputValue1, setInputValue1] = useState(''); // Primer campo de entrada
-  const [inputValue2, setInputValue2] = useState(''); // Segundo campo de entrada
-  const [modalParam, setModalParam] = useState(null); // Estado para el valor recibido en el modal
-  const [setId, setSetId] = useState(null); // Estado para el ID del set
+  const [inputValue1, setInputValue1] = useState('');
+  const [inputValue2, setInputValue2] = useState('');
+  const [modalParam, setModalParam] = useState(null);
+  const [setId, setSetId] = useState(null);
   const navigation = useNavigation();
 
+  useEffect(() => {
+    const storeScores = async () => {
+      try {
+        await AsyncStorage.setItem('scores', JSON.stringify(numbers));
+      } catch (error) {
+        console.error('Error saving scores to AsyncStorage', error);
+      }
+    };
+
+    storeScores();
+  }, [numbers]); // Se ejecuta cada vez que 'numbers' cambia
+
   const openModal = (param, id) => {
-    setModalParam(param); 
-    setSetId(id); 
+    setModalParam(param);
+    setSetId(id);
     setModalVisible(true);
   };
 
   const closeModal = () => {
     setModalVisible(false);
-    setInputValue1(''); 
-    setInputValue2(''); 
+    setInputValue1('');
+    setInputValue2('');
   };
 
   const handleConfirm = () => {
@@ -32,7 +45,7 @@ const PuntajeJugar = () => {
     const num2 = parseInt(inputValue2);
 
     if ((((num1 === 6 && num2 < 6) || (num1 < 6 && num2 === 6)) || (num1 === 7 && (num2 === 5 || num2 === 6)) || (num2 === 7 && (num1 === 5 || num1 === 6))) && !isNaN(num1) && !isNaN(num2)) {
-      editNumber(setId, [inputValue1, inputValue2]); // Guarda los dos valores
+      editNumber(setId, [inputValue1, inputValue2]);
       closeModal();
     } else {
       alert("Se tiene que cargar el puntaje correctamente. No ingresar letras y en caso de tie break poner 7-6 o 6-7.");
@@ -52,7 +65,7 @@ const PuntajeJugar = () => {
   const addSet = () => {
     if (sets.length < 3) {
       setSets([...sets, `Set ${sets.length + 1}`]);
-      addNumber([0, 0]); // Inicializa con dos valores
+      addNumber([0, 0]);
     }
   };
 
@@ -72,20 +85,20 @@ const PuntajeJugar = () => {
   };
 
   const handleCargarPuntos = (index) => {
-    openModal(`Set ${index + 1}`, index); // Pasa el valor del set y el ID como parámetro
+    openModal(`Set ${index + 1}`, index);
   };
 
   const handleSubirPartido = () => {
     const validSets = sets.reduce((acc, _, index) => {
       const setScore = numbers[index] || [0, 0];
-      return acc && (index % 2 === 0 || numbers[index - 1]); 
+      return acc && (index % 2 === 0 || numbers[index - 1]);
     }, true);
 
     const hasValidScores = numbers.some(score => score[0] !== 0 || score[1] !== 0);
 
     if (validSets && hasValidScores) {
       alert("El partido ha sido enviado correctamente.");
-      navigation.navigate('FinalJugar', { puntaje: numbers })
+      navigation.navigate('FinalJugar', { puntaje: numbers });
     } else {
       alert("No se puede subir el partido. Asegúrate de ingresar puntajes válidos y que los sets estén completos.");
     }
@@ -115,7 +128,7 @@ const PuntajeJugar = () => {
           ))}
         </View>
         <Modal
-          animationType="fade" // Cambiado para que el modal no se deslice
+          animationType="fade"
           transparent={true}
           visible={modalVisible}
           onRequestClose={() => {
@@ -134,15 +147,15 @@ const PuntajeJugar = () => {
                   style={styles.input}
                   value={inputValue1}
                   onChangeText={setInputValue1}
-                  keyboardType='numeric' // Solo permitir números
-                  placeholder="Puntaje 1" // Placeholder para el primer campo
+                  keyboardType='numeric'
+                  placeholder="Puntaje 1"
                 />
                 <TextInput
                   style={styles.input}
                   value={inputValue2}
                   onChangeText={setInputValue2}
-                  keyboardType='numeric' // Solo permitir números
-                  placeholder="Puntaje 2" // Placeholder para el segundo campo
+                  keyboardType='numeric'
+                  placeholder="Puntaje 2"
                 />
               </View>
               <Pressable
@@ -166,9 +179,9 @@ const PuntajeJugar = () => {
             </TouchableOpacity>
           )}
         </View>
-          <TouchableOpacity style={styles.subirPartidoButton} onPress={handleSubirPartido}>
-            <Text style={styles.subirPartidoText}>Subir partido</Text>
-          </TouchableOpacity>
+        <TouchableOpacity style={styles.subirPartidoButton} onPress={handleSubirPartido}>
+          <Text style={styles.subirPartidoText}>Subir partido</Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
