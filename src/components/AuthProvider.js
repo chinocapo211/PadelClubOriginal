@@ -45,7 +45,9 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     try {
       await AsyncStorage.removeItem('@AccessToken');
-      await AsyncStorage.removeItem('@GrupoId');
+      await AsyncStorage.removeItem('@GrupoId')
+      await AsyncStorage.removeItem('@GrupoId1');
+      await AsyncStorage.removeItem('@GrupoId2');
       setIsAuthenticated(false);
     } catch (error) {
       console.error('Error logging out:', error);

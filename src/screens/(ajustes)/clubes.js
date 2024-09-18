@@ -13,6 +13,8 @@ const Clubes = ({ navigation }) => {
         if (token) {
           console.log('Token found, clearing...');
           await AsyncStorage.removeItem('@AccessToken');
+          await AsyncStorage.removeItem('@GrupoId1');
+          await AsyncStorage.removeItem('@GrupoId2');
           console.log('Token cleared');
         } else {
           console.log('No token found to clear');

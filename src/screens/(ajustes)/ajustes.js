@@ -13,12 +13,13 @@ const Ajustes = ({ navigation }) => {
     try {
       // Eliminar el token almacenado 
       const token = await AsyncStorage.getItem('@AccessToken');
+      const idgrupo = await AsyncStorage.getItem('@GrupoId');
       if (token) {
         logout();
       } else {
         console.log('No token found to clear');
       }
-      // Navegar al inicio de sesión y reiniciar la navegación
+     
       
     } catch (error) {
     

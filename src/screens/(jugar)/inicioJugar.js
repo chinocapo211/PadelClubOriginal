@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import NavbarHigh from '../../components/navbarHigh';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import GruposApi from '../../api/GruposApi';
@@ -13,94 +13,91 @@ const InicioJugar = ({ navigation }) => {
   const [groupData, setGroupData] = useState(null);
   const [jugadores, setJugadores] = useState([]);
   const [token, setToken] = useState(null);
-  const [idGrupo, setIdGrupo] = useState(null);
+  const [idGrupo1, setIdGrupo1] = useState(null);
+  const [idGrupo2, setIdGrupo2] = useState(null);
   const [isGroup1Full, setIsGroup1Full] = useState(false);
   const [isGroup2Full, setIsGroup2Full] = useState(false);
   const [equipo1, setEquipo1] = useState([]);
   const [equipo2, setEquipo2] = useState([]);
 
   useEffect(() => {
-    const createGrupo = async () => {
+    const createGrupos = async () => {
       try {
         const storedToken = await AsyncStorage.getItem('@AccessToken');
-        const storedIdGrupo = await AsyncStorage.getItem('@GrupoId');
+        const storedIdGrupo1 = await AsyncStorage.getItem('@GrupoId1');
+        const storedIdGrupo2 = await AsyncStorage.getItem('@GrupoId2');
 
         if (storedToken) {
           setToken(storedToken);
 
-          if (storedIdGrupo) {
-            setIdGrupo(storedIdGrupo);
-            console.log('Grupo existente encontrado:', storedIdGrupo);
+          // Verificar si ya existen los grupos o crearlos
+          if (storedIdGrupo1 && storedIdGrupo2) {
+            setIdGrupo1(storedIdGrupo1);
+            setIdGrupo2(storedIdGrupo2);
+            console.log('Grupos existentes encontrados:', storedIdGrupo1, storedIdGrupo2);
           } else {
-            const response = await GruposApi.grupoApi(storedToken);
+          
+            const response1 = await GruposApi.grupoApi(storedToken);
+            
 
-            if (response && response.data && response.data.idGrupo) {
-              await AsyncStorage.setItem('@GrupoId', response.data.idGrupo.toString());
-              setIdGrupo(response.data.idGrupo);
-              setGroupData(response.data);
-              console.log('Nuevo grupo creado:', response.data.idGrupo);
+            if (response1 && response1.data && response1.data.idGrupo) {
+              await AsyncStorage.setItem('@GrupoId1', response1.data.idGrupo.toString());
+              setIdGrupo1(response1.data.idGrupo);
+              console.log('Nuevo grupo 1 creado:', response1.data.idGrupo);
             } else {
-              console.error('Error al crear grupo:', response);
+              console.error('Error al crear grupo 1:', response1);
+            }
+
+            if (response2 && response2.data && response2.data.idGrupo) {
+              await AsyncStorage.setItem('@GrupoId2', response2.data.idGrupo.toString());
+              setIdGrupo2(response2.data.idGrupo);
+              console.log('Nuevo grupo 2 creado:', response2.data.idGrupo);
+            } else {
+              console.error('Error al crear grupo 2:', response2);
             }
           }
         }
       } catch (error) {
-        console.error('Error al inicializar grupo o token:', error);
+        console.error('Error al inicializar grupos o token:', error);
       }
     };
 
-    createGrupo();
+    createGrupos();
   }, []);
 
   useFocusEffect(
     React.useCallback(() => {
-      const obtenerInfoGrupo = async () => {
+      const obtenerInfoGrupos = async () => {
         try {
           const storedToken = await AsyncStorage.getItem('@AccessToken');
-          const storedIdGrupo = await AsyncStorage.getItem('@GrupoId');
+          const storedIdGrupo1 = await AsyncStorage.getItem('@GrupoId1');
+          const storedIdGrupo2 = await AsyncStorage.getItem('@GrupoId2');
   
-          if (storedToken && storedIdGrupo) {
-            const response = await GruposApi.ObtenerInfoGrupo(storedToken, storedIdGrupo);
-            console.log( "Respuesta info grupo" + response);
-  
-            if (response.data) {   
-            
-              const equipo1Response = await Equipo1Api.ObtenerInfoGrupo(storedToken, storedIdGrupo);
-              console.log("Respuesta equipo1:", JSON.stringify(equipo1Response, null, 2));
-              console.log("ID equipo1" + equipo1Response.data.grupo.id2);
-              if(equipo1Response.data.grupo.id2 != 0)
-              {
+          if (storedToken && storedIdGrupo1 && storedIdGrupo2) {
+            const equipo1Response = await Equipo1Api.ObtenerInfoGrupo(storedToken, storedIdGrupo1);
+            const equipo2Response = await Equipo2Api.ObtenerInfoGrupo(storedToken, storedIdGrupo2);
+
+            if (equipo1Response.data) {
+              if (equipo1Response.data.jugadores.length === 2) {
                 setIsGroup1Full(true);
               }
-
-              setEquipo1(equipo1Response.data.grupo);
-
-              
-              const equipo2Response = await Equipo2Api.ObtenerInfoGrupo(storedToken, storedIdGrupo);
-              if(equipo2Response.data.grupo.id3 != 0 && equipo2Response.data.grupo.id4 != 0)
-              {
-                setIsGroup1Full(true);
-              }
-
-
-              setEquipo1(equipo1Response.data.grupo); // Asigna el valor al estado de equipo1
-              setEquipo2(equipo2Response);
+              setEquipo1(equipo1Response.data.jugadores);
             }
-            console.log("Valor de equipo1 antes del renderizado:", equipo1);
-            setGroupData(response.data);
+
+            if (equipo2Response.data) {
+              if (equipo2Response.data.jugadores.length === 2) {
+                setIsGroup2Full(true);
+              }
+              setEquipo2(equipo2Response.data.jugadores);
+            }
           }
         } catch (error) {
-          console.error('Error al obtener la información del grupo:', error);
+          console.error('Error al obtener la información de los grupos:', error);
         }
       };
   
-      if (idGrupo) {
-        obtenerInfoGrupo();
-      }
-  
-      return () => {};
-  
-    }, [idGrupo])
+      obtenerInfoGrupos();
+    }, [])
   );
   useEffect(() => {
     console.log('Valor de equipo1 después de actualizarse:', equipo1);
@@ -118,37 +115,45 @@ const InicioJugar = ({ navigation }) => {
           <View style={styles.profileContainer}>
             <View style={styles.equipoContainer}>
               <Text style={styles.title}>Equipo 1</Text>
-              {equipo1.data.jugadores.map((jugador) => (
-                <View key={jugador.id} style={styles.jugadorContainer}>
-                  <View style={styles.textos}>
-                    <Text style={styles.userName}>{jugador.Nombre}</Text>
-                    <Text style={styles.userRank}>Rango: {jugador.Rango}</Text>
-                  </View>
-                  <TouchableOpacity
-                    style={styles.crossButton}
-                    onPress={() => UpdateGrupo(jugador.id)} 
-                  >
-                    <Text style={styles.crossIcon}> - </Text>
-                  </TouchableOpacity>
-                </View>
-              ))}
+              {equipo1 && Array.isArray(equipo1) ? (
+  equipo1.map((jugador) => (
+    <View key={jugador.id} style={styles.jugadorContainer}>
+      <View style={styles.textos}>
+        <Text style={styles.userName}>{jugador.Nombre}</Text>
+        <Text style={styles.userRank}>Rango: {jugador.Rango}</Text>
+      </View>
+      <TouchableOpacity
+        style={styles.crossButton}
+        onPress={() => UpdateGrupo(jugador.id)} 
+      >
+        <Text style={styles.crossIcon}> - </Text>
+      </TouchableOpacity>
+    </View>
+  ))
+) : (
+  <Text>No hay jugadores en el Equipo 1</Text>
+)}
             </View>
             <View style={styles.equipoContainer}>
               <Text style={styles.title}>Equipo 2</Text>
-              {equipo2.data.jugadores.map((jugador) => (
-                <View key={jugador.id} style={styles.jugadorContainer}>
-                  <View style={styles.textos}>
-                    <Text style={styles.userName}>{jugador.Nombre}</Text>
-                    <Text style={styles.userRank}>Rango: {jugador.Rango}</Text>
-                  </View>
-                  <TouchableOpacity
-                    style={styles.crossButton}
-                    onPress={() => UpdateGrupo(jugador.id)} 
-                  >
-                    <Text style={styles.crossIcon}> - </Text>
-                  </TouchableOpacity>
-                </View>
-              ))}
+              {equipo2 && Array.isArray(equipo2) ? (
+    equipo2.map((jugador) => (
+      <View key={jugador.id} style={styles.jugadorContainer}>
+        <View style={styles.textos}>
+          <Text style={styles.userName}>{jugador.Nombre}</Text>
+          <Text style={styles.userRank}>Rango: {jugador.Rango}</Text>
+        </View>
+        <TouchableOpacity
+          style={styles.crossButton}
+          onPress={() => UpdateGrupo(jugador.id)} 
+        >
+          <Text style={styles.crossIcon}> - </Text>
+        </TouchableOpacity>
+      </View>
+    ))
+  ) : (
+    <Text>No hay jugadores en el Equipo 2</Text>
+  )}
             </View>
           </View>
           {jugadores.length < 4 ? (

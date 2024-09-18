@@ -7,38 +7,46 @@ import GruposApi from '../../api/GruposApi';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect } from '@react-navigation/native';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import Equipo1Api from '../../api/Equipo1Api';
+import Equipo2Api from '../../api/Equipo2Api';
 
 const MostrarJugadores = ({ navigation }) => {
   const [jugadores, setJugadores] = useState([]);
   const [token, setToken] = useState(null);
-  const [grupoData, setGrupoData] = useState(null);
+  const [equipo1, setEquipo1] = useState([]);
+  const [equipo2, setEquipo2] = useState([]);
 
   useFocusEffect(
     React.useCallback(() => {
       const fetchJugadores = async () => {
         try {
           const storedToken = await AsyncStorage.getItem('@AccessToken');
+          const idEquipo1 = await AsyncStorage.getItem('@GrupoId1');
+          const idEquipo2 = await AsyncStorage.getItem('@GrupoId2');
+          console.log( "idEquipo ALMACENADO " + idEquipo1);
+          console.log( "idEquipo2 ALMACENADO " + idEquipo2);
           if (storedToken) {
             setToken(storedToken);
 
-            // Obtener la información del grupo para filtrar jugadores
+  
             const storedIdGrupo = await AsyncStorage.getItem('@GrupoId');
             if (storedIdGrupo) {
-              const grupoResponse = await GruposApi.ObtenerInfoGrupo(storedToken, storedIdGrupo);
-              if (grupoResponse && grupoResponse.data) {
-                setGrupoData(grupoResponse.data.grupo);
-
-                // Obtener todos los jugadores
+              const equipo1Response = await Equipo1Api.ObtenerInfoGrupo(storedToken, storedIdGrupo);
+              const equipo2Response = await Equipo2Api.ObtenerInfoGrupo(storedToken, storedIdGrupo);
+              if (equipo1Response && equipo1Response.data) {
                 const response = await userApi.ObtenerJugadores(storedToken);
                 if (response && Array.isArray(response)) {
-                  // Filtrar jugadores que ya están en el grupo
-                  const jugadoresEnGrupo = [
+                  
+                  const jugadoresEnEquipo1 = [
                     grupoResponse.data.grupo.id2,
+                  ].filter(id => id !== 0);
+
+                  const jugadoresEnEquipo2 = [
                     grupoResponse.data.grupo.id3,
                     grupoResponse.data.grupo.id4,
                   ].filter(id => id !== 0);
                   
-                  const jugadoresFiltrados = response.filter(jugador => !jugadoresEnGrupo.includes(jugador.id));
+                  const jugadoresFiltrados = response.filter(jugador => !jugadoresEnEquipo1.includes(jugador.id));
                   setJugadores(jugadoresFiltrados);
                 } else {
                   console.error('Response structure is not as expected:', response);
@@ -52,7 +60,7 @@ const MostrarJugadores = ({ navigation }) => {
       };
 
       fetchJugadores();
-    }, []) // El efecto se ejecutará cada vez que la pantalla se enfoque
+    }, []) 
   );
 
   const UpdateGrupo = async (selectedPlayerId) => {
