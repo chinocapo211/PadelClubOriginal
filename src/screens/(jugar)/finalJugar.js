@@ -1,36 +1,60 @@
-import React, { useEffect } from 'react'; // Asegúrate de importar useEffect
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, Alert } from 'react-native';
 import NavbarHigh from '../../components/navbarHigh';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import AntDesign from '@expo/vector-icons/AntDesign';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
 const FinalJugar = ({ route }) => {
   const navigation = useNavigation();
-  const { puntaje } = route.params || {}; // Asegúrate de obtener `puntaje` desde `route.params`
+  const { puntaje } = route.params || {}; // Obtener `puntaje` desde `route.params`
+
+  const [scores, setScores] = useState([]); // Estado para almacenar los puntajes
+  const [team1Points, setTeam1Points] = useState(0); // Estado para puntos del equipo 1
+  const [team2Points, setTeam2Points] = useState(0);
 
   useEffect(() => {
     if (puntaje) {
       console.log("Valor de puntaje recibido:", puntaje);
-      // Si quieres mostrarlo en una alerta o en el UI, puedes hacerlo aquí
-      Alert.alert("Valor de puntaje", JSON.stringify(puntaje.score));
+
+      // Verificar si 'score' es un array para cada set
+      puntaje.forEach((set, index) => {
+        if (Array.isArray(set.score)) {
+          console.log(`Score en Set ${index + 1} es un array:`, set.score);
+
+          // Determinar qué equipo ganó el set
+          if (set.score[0] === 7) {
+            // Si el equipo 1 (score[0]) tiene 7 puntos, suma 1 punto a su marcador
+            setTeam1Points(prevPoints => prevPoints + 1);
+          } else if (set.score[1] === 7) {
+            // Si el equipo 2 (score[1]) tiene 7 puntos, suma 1 punto a su marcador
+            setTeam2Points(prevPoints => prevPoints + 1);
+          }
+        } else {
+          console.log(`Score en Set ${index + 1} NO es un array, es un:`, typeof set.score);
+        }
+      });
+
+      // Extraer los puntajes de cada set y almacenarlos en un array
+      const extractedScores = puntaje.map(set => set.score);
+      setScores(extractedScores); // Almacenar los puntajes en el estado
+
+      // Mostrar el primer puntaje en una alerta (puedes modificarlo si es necesario)
+      Alert.alert("Primer puntaje", JSON.stringify(puntaje[0].score));
     }
   }, [puntaje]);
 
-  // ... El resto del código
-
+  // Función para calcular el Elo (ya presente en tu código)
   const calculateElo = (Ra, Rb, Sa, Sb, Ka, Kb) => {
-    // Calcular expectativas
     const Ea = 1 / (1 + Math.pow(10, (Rb - Ra) / 400));
     const Eb = 1 / (1 + Math.pow(10, (Ra - Rb) / 400));
 
-    // Calcular nuevos rankings
     const newRa = Ra + Ka * (Sa - Ea);
     const newRb = Rb + Kb * (Sb - Eb);
 
     return { newRa, newRb };
   };
 
+  // Función para obtener el factor K (ya presente en tu código)
   const getKFactor = (playerRating, matchesPlayed) => {
     if (matchesPlayed < 30 || playerRating < 2300) {
       return 40;
@@ -41,28 +65,21 @@ const FinalJugar = ({ route }) => {
     }
   };
 
+  // Función para calcular los rankings del equipo (ya presente en tu código)
   const calculateTeamRankings = () => {
-    // Sumar los rankings de los jugadores de cada equipo
     const Ra = teamA.player1.rating + teamA.player2.rating;
     const Rb = teamB.player1.rating + teamB.player2.rating;
 
-    // Obtener el factor K para cada equipo
     const Ka = (getKFactor(teamA.player1.rating, teamA.player1.matches) + getKFactor(teamA.player2.rating, teamA.player2.matches)) / 2;
-    const Kb = (getKFactor(teamB.player1.rating, teamB.player2.rating) + getKFactor(teamB.player2.rating, teamB.player2.matches)) / 2;
+    const Kb = (getKFactor(teamB.player1.rating, teamB.player2.matches) + getKFactor(teamB.player2.rating, teamB.player2.matches)) / 2;
 
-    // Asignar los resultados (1 = victoria, 0.5 = empate, 0 = derrota)
     const { Sa, Sb } = resultado;
-
-    // Calcular los nuevos rankings
     const { newRa, newRb } = calculateElo(Ra, Rb, Sa, Sb, Ka, Kb);
 
-    // Dividir el nuevo ranking del equipo entre los dos jugadores
     const updatedTeamAPlayer1 = newRa / 2;
     const updatedTeamAPlayer2 = newRa / 2;
     const updatedTeamBPlayer1 = newRb / 2;
     const updatedTeamBPlayer2 = newRb / 2;
-
-    // Aquí podrías actualizar el estado con los nuevos valores de ranking de cada jugador
   };
 
   return (
@@ -75,6 +92,8 @@ const FinalJugar = ({ route }) => {
             style={styles.backButton}
           />
         </TouchableOpacity>
+
+        {/* Mostrar los sets recibidos y sus puntajes */}
         <View style={styles.scoreWrapper}>
           {puntaje.map((set, index) => (
             <View key={index} style={styles.scoreContainer}>
@@ -86,8 +105,19 @@ const FinalJugar = ({ route }) => {
             </View>
           ))}
         </View>
-        
-       
+
+        {/* Mostrar los puntajes extraídos y almacenados en `scores` */}
+        <View style={styles.extractedScoresWrapper}>
+          <Text style={styles.extractedScoresTitle}>Puntajes almacenados:</Text>
+          {scores.map((score, index) => (
+            <Text key={index} style={styles.extractedScoreText}>{`Set ${index + 1}: ${score[0]} - ${score[1]}`}</Text>
+          ))}
+        </View>
+        <View style={styles.teamPointsWrapper}>
+          <Text style={styles.teamPointsTitle}>Puntos acumulados:</Text>
+          <Text style={styles.teamPointsText}>{`Equipo 1: ${team1Points} puntos`}</Text>
+          <Text style={styles.teamPointsText}>{`Equipo 2: ${team2Points} puntos`}</Text>
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -96,17 +126,16 @@ const FinalJugar = ({ route }) => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor:"#EBEBEB"
+    backgroundColor: "#EBEBEB"
   },
   container: {
     flex: 1,
     alignItems: 'center',
-    backgroundColor:"#EBEBEB"
+    backgroundColor: "#EBEBEB"
   },
   scoreWrapper: {
     borderRadius: 15,
     width: '80%',
-    display: 'flex',
     justifyContent: 'flex-start',
     alignContent: 'center',
     marginTop: '40%',
@@ -132,26 +161,17 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginTop: 10,
   },
-  buttonText: {
-    color: 'black',
-    fontSize: 16,
-    textAlign: 'center',
-  },
-  iconContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '40%',
+  extractedScoresWrapper: {
     marginTop: 20,
+    alignItems: 'center',
   },
-  centerIconContainer: {
-    justifyContent: 'center',
+  extractedScoresTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
   },
-  botonMas: {
-    display: 'flex',
-    alignContent: 'flex-start',
-  },
-  botonMenos: {
-    marginLeft: '42%',
+  extractedScoreText: {
+    fontSize: 18,
+    marginTop: 5,
   },
   backButton: {
     width: 30,
@@ -160,18 +180,9 @@ const styles = StyleSheet.create({
     marginTop: 10,
     zIndex: 1,
   },
-  subirPartidoButton: {
-    marginTop: 20,
-    backgroundColor: '#00ff00',
-    paddingVertical: 10,
-    paddingHorizontal: 40,
-    borderRadius: 10,
-  },
-  subirPartidoText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
 });
 
 export default FinalJugar;
+
+
+
