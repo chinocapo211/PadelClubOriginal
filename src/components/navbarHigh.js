@@ -24,7 +24,7 @@ const NavbarHigh = () => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#F2F2F2',
+    backgroundColor: 'white',
     width: '100%',
     height: '15%',  
     top: 0,
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
   topSection: {
     height: '100%',
     width:'100%',
-    backgroundColor: '#F2F2F2',
+    backgroundColor: 'white',
     flexDirection: 'row',
     flex:1,
     alignItems: 'center',

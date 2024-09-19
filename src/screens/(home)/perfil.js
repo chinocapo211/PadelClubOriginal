@@ -8,7 +8,8 @@ import userApi from '../../api/userApi';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import fotoPerfil from "../../../assets/images/nonoPerf.jpg";
 
-const { width } = Dimensions.get('window');
+// Obtener las dimensiones de la pantalla
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 const Perfil = ({ navigation }) => {
   const [userData, setUserData] = useState(null);
@@ -44,13 +45,17 @@ const Perfil = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <View style={styles.innerContainer}>
+      <View style={styles.container}>
         <NavbarHigh />
         <Image source={fotoPerfil} style={styles.profileImage} />
         <Text style={styles.userName}>{userData.Usuario.Nombre}</Text>
         <View style={styles.progressBarContainer}>
           <Text style={styles.progressText}>0</Text>
-          <ProgressBar progress={userData.Usuario.Puntos / 100} color="#FFD700" style={styles.progressBar} />
+          <ProgressBar 
+            progress={userData.Usuario.Puntos / 100} 
+            color="#FFD700" 
+            style={styles.progressBar} 
+          />
           <Text style={styles.progressText2}>100</Text>
         </View>
         <View style={styles.statsContainer}>
@@ -76,66 +81,61 @@ const Perfil = ({ navigation }) => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
+    backgroundColor:"#EBEBEB",
   },
-  innerContainer: {
-    borderRadius: 10,
-    padding: 20,
-    flex:1,
+  container: {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    paddingBottom: screenHeight * 0.05, // Ajuste responsivo
   },
   profileImage: {
-    width: "50%",
-    height: "50%",
-    borderRadius: 100,
+    width: screenWidth * 0.4,  // Ajuste dinámico basado en el ancho de la pantalla
+    height: screenWidth * 0.4,
+    borderRadius: (screenWidth * 0.4) / 2, // Mantener circular
     borderColor: '#FFFFFF',
     borderWidth: 2,
-    display:"flex",
-    alignSelf:"center",
-    marginRight:"2%"
+    marginTop: screenHeight * 0.05, // Márgen superior dinámico
   },
   userName: {
-    fontSize: 24,
+    fontSize: screenWidth * 0.07, // Texto adaptable
     fontWeight: 'bold',
-    
     textAlign: 'center',
+    marginVertical: screenHeight * 0.03, // Márgen dinámico
   },
   progressBarContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    width: "80%",
-    marginVertical: 10,
+    width: screenWidth * 0.8, // Ancho responsivo
+    marginVertical: screenHeight * 0.02, // Márgen vertical dinámico
   },
   progressText: {
-    fontSize: 14,
+    fontSize: screenWidth * 0.04, // Tamaño del texto adaptable
     color: '#888888',
   },
   progressText2: {
-    fontSize: 14,
+    fontSize: screenWidth * 0.04,
     color: '#888888',
-    marginLeft: "2%",
+    marginLeft: screenWidth * 0.04, // Espaciado dinámico
   },
   progressBar: {
     flex: 1,
-    height: 10,
+    height: screenHeight * 0.015,  // Altura adaptable de la barra de progreso
     borderRadius: 10,
-    marginLeft: "2%",
+    marginLeft: screenWidth * 0.02,
   },
   statsContainer: {
-    width: width * 0.8,
-    marginTop: 20,
+    width: screenWidth * 0.9,  // Adaptar el ancho al 90% de la pantalla
+    marginTop: screenHeight * 0.03, // Márgen superior dinámico
   },
   statBox: {
     backgroundColor: '#FFFFFF',
     borderRadius: 10,
-    padding: 15,
-    marginBottom: 10,
+    padding: screenWidth * 0.05,  // Padding dinámico
+    marginBottom: screenHeight * 0.02, // Márgen dinámico
     alignItems: 'center',
     shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
@@ -144,23 +144,23 @@ const styles = StyleSheet.create({
   },
   pointsBox: {
     backgroundColor: '#4169E1',
-    width: "90%",
+    width: '100%',
   },
   matchesBox: {
     backgroundColor: '#1E90FF',
-    width: "90%",
+    width: '100%',
   },
   rankingBox: {
     backgroundColor: '#00BFFF',
-    width: "90%",
+    width: '100%',
   },
   statNumber: {
-    fontSize: 28,
+    fontSize: screenWidth * 0.07,  // Texto adaptable
     fontWeight: 'bold',
     color: '#FFFFFF',
   },
   statText: {
-    fontSize: 16,
+    fontSize: screenWidth * 0.05,  // Texto adaptable
     color: '#FFFFFF',
     textAlign: 'left',
   },
