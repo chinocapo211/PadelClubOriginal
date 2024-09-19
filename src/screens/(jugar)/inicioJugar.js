@@ -50,8 +50,6 @@ const InicioJugar = ({ navigation }) => {
               console.error('Error al crear grupo 1:', response1);
               console.error('Error al crear grupo 2:', response1);
             }
-
-            
           }
         }
       } catch (error) {
@@ -110,68 +108,68 @@ const InicioJugar = ({ navigation }) => {
         </TouchableOpacity>
         <View style={styles.innerContainer}>
           <View style={styles.profileContainer}>
-            <View style={styles.equipoContainer}>
-              <Text style={styles.title}>Equipo 1</Text>
-              {equipo1 && Array.isArray(equipo1) ? (
-  equipo1.map((jugador) => (
-    <View key={jugador.id} style={styles.jugadorContainer}>
-      <View style={styles.textos}>
-        <Text style={styles.userName}>{jugador.Nombre}</Text>
-        <Text style={styles.userRank}>Rango: {jugador.Rango}</Text>
+          <View style={styles.equipoContainer}>
+  <Text style={styles.title}>Equipo 1</Text>
+  {equipo1 && Array.isArray(equipo1) ? (
+    equipo1.map((jugador) => (
+      <View key={jugador.id} style={styles.jugadorContainer}>
+        <View style={styles.textos}>
+          <Text style={styles.userName}>{jugador.Nombre}</Text>
+          <Text style={styles.userRank}>Rango: {jugador.Rango}</Text>
+        </View>
+        <TouchableOpacity
+          style={styles.crossButton}
+          onPress={() => UpdateGrupo(jugador.id)} 
+        >
+          <Text style={styles.crossIcon}> - </Text>
+        </TouchableOpacity>
       </View>
-      <TouchableOpacity
-        style={styles.crossButton}
-        onPress={() => UpdateGrupo(jugador.id)} 
-      >
-        <Text style={styles.crossIcon}> - </Text>
-      </TouchableOpacity>
-    </View>
-  ))
-) : (
-  <Text>No hay jugadores en el Equipo 1</Text>
-)}
-{!(idGrupo1 && idGrupo1.id2 === 0) ? null : (
-  <TouchableOpacity 
-    style={styles.addButton}
-    onPress={() => navigation.navigate('MostrarJugadoresEquipo1')}
-  >
-    <AntDesign name="pluscircle" size={30} color="#6CA0D4" />
-  </TouchableOpacity>
-)}
-            </View>
+    ))
+  ) : (
+    <Text>No hay jugadores en el Equipo 1</Text>
+  )}
+  {equipo1.length < 2 ? ( // Show "+" button if less than 2 players in equipo1
+    <TouchableOpacity 
+      style={styles.addButton}
+      onPress={() => navigation.navigate('MostrarJugadoresEquipo1')}
+    >
+      <AntDesign name="pluscircle" size={30} color="#6CA0D4" />
+    </TouchableOpacity>
+  ) : null}
+</View>
+<View style={styles.equipoContainer}>
+  <Text style={styles.title}>Equipo 2</Text>
+  {equipo2 && Array.isArray(equipo2) ? (
+    equipo2.map((jugador) => (
+      <View key={jugador.id} style={styles.jugadorContainer}>
+        <View style={styles.textos}>
+          <Text style={styles.userName}>{jugador.Nombre}</Text>
+          <Text style={styles.userRank}>Rango: {jugador.Rango}</Text>
+        </View>
+        <TouchableOpacity
+          style={styles.crossButton}
+          onPress={() => UpdateGrupo(jugador.id)} 
+        >
+          <Text style={styles.crossIcon}> - </Text>
+        </TouchableOpacity>
+      </View>
+    ))
+  ) : (
+    <Text>No hay jugadores en el Equipo 2</Text>
+  )}
+  {equipo2.length < 2 ? ( // Show "+" button if less than 2 players in equipo2
+    <TouchableOpacity 
+      style={styles.addButton}
+      onPress={() => navigation.navigate('MostrarJugadoresEquipo2')}
+    >
+      <AntDesign name="pluscircle" size={30} color="#6CA0D4" />
+    </TouchableOpacity>
+  ) : null}
+</View>
 
-            <View style={styles.equipoContainer}>
-              <Text style={styles.title}>Equipo 2</Text>
-              {equipo2 && Array.isArray(equipo2) ? (
-  equipo2.map((jugador) => (
-    <View key={jugador.id} style={styles.jugadorContainer}>
-      <View style={styles.textos}>
-        <Text style={styles.userName}>{jugador.Nombre}</Text>
-        <Text style={styles.userRank}>Rango: {jugador.Rango}</Text>
-      </View>
-      <TouchableOpacity
-        style={styles.crossButton}
-        onPress={() => UpdateGrupo(jugador.id)} 
-      >
-        <Text style={styles.crossIcon}> - </Text>
-      </TouchableOpacity>
-    </View>
-  ))
-) : (
-  <Text>No hay jugadores en el Equipo 2</Text>
-)}
-{!(idGrupo2 && idGrupo2.id4 === 0) ? null : (
-  <TouchableOpacity 
-    style={styles.addButton}
-    onPress={() => navigation.navigate('MostrarJugadoresEquipo2')}
-  >
-    <AntDesign name="pluscircle" size={30} color="#6CA0D4" />
-  </TouchableOpacity>
-)}
-            </View>
           </View>
 
-          {(idGrupo1 && idGrupo1.id2 !== 0 && idGrupo2 && idGrupo2.id4 !== 0) ? (
+          {(equipo1.length >= 2 && equipo2.length >= 2) ? (
   <TouchableOpacity
     style={styles.startButton}
     onPress={() => navigation.navigate('PuntajeJugar')} 
