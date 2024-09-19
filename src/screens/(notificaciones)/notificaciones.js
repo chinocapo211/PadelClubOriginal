@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, Image } from 'react-native'; 
+import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from 'react-native'; 
 import NavbarHigh from '../../components/navbarHigh';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import NavbarLow from '../../components/navbarLow';
@@ -45,24 +45,34 @@ const Notificaciones = ({ navigation }) => {
         <Text style={styles.notificationText}>{item.Mensaje}</Text>
         <Text style={styles.dateText}>{new Date(item.Fecha).toLocaleString()}</Text>
       </View>
+      {/* Botón alineado a la derecha */}
+      {item.Tipo !== 'Partido' && (
+        <TouchableOpacity style={styles.button} onPress={() => handleButtonPress(item)}>
+          <Text style={styles.buttonText}>Ver Partido</Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
+  
+  const handleButtonPress = (item) => {
+    console.log('Acción para el partido:', item);
+  };
 
   return (
     <SafeAreaView style={styles.safeArea}>
-    <View style={styles.container}>
-      <NavbarHigh />
-      <View style={styles.flatcont}>
-      <FlatList
-        contentContainerStyle={styles.notificationList}
-        data={notificaciones}
-        renderItem={renderNotification}
-        keyExtractor={(item) => item.id.toString()}
-        ListEmptyComponent={<Text style={styles.emptyText}>No hay notificaciones</Text>}
-      />
+      <View style={styles.container}>
+        <NavbarHigh />
+        <View style={styles.flatcont}>
+          <FlatList
+            contentContainerStyle={styles.notificationList}
+            data={notificaciones}
+            renderItem={renderNotification}
+            keyExtractor={(item) => item.id.toString()}
+            ListEmptyComponent={<Text style={styles.emptyText}>No hay notificaciones</Text>}
+          />
+        </View>
+        <NavbarLow />
       </View>
-      <NavbarLow />
-    </View>
     </SafeAreaView>
   );
 };
@@ -70,30 +80,31 @@ const Notificaciones = ({ navigation }) => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor:"#EBEBEB"
+    backgroundColor: "#EBEBEB"
   },
-  flatcont:{
-    marginTop:'30%',
+  flatcont: {
+    marginTop: '30%',
   },
   container: {
     flex: 1,
-    backgroundColor:"#EBEBEB",
+    backgroundColor: "#EBEBEB",
   },
   notificationList: {
     paddingHorizontal: 20,
     paddingVertical: 20,
-    paddingBottom: 20, // Deja espacio para la navbar
+    paddingBottom: 20,
     flexGrow: 1,
-    justifyContent: 'center', // Centra verticalmente cuando está vacío
+    justifyContent: 'center',
   },
   notificationContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
     backgroundColor: '#FFF',
     borderRadius: 15,
     padding: 15,
     marginVertical: 10,
-    elevation: 2, 
+    elevation: 2,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
@@ -109,6 +120,7 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     flex: 1,
+    marginRight: 10,
   },
   notificationText: {
     fontSize: 16,
@@ -123,7 +135,17 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: '#757575',
     textAlign: 'center',
-    marginTop:5,
+    marginTop: 5,
+  },
+  button: {
+    backgroundColor: '#00BFFF',
+    borderRadius: 5,
+    paddingVertical: 8,
+    paddingHorizontal: 15,
+  },
+  buttonText: {
+    color: '#FFF',
+    fontSize: 16,
   },
 });
 

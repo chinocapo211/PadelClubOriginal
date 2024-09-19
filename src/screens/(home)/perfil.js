@@ -76,9 +76,11 @@ const Perfil = ({ navigation }) => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
+    backgroundColor:"#EBEBEB",
   },
   innerContainer: {
     borderRadius: 10,
+    backgroundColor:"#EBEBEB",
     padding: 20,
     flex:1,
     justifyContent: 'center',
