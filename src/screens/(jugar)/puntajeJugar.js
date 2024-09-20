@@ -61,8 +61,9 @@ const PuntajeJugar = () => {
   };
 
   const handleSubirPartido = () => {
-    navigation.navigate('FinalJugar', { puntaje: sets }) 
-  
+    if((sets[0].score[0] != 0 || sets[0].score[1] != 0) || ((sets[0].score[0] != 0 || sets[0].score[1] != 0) && (set[1].score[0] != 0 || set[1].score[1] != 0) && (set[2].score[0] != 0 || set[2].score[1] != 0))){
+      navigation.navigate('FinalJugar', { puntaje: sets }) 
+    }
   };
 
   return (
@@ -140,9 +141,11 @@ const PuntajeJugar = () => {
             </TouchableOpacity>
           )}
         </View>
-        <TouchableOpacity style={styles.subirPartidoButton} onPress={handleSubirPartido}>
+        {(sets.length === 1 || sets.length === 3) && (
+          <TouchableOpacity style={styles.subirPartidoButton} onPress={handleSubirPartido}>
           <Text style={styles.subirPartidoText}>Subir partido</Text>
         </TouchableOpacity>
+        )}
       </View>
     </SafeAreaView>
   );
