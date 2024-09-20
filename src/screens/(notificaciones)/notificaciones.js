@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from 'react-native'; 
+import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity} from 'react-native'; 
 import NavbarHigh from '../../components/navbarHigh';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import NavbarLow from '../../components/navbarLow';
@@ -36,6 +36,10 @@ const Notificaciones = ({ navigation }) => {
     fetchNotifications();
   }, []);
 
+  const handlePartidoButton = (item) => {
+    navigation.navigate('ConfirmarPartido'); //, { partidoId: item.id }
+  };  
+
   const renderNotification = ({ item }) => (
     <View style={styles.notificationContainer} key={item.id}>
       <View style={styles.iconContainer}>
@@ -47,7 +51,7 @@ const Notificaciones = ({ navigation }) => {
       </View>
       {/* Botón alineado a la derecha */}
       {item.Tipo !== 'Partido' && (
-        <TouchableOpacity style={styles.button} onPress={() => handleButtonPress(item)}>
+        <TouchableOpacity style={styles.button} onPress={() => handlePartidoButton(item)}>
           <Text style={styles.buttonText}>Ver Partido</Text>
         </TouchableOpacity>
       )}
@@ -61,7 +65,14 @@ const Notificaciones = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
+      <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+          <Image
+            source={require('../../../assets/images/back.png')}
+            style={styles.backImage}
+          />
+        </TouchableOpacity>
         <NavbarHigh />
+        
         <View style={styles.flatcont}>
           <FlatList
             contentContainerStyle={styles.notificationList}
@@ -95,6 +106,15 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
     flexGrow: 1,
     justifyContent: 'center',
+  },
+  backButton: {
+    width: 30,
+    height: 30,
+    zIndex: 1,
+  },
+  backImage: {
+    width: '100%',
+    height: '100%',
   },
   notificationContainer: {
     flexDirection: 'row',
