@@ -141,7 +141,7 @@ const PuntajeJugar = () => {
             </TouchableOpacity>
           )}
         </View>
-        {(sets.length === 1 || sets.length === 3) && (
+        {((sets.length === 1 || sets.length === 3) || (sets[0].score[0] > sets[0].score[1] && sets[1].score[0] > sets[1].score[1]) || (sets[0].score[0] < sets[0].score[1] && sets[1].score[0] < sets[1].score[1])) && (
           <TouchableOpacity style={styles.subirPartidoButton} onPress={handleSubirPartido}>
           <Text style={styles.subirPartidoText}>Subir partido</Text>
         </TouchableOpacity>
