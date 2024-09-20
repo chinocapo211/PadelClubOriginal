@@ -2,84 +2,108 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, Alert } from 'react-native';
 import NavbarHigh from '../../components/navbarHigh';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
+import PartidoApi from '../../api/PartidoApi';
+import userApi from '../../api/userApi';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const FinalJugar = ({ route }) => {
   const navigation = useNavigation();
-  const { puntaje } = route.params || {}; // Obtener `puntaje` desde `route.params`
+  const { puntaje } = route.params || {};
 
-  const [scores, setScores] = useState([]); // Estado para almacenar los puntajes
-  const [team1Points, setTeam1Points] = useState(0); // Estado para puntos del equipo 1
-  const [team2Points, setTeam2Points] = useState(0);
+  const [matchSummary, setMatchSummary] = useState({});
 
   useEffect(() => {
-    if (puntaje) {
-      console.log("Valor de puntaje recibido:", puntaje);
+    const getIdGrupo = async () => {
+      const storedIdGrupo1 = await AsyncStorage.getItem('@GrupoId1');
+      const storedIdGrupo2 = await AsyncStorage.getItem('@GrupoId2');
+      const idGrupoNumber = parseInt(storedIdGrupo1, 10);
+      if (isNaN(idGrupoNumber)) {
+        console.log('Error: idGrupo no es un número válido');
+        return null;
+      }
+      return idGrupoNumber;
+    };
 
-      // Verificar si 'score' es un array para cada set
-      puntaje.forEach((set, index) => {
-        if (Array.isArray(set.score)) {
-          console.log(`Score en Set ${index + 1} es un array:`, set.score);
+    const processPuntaje = async () => {
+      if (puntaje) {
+        console.log("Valor de puntaje recibido:", puntaje);
 
-          // Determinar qué equipo ganó el set
-          if (set.score[0] === 7) {
-            // Si el equipo 1 (score[0]) tiene 7 puntos, suma 1 punto a su marcador
-            setTeam1Points(prevPoints => prevPoints + 1);
-          } else if (set.score[1] === 7) {
-            // Si el equipo 2 (score[1]) tiene 7 puntos, suma 1 punto a su marcador
-            setTeam2Points(prevPoints => prevPoints + 1);
-          }
-        } else {
-          console.log(`Score en Set ${index + 1} NO es un array, es un:`, typeof set.score);
+      
+        const idDelGrupo = await getIdGrupo();
+        if (idDelGrupo === null) {
+          Alert.alert("Error", "No se pudo obtener el ID del grupo.");
+          return;
         }
-      });
 
-      // Extraer los puntajes de cada set y almacenarlos en un array
-      const extractedScores = puntaje.map(set => set.score);
-      setScores(extractedScores); // Almacenar los puntajes en el estado
+        let team1Score = 0;
+        let team2Score = 0;
 
-      // Mostrar el primer puntaje en una alerta (puedes modificarlo si es necesario)
-      Alert.alert("Primer puntaje", JSON.stringify(puntaje[0].score));
-    }
+        const summary = {
+          idGrupo: idDelGrupo,
+          set1: '',
+          set2: '',
+          set3: '',
+          fecha: new Date(), // Almacenar como objeto Date
+          puntajeEquipo1: 0,
+          puntajeEquipo2: 0
+        };
+
+        puntaje.forEach((set, index) => {
+          let scoreArray;
+
+          if (typeof set.score === 'string') {
+            scoreArray = set.score.split('-').map(num => parseInt(num.trim(), 10));
+            console.log(`Score en Set ${index + 1} convertido de string a array:`, scoreArray);
+          } else if (Array.isArray(set.score)) {
+            scoreArray = set.score.map(num => parseInt(num, 10));
+            console.log(`Score en Set ${index + 1} es un array:`, scoreArray);
+          }
+
+          if (scoreArray) {
+            if (scoreArray[0] === 7) {
+              team1Score++;
+            } else if (scoreArray[1] === 7) {
+              team2Score++;
+            }
+            summary[`set${index + 1}`] = `${scoreArray[0]} - ${scoreArray[1]}`;
+          } else {
+            console.log(`Score en Set ${index + 1} no es válido o no tiene un formato esperado.`);
+          }
+        });
+
+        summary.puntajeEquipo1 = team1Score;
+        summary.puntajeEquipo2 = team2Score;
+
+        setMatchSummary(summary);
+
+        Alert.alert("Primer puntaje", JSON.stringify(summary.set1));
+      }
+    };
+
+    processPuntaje();
   }, [puntaje]);
 
-  // Función para calcular el Elo (ya presente en tu código)
-  const calculateElo = (Ra, Rb, Sa, Sb, Ka, Kb) => {
-    const Ea = 1 / (1 + Math.pow(10, (Rb - Ra) / 400));
-    const Eb = 1 / (1 + Math.pow(10, (Ra - Rb) / 400));
+  const submitResults = async () => {
+    try {
+      const storedToken = await AsyncStorage.getItem('@AccessToken');
+      const storedIdGrupo1 = await AsyncStorage.getItem('@GrupoId1');
+      const storedIdGrupo2 = await AsyncStorage.getItem('@GrupoId2');
+      const summaryToSend = {
+        ...matchSummary,
+        fecha: matchSummary.fecha.toISOString() 
+      };
 
-    const newRa = Ra + Ka * (Sa - Ea);
-    const newRb = Rb + Kb * (Sb - Eb);
-
-    return { newRa, newRb };
-  };
-
-  // Función para obtener el factor K (ya presente en tu código)
-  const getKFactor = (playerRating, matchesPlayed) => {
-    if (matchesPlayed < 30 || playerRating < 2300) {
-      return 40;
-    } else if (playerRating >= 2400) {
-      return 10;
-    } else {
-      return 20;
+      const response = await PartidoApi.create_Partido(storedToken, summaryToSend);
+      const jugadores = await PartidoApi.getJugadoresEquipo1y2(storedToken,parseInt(storedIdGrupo1,10),parseInt(storedIdGrupo2,10));
+      console.log(jugadores);
+      
+      
+      Alert.alert("Resultado del partido enviado con éxito", `Respuesta: ${JSON.stringify(response)}`);
+      
+    } catch (error) {
+      Alert.alert("Error", "Hubo un problema al enviar los resultados del partido.");
     }
-  };
-
-  // Función para calcular los rankings del equipo (ya presente en tu código)
-  const calculateTeamRankings = () => {
-    const Ra = teamA.player1.rating + teamA.player2.rating;
-    const Rb = teamB.player1.rating + teamB.player2.rating;
-
-    const Ka = (getKFactor(teamA.player1.rating, teamA.player1.matches) + getKFactor(teamA.player2.rating, teamA.player2.matches)) / 2;
-    const Kb = (getKFactor(teamB.player1.rating, teamB.player2.matches) + getKFactor(teamB.player2.rating, teamB.player2.matches)) / 2;
-
-    const { Sa, Sb } = resultado;
-    const { newRa, newRb } = calculateElo(Ra, Rb, Sa, Sb, Ka, Kb);
-
-    const updatedTeamAPlayer1 = newRa / 2;
-    const updatedTeamAPlayer2 = newRa / 2;
-    const updatedTeamBPlayer1 = newRb / 2;
-    const updatedTeamBPlayer2 = newRb / 2;
   };
 
   return (
@@ -93,12 +117,13 @@ const FinalJugar = ({ route }) => {
           />
         </TouchableOpacity>
 
-        {/* Mostrar los sets recibidos y sus puntajes */}
         <View style={styles.scoreWrapper}>
           {puntaje.map((set, index) => (
             <View key={index} style={styles.scoreContainer}>
-              <Text style={styles.scoreText}>{set.name}</Text>
-              <Text style={styles.scoreText}>{set.score[0]} - {set.score[1]}</Text>
+              <Text style={styles.scoreText}>{`Set ${index + 1}`}</Text>
+              <Text style={styles.scoreText}>
+                {typeof set.score === 'string' ? set.score : `${set.score[0]} - ${set.score[1]}`}
+              </Text>
               <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('CargarPuntos', { index })}>
                 <Text style={styles.buttonText}>Cargar puntos</Text>
               </TouchableOpacity>
@@ -106,22 +131,24 @@ const FinalJugar = ({ route }) => {
           ))}
         </View>
 
-        {/* Mostrar los puntajes extraídos y almacenados en `scores` */}
-        <View style={styles.extractedScoresWrapper}>
-          <Text style={styles.extractedScoresTitle}>Puntajes almacenados:</Text>
-          {scores.map((score, index) => (
-            <Text key={index} style={styles.extractedScoreText}>{`Set ${index + 1}: ${score[0]} - ${score[1]}`}</Text>
-          ))}
+        <View style={styles.matchSummaryWrapper}>
+          <Text style={styles.matchSummaryTitle}>Resumen del Partido:</Text>
+          <Text>{`Fecha: ${matchSummary.fecha ? matchSummary.fecha.toLocaleDateString() : ''}`}</Text>
+          <Text>{`Set 1: ${matchSummary.set1}`}</Text>
+          <Text>{`Set 2: ${matchSummary.set2}`}</Text>
+          <Text>{`Set 3: ${matchSummary.set3}`}</Text>
+          <Text>{`Equipo 1: ${matchSummary.puntajeEquipo1} puntos`}</Text>
+          <Text>{`Equipo 2: ${matchSummary.puntajeEquipo2} puntos`}</Text>
         </View>
-        <View style={styles.teamPointsWrapper}>
-          <Text style={styles.teamPointsTitle}>Puntos acumulados:</Text>
-          <Text style={styles.teamPointsText}>{`Equipo 1: ${team1Points} puntos`}</Text>
-          <Text style={styles.teamPointsText}>{`Equipo 2: ${team2Points} puntos`}</Text>
-        </View>
+
+        <TouchableOpacity style={styles.submitButton} onPress={submitResults}>
+          <Text style={styles.submitButtonText}>Enviar Resultados</Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
 };
+
 
 const styles = StyleSheet.create({
   safeArea: {
@@ -161,17 +188,13 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginTop: 10,
   },
-  extractedScoresWrapper: {
+  matchSummaryWrapper: {
     marginTop: 20,
     alignItems: 'center',
   },
-  extractedScoresTitle: {
+  matchSummaryTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-  },
-  extractedScoreText: {
-    fontSize: 18,
-    marginTop: 5,
   },
   backButton: {
     width: 30,
@@ -180,9 +203,20 @@ const styles = StyleSheet.create({
     marginTop: 10,
     zIndex: 1,
   },
+  submitButton: {
+    backgroundColor: '#28a745',
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+    borderRadius: 10,
+    marginTop: 20,
+  },
+  submitButtonText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
 });
 
 export default FinalJugar;
-
 
 
