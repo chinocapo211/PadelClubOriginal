@@ -31,7 +31,15 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     position:'absolute',
-    
+  },
+  backButton: {
+    width: 30,
+    height: 30,
+    zIndex: 1,
+  },
+  backImage: {
+    width: '100%',
+    height: '100%',
   },
   topSection: {
     height: '100%',

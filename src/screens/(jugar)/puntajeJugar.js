@@ -6,7 +6,7 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import { useNavigation } from '@react-navigation/native';
 
 const PuntajeJugar = () => {
-  const [sets, setSets] = useState([{ name: 'Set 1', score: [0, 0] }]);
+  const [sets, setSets] = useState([{ name: 'Set 1', score: '0-0' }]);
   const [modalVisible, setModalVisible] = useState(false);
   const [inputValue1, setInputValue1] = useState('');
   const [inputValue2, setInputValue2] = useState('');
@@ -31,22 +31,22 @@ const PuntajeJugar = () => {
     const num2 = parseInt(inputValue2);
 
     if ((((num1 === 6 && num2 < 6) || (num1 < 6 && num2 === 6)) || (num1 === 7 && (num2 === 5 || num2 === 6)) || (num2 === 7 && (num1 === 5 || num1 === 6))) && !isNaN(num1) && !isNaN(num2)) {
-      editNumber(setId, [num1, num2]);
+      editNumber(setId, `${num1}-${num2}`); // Store score as string
       closeModal();
     } else {
       Alert.alert("Error", "Se tiene que cargar el puntaje correctamente. No ingresar letras y en caso de tie break poner 7-6 o 6-7.");
     }
   };
 
-  const editNumber = (index, newValues) => {
+  const editNumber = (index, newValue) => {
     const updatedSets = [...sets];
-    updatedSets[index] = { ...updatedSets[index], score: newValues };
+    updatedSets[index] = { ...updatedSets[index], score: newValue }; // Update score as string
     setSets(updatedSets);
   };
 
   const addSet = () => {
     if (sets.length < 3) {
-      setSets([...sets, { name: `Set ${sets.length + 1}`, score: [0, 0] }]);
+      setSets([...sets, { name: `Set ${sets.length + 1}`, score: '0-0' }]);
     }
   };
 
@@ -61,9 +61,13 @@ const PuntajeJugar = () => {
   };
 
   const handleSubirPartido = () => {
+<<<<<<< HEAD
+    navigation.navigate('FinalJugar', { puntaje: sets });
+=======
     if(((sets[0].score[0] != 0 || sets[0].score[1] != 0) && (sets[1] == null || sets[2] == null)) || ((sets[0].score[0] != 0 || sets[0].score[1] != 0) && (sets[1].score[0] != 0 || sets[1].score[1] != 0) && (sets[2].score[0] != 0 || sets[2].score[1] != 0))){
       navigation.navigate('FinalJugar', { puntaje: sets }) 
     }
+>>>>>>> f989ec2c4ed89b88ce6398e7dfb79eca744868eb
   };
 
   return (
@@ -81,7 +85,7 @@ const PuntajeJugar = () => {
             <View key={index} style={styles.scoreContainer}>
               <Text style={styles.scoreText}>{set.name}</Text>
               <Text style={styles.scoreText}>
-                {set.score[0]} - {set.score[1]}
+                {set.score} {/* Displaying score as string */}
               </Text>
               <TouchableOpacity style={styles.button} onPress={() => handleCargarPuntos(index)}>
                 <Text style={styles.buttonText}>Cargar puntos</Text>
@@ -141,7 +145,7 @@ const PuntajeJugar = () => {
             </TouchableOpacity>
           )}
         </View>
-        {(sets.length === 1 || sets.length === 3) && (
+        {((sets.length === 1 || sets.length === 3) || (sets[0].score[0] > sets[0].score[1] && sets[1].score[0] > sets[1].score[1]) || (sets[0].score[0] < sets[0].score[1] && sets[1].score[0] < sets[1].score[1])) && (
           <TouchableOpacity style={styles.subirPartidoButton} onPress={handleSubirPartido}>
           <Text style={styles.subirPartidoText}>Subir partido</Text>
         </TouchableOpacity>
@@ -150,6 +154,7 @@ const PuntajeJugar = () => {
     </SafeAreaView>
   );
 };
+
 
 const styles = StyleSheet.create({
   safeArea: {

@@ -60,6 +60,24 @@ const ObtenerJugadores = async(token) =>
     await AsyncStorage.removeItem('@AccessToken');
     return { error: error.message };
   }
-}
+};
+const actualizarJugador = async(token,idJugador,data) =>
+  {
+    const method = "PATCH";
+    const headers = {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`,  
+      "ngrok-skip-browser-warning": true, 
+    };
+    try {
+      const result = await apiManager(method, headers, data, `Jugador/${idJugador}`);
+      console.log('User info response:', result.data);  
+      return result.data;
+    } catch (error) {
+      console.error('Error en ObtenerInfoJugador:', error.message);
+      await AsyncStorage.removeItem('@AccessToken');
+      return { error: error.message };
+    }
+  };
 
-export default { user_login, ObtenerInfoJugador, ObtenerJugadores };
+export default { user_login, ObtenerInfoJugador, ObtenerJugadores, actualizarJugador};
