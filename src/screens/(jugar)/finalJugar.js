@@ -22,10 +22,10 @@ const FinalJugar = ({ route }) => {
           console.log(`Score en Set ${index + 1} es un array:`, set.score);
 
           // Determinar qué equipo ganó el set
-          if (set.score[0] === 7) {
+          if (set.score[0] === 7 || (set.score[0] === 6 && set.score[1] < 6)) {
             // Si el equipo 1 (score[0]) tiene 7 puntos, suma 1 punto a su marcador
             setTeam1Points(prevPoints => prevPoints + 1);
-          } else if (set.score[1] === 7) {
+          } else if (set.score[1] === 7 || (set.score[1] === 6 && set.score[0] < 6)) {
             // Si el equipo 2 (score[1]) tiene 7 puntos, suma 1 punto a su marcador
             setTeam2Points(prevPoints => prevPoints + 1);
           }

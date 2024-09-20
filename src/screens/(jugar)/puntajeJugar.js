@@ -68,13 +68,13 @@ const PuntajeJugar = () => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
-        <NavbarHigh />
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+      <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <Image
             source={require('../../../assets/images/back.png')}
             style={styles.backImage}
           />
         </TouchableOpacity>
+        <NavbarHigh />
         <View style={styles.scoreWrapper}>
           {sets.map((set, index) => (
             <View key={index} style={styles.scoreContainer}>
@@ -159,11 +159,13 @@ const styles = StyleSheet.create({
     paddingVertical: "4%",
     paddingHorizontal: "5%",
     marginTop: "5%",
-    alignItems: 'center',
+    alignSelf: 'center',
+    alignItems:"center",
+    width:"80%",
+    textAlign:"center",
   },
   container: {
     flex: 1,
-    alignItems: 'center',
   },
   scoreWrapper: {
     borderRadius: 15,
@@ -171,6 +173,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignContent: 'center',
     marginTop: '25%',
+    alignSelf:"center",
   },
   scoreContainer: {
     backgroundColor: '#ffffff',
@@ -189,7 +192,7 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingVertical: 10,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignSelf:"center",
     borderRadius: 10,
     marginTop: 10,
   },
@@ -203,13 +206,14 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     width: '40%',
     marginTop: 20,
+    alignSelf:"center",
   },
   centerIconContainer: {
     justifyContent: 'center',
   },
   botonMas: {
     display: 'flex',
-    alignContent: 'flex-start',
+    alignSelf: 'flex-start',
   },
   botonMenos: {
     marginLeft: '42%',
@@ -217,8 +221,6 @@ const styles = StyleSheet.create({
   backButton: {
     width: 30,
     height: 30,
-    marginRight: '80%',
-    marginTop: "20%",
     zIndex: 1,
   },
   backImage: {

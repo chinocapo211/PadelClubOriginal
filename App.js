@@ -21,6 +21,7 @@ import MostrarJugadoresEquipo1 from './src/screens/(jugar)/mostrarJugadoresEquip
 import MostrarJugadoresEquipo2 from './src/screens/(jugar)/mostrarJugadoresEquipo2';
 import PuntajeJugar from './src/screens/(jugar)/puntajeJugar';
 import FinalJugar from './src/screens/(jugar)/finalJugar';
+import ConfirmarPartido from './src/screens/(notificaciones)/confirmarPartido';
 import { AuthProvider, useAuth } from './src/components/AuthProvider';
 
 const LoginStack = createStackNavigator();
@@ -55,6 +56,7 @@ function NotificacionesStackScreen() {
   return (
     <NotificacionesStack.Navigator screenOptions={{ headerShown: false }}>
       <NotificacionesStack.Screen name="Notificaciones" component={Notificaciones} />
+      <NotificacionesStack.Screen name="ConfirmarPartido" component={ConfirmarPartido}/>
     </NotificacionesStack.Navigator>
   );
 }
