@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     width: screenWidth * 0.8, // Ancho responsivo
-   
+    marginRight: screenHeight * 0.05,
   },
   progressText: {
     fontSize: screenWidth * 0.04, // Tamaño del texto adaptable
