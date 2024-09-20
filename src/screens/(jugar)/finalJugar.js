@@ -99,7 +99,12 @@ const FinalJugar = ({ route }) => {
           ))}
         </View>
         <View style={styles.winnerTeam}>
+        {(team1Points > team2Points) && (
           <Text>Gano el Equipo 1, se espera confirmacion</Text>
+        )}
+          {(team2Points > team1Points) && (
+          <Text>Gano el Equipo 2, se espera confirmacion</Text>
+        )}
         </View>
       </View>
     </SafeAreaView>

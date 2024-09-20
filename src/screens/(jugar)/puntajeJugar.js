@@ -61,7 +61,7 @@ const PuntajeJugar = () => {
   };
 
   const handleSubirPartido = () => {
-    if((sets[0].score[0] != 0 || sets[0].score[1] != 0) || ((sets[0].score[0] != 0 || sets[0].score[1] != 0) && (set[1].score[0] != 0 || set[1].score[1] != 0) && (set[2].score[0] != 0 || set[2].score[1] != 0))){
+    if(((sets[0].score[0] != 0 || sets[0].score[1] != 0) && (sets[1] == null || sets[2] == null)) || ((sets[0].score[0] != 0 || sets[0].score[1] != 0) && (sets[1].score[0] != 0 || sets[1].score[1] != 0) && (sets[2].score[0] != 0 || sets[2].score[1] != 0))){
       navigation.navigate('FinalJugar', { puntaje: sets }) 
     }
   };
