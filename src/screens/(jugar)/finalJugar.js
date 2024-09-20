@@ -22,10 +22,10 @@ const FinalJugar = ({ route }) => {
           console.log(`Score en Set ${index + 1} es un array:`, set.score);
 
           // Determinar qué equipo ganó el set
-          if (set.score[0] === 7) {
+          if (set.score[0] === 7 || (set.score[0] === 6 && set.score[1] < 6)) {
             // Si el equipo 1 (score[0]) tiene 7 puntos, suma 1 punto a su marcador
             setTeam1Points(prevPoints => prevPoints + 1);
-          } else if (set.score[1] === 7) {
+          } else if (set.score[1] === 7 || (set.score[1] === 6 && set.score[0] < 6)) {
             // Si el equipo 2 (score[1]) tiene 7 puntos, suma 1 punto a su marcador
             setTeam2Points(prevPoints => prevPoints + 1);
           }
@@ -92,31 +92,19 @@ const FinalJugar = ({ route }) => {
             style={styles.backButton}
           />
         </TouchableOpacity>
-
-        {/* Mostrar los sets recibidos y sus puntajes */}
-        <View style={styles.scoreWrapper}>
-          {puntaje.map((set, index) => (
-            <View key={index} style={styles.scoreContainer}>
-              <Text style={styles.scoreText}>{set.name}</Text>
-              <Text style={styles.scoreText}>{set.score[0]} - {set.score[1]}</Text>
-              <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('CargarPuntos', { index })}>
-                <Text style={styles.buttonText}>Cargar puntos</Text>
-              </TouchableOpacity>
-            </View>
-          ))}
-        </View>
-
-        {/* Mostrar los puntajes extraídos y almacenados en `scores` */}
         <View style={styles.extractedScoresWrapper}>
-          <Text style={styles.extractedScoresTitle}>Puntajes almacenados:</Text>
+          <Text style={styles.extractedScoresTitle}>Resultados del Partido:</Text>
           {scores.map((score, index) => (
             <Text key={index} style={styles.extractedScoreText}>{`Set ${index + 1}: ${score[0]} - ${score[1]}`}</Text>
           ))}
         </View>
-        <View style={styles.teamPointsWrapper}>
-          <Text style={styles.teamPointsTitle}>Puntos acumulados:</Text>
-          <Text style={styles.teamPointsText}>{`Equipo 1: ${team1Points} puntos`}</Text>
-          <Text style={styles.teamPointsText}>{`Equipo 2: ${team2Points} puntos`}</Text>
+        <View style={styles.winnerTeam}>
+        {(team1Points > team2Points) && (
+          <Text>Gano el Equipo 1, se espera confirmacion</Text>
+        )}
+          {(team2Points > team1Points) && (
+          <Text>Gano el Equipo 2, se espera confirmacion</Text>
+        )}
         </View>
       </View>
     </SafeAreaView>
@@ -162,8 +150,19 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   extractedScoresWrapper: {
-    marginTop: 20,
+    marginTop: '30%',
     alignItems: 'center',
+    backgroundColor: '#ffffff',
+    padding: '5%',
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    elevation: 5,
   },
   extractedScoresTitle: {
     fontSize: 20,
@@ -179,6 +178,10 @@ const styles = StyleSheet.create({
     marginRight: '80%',
     marginTop: 10,
     zIndex: 1,
+  },
+  winnerTeam: {
+    fontSize: 24,
+    marginTop: '10%'
   },
 });
 
