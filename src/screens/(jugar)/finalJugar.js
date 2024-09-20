@@ -16,7 +16,6 @@ const FinalJugar = ({ route }) => {
   useEffect(() => {
     const getIdGrupo = async () => {
       const storedIdGrupo1 = await AsyncStorage.getItem('@GrupoId1');
-      const storedIdGrupo2 = await AsyncStorage.getItem('@GrupoId2');
       const idGrupoNumber = parseInt(storedIdGrupo1, 10);
       if (isNaN(idGrupoNumber)) {
         console.log('Error: idGrupo no es un número válido');
@@ -96,8 +95,11 @@ const FinalJugar = ({ route }) => {
 
       const response = await PartidoApi.create_Partido(storedToken, summaryToSend);
       const jugadores = await PartidoApi.getJugadoresEquipo1y2(storedToken,parseInt(storedIdGrupo1,10),parseInt(storedIdGrupo2,10));
-      console.log(jugadores);
       
+
+
+      console.log(jugadores);
+
       
       Alert.alert("Resultado del partido enviado con éxito", `Respuesta: ${JSON.stringify(response)}`);
       
