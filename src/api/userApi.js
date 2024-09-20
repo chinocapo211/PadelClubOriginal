@@ -61,15 +61,49 @@ const ObtenerJugadores = async(token) =>
     return { error: error.message };
   }
 };
-const actualizarJugador = async(token,idJugador,data) =>
+
+const ObtenerJugadorPorID = async(token,idJugador) =>{
+  console.log('Token:', token);
+  const method = "GET";
+  const headers = {
+    "Content-Type": "application/json",
+    "Authorization": `Bearer ${token}`,  
+    "ngrok-skip-browser-warning": true, 
+  };
+  const data = {};
+  const path = `Jugador/${idJugador}`;
+  try {
+    const result = await apiManager(method, headers, data, path);
+    console.log('User info response:', result.data);  
+    return result.data;
+  } catch (error) {
+    console.error('Error en ObtenerInfoJugador:', error.message);
+    await AsyncStorage.removeItem('@AccessToken');
+    return { error: error.message };
+  }
+
+}
+
+const actualizarJugador = async(token,idJugador,numeroUpdate) =>
   {
+
+    const jugador = await ObtenerInfoJugador(token,idJugador);
+
+
     const method = "PATCH";
     const headers = {
       "Content-Type": "application/json",
       "Authorization": `Bearer ${token}`,  
       "ngrok-skip-browser-warning": true, 
     };
+    jugador.Puntos += numeroUpdate
+    const data = 
+    {
+      Puntos: jugador.Puntos 
+    }
+
     try {
+      console.log("Informacion antes de enviar" + data);
       const result = await apiManager(method, headers, data, `Jugador/${idJugador}`);
       console.log('User info response:', result.data);  
       return result.data;
@@ -80,4 +114,4 @@ const actualizarJugador = async(token,idJugador,data) =>
     }
   };
 
-export default { user_login, ObtenerInfoJugador, ObtenerJugadores, actualizarJugador};
+export default { user_login, ObtenerInfoJugador, ObtenerJugadores, actualizarJugador, ObtenerJugadorPorID};

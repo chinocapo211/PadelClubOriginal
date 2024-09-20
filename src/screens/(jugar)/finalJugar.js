@@ -16,6 +16,7 @@ const FinalJugar = ({ route }) => {
   useEffect(() => {
     const getIdGrupo = async () => {
       const storedIdGrupo1 = await AsyncStorage.getItem('@GrupoId1');
+      const storedIdGrupo2 = await AsyncStorage.getItem('@GrupoId2');
       const idGrupoNumber = parseInt(storedIdGrupo1, 10);
       if (isNaN(idGrupoNumber)) {
         console.log('Error: idGrupo no es un número válido');
@@ -28,24 +29,11 @@ const FinalJugar = ({ route }) => {
       if (puntaje) {
         console.log("Valor de puntaje recibido:", puntaje);
 
-<<<<<<< HEAD
       
         const idDelGrupo = await getIdGrupo();
         if (idDelGrupo === null) {
           Alert.alert("Error", "No se pudo obtener el ID del grupo.");
           return;
-=======
-          // Determinar qué equipo ganó el set
-          if (set.score[0] === 7 || (set.score[0] === 6 && set.score[1] < 6)) {
-            // Si el equipo 1 (score[0]) tiene 7 puntos, suma 1 punto a su marcador
-            setTeam1Points(prevPoints => prevPoints + 1);
-          } else if (set.score[1] === 7 || (set.score[1] === 6 && set.score[0] < 6)) {
-            // Si el equipo 2 (score[1]) tiene 7 puntos, suma 1 punto a su marcador
-            setTeam2Points(prevPoints => prevPoints + 1);
-          }
-        } else {
-          console.log(`Score en Set ${index + 1} NO es un array, es un:`, typeof set.score);
->>>>>>> f989ec2c4ed89b88ce6398e7dfb79eca744868eb
         }
 
         let team1Score = 0;
@@ -100,19 +88,36 @@ const FinalJugar = ({ route }) => {
     try {
       const storedToken = await AsyncStorage.getItem('@AccessToken');
       const storedIdGrupo1 = await AsyncStorage.getItem('@GrupoId1');
-      const storedIdGrupo2 = await AsyncStorage.getItem('@GrupoId2');
+      const idEquipo1 = parseInt(storedIdGrupo1,10);
+      const idEquipo2 =parseInt(storedIdGrupo1,10);
+      console.log("Valor idEquipo2" +idEquipo2);
+      
       const summaryToSend = {
         ...matchSummary,
         fecha: matchSummary.fecha.toISOString() 
       };
 
       const response = await PartidoApi.create_Partido(storedToken, summaryToSend);
-      const jugadores = await PartidoApi.getJugadoresEquipo1y2(storedToken,parseInt(storedIdGrupo1,10),parseInt(storedIdGrupo2,10));
-      
+      const jugadores = await PartidoApi.getJugadoresEquipo1y2(storedToken,idEquipo1,idEquipo2)
 
-
-      console.log(jugadores);
-
+      console.log(matchSummary.puntajeEquipo1)
+      if (matchSummary.puntajeEquipo1 === 2) {
+        console.log("entre a actualizar jugador");
+        console.log("Valor jugador iD" + jugadores.data.jugadores[0].id);
+        await userApi.actualizarJugador(storedToken, jugadores.data.jugadores[0].id, 100);
+        await userApi.actualizarJugador(storedToken, jugadores.data.jugadores[3].id, 100);
+      } else {
+        await userApi.actualizarJugador(storedToken, jugadores.data.jugadores[0].id, -100);
+        await userApi.actualizarJugador(storedToken, jugadores.data.jugadores[3].id, -100);
+      }
+  
+      if (matchSummary.puntajeEquipo2 === 2) {
+        await userApi.actualizarJugador(storedToken, jugadores.data.jugadores[1].id, 100);
+        await userApi.actualizarJugador(storedToken, jugadores.data.jugadores[2].id, 100);
+      } else {
+        await userApi.actualizarJugador(storedToken, jugadores.data.jugadores[1].id, -100);
+        await userApi.actualizarJugador(storedToken, jugadores.data.jugadores[2].id, -100);
+      }
       
       Alert.alert("Resultado del partido enviado con éxito", `Respuesta: ${JSON.stringify(response)}`);
       
@@ -131,7 +136,6 @@ const FinalJugar = ({ route }) => {
             style={styles.backButton}
           />
         </TouchableOpacity>
-<<<<<<< HEAD
 
         <View style={styles.scoreWrapper}>
           {puntaje.map((set, index) => (
@@ -155,21 +159,6 @@ const FinalJugar = ({ route }) => {
           <Text>{`Set 3: ${matchSummary.set3}`}</Text>
           <Text>{`Equipo 1: ${matchSummary.puntajeEquipo1} puntos`}</Text>
           <Text>{`Equipo 2: ${matchSummary.puntajeEquipo2} puntos`}</Text>
-=======
-        <View style={styles.extractedScoresWrapper}>
-          <Text style={styles.extractedScoresTitle}>Resultados del Partido:</Text>
-          {scores.map((score, index) => (
-            <Text key={index} style={styles.extractedScoreText}>{`Set ${index + 1}: ${score[0]} - ${score[1]}`}</Text>
-          ))}
-        </View>
-        <View style={styles.winnerTeam}>
-        {(team1Points > team2Points) && (
-          <Text>Gano el Equipo 1, se espera confirmacion</Text>
-        )}
-          {(team2Points > team1Points) && (
-          <Text>Gano el Equipo 2, se espera confirmacion</Text>
-        )}
->>>>>>> f989ec2c4ed89b88ce6398e7dfb79eca744868eb
         </View>
 
         <TouchableOpacity style={styles.submitButton} onPress={submitResults}>
@@ -219,25 +208,9 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginTop: 10,
   },
-<<<<<<< HEAD
   matchSummaryWrapper: {
     marginTop: 20,
-=======
-  extractedScoresWrapper: {
-    marginTop: '30%',
->>>>>>> f989ec2c4ed89b88ce6398e7dfb79eca744868eb
     alignItems: 'center',
-    backgroundColor: '#ffffff',
-    padding: '5%',
-    borderRadius: 10,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 2,
-    elevation: 5,
   },
   matchSummaryTitle: {
     fontSize: 20,
@@ -250,7 +223,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
     zIndex: 1,
   },
-<<<<<<< HEAD
   submitButton: {
     backgroundColor: '#28a745',
     paddingVertical: 15,
@@ -262,11 +234,6 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
-=======
-  winnerTeam: {
-    fontSize: 24,
-    marginTop: '10%'
->>>>>>> f989ec2c4ed89b88ce6398e7dfb79eca744868eb
   },
 });
 

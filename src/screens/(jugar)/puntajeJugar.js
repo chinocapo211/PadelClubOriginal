@@ -61,13 +61,9 @@ const PuntajeJugar = () => {
   };
 
   const handleSubirPartido = () => {
-<<<<<<< HEAD
-    navigation.navigate('FinalJugar', { puntaje: sets });
-=======
     if(((sets[0].score[0] != 0 || sets[0].score[1] != 0) && (sets[1] == null || sets[2] == null)) || ((sets[0].score[0] != 0 || sets[0].score[1] != 0) && (sets[1].score[0] != 0 || sets[1].score[1] != 0) && (sets[2].score[0] != 0 || sets[2].score[1] != 0))){
       navigation.navigate('FinalJugar', { puntaje: sets }) 
     }
->>>>>>> f989ec2c4ed89b88ce6398e7dfb79eca744868eb
   };
 
   return (
