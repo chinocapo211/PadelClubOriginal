@@ -3,8 +3,9 @@ import { View, Text, StyleSheet, TouchableOpacity, Image, Alert } from 'react-na
 import NavbarHigh from '../../components/navbarHigh';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
-import PartidoApi from '../../api/PartidoApi';
+import PartidoPendienteApi from '../../api/PartidoPendienteApi';
 import userApi from '../../api/userApi';
+import NotificacionesApi from '../../api/NotificacionesApi';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const FinalJugar = ({ route }) => {
@@ -53,7 +54,8 @@ const FinalJugar = ({ route }) => {
           set3: '',
           fecha: new Date(), 
           puntajeEquipo1: 0,
-          puntajeEquipo2: 0
+          puntajeEquipo2: 0,
+          confirmacion: false,
         };
 
         puntaje.forEach((set, index) => {
@@ -109,27 +111,38 @@ const FinalJugar = ({ route }) => {
 
       console.log("Summary to send"+ JSON.stringify(summaryToSend));
 
-      const response = await PartidoApi.create_Partido(storedToken, summaryToSend);
-      const jugadores = await PartidoApi.getJugadoresEquipo1y2(storedToken,idEquipo1,idEquipo2)
-
+      const response = await PartidoPendienteApi.create_Partido(storedToken, summaryToSend);
+      const jugadores = await PartidoPendienteApi.getJugadoresEquipo1y2(storedToken,idEquipo1,idEquipo2)
+      const Notificacion = await NotificacionesApi.CrearNoti(storedToken,"Confirmar_Resultado_Partido",jugadores.data.jugadores[0].id, jugadores.data.jugadores[1].id)
       console.log(matchSummary.puntajeEquipo1)
-      if (summaryToSend.puntajeEquipo1 === 2) {
-        console.log("entre a actualizar jugador");
-        console.log("Valor jugador iD" + jugadores.data.jugadores[0].id);
-        await userApi.actualizarJugador(storedToken, jugadores.data.jugadores[0].id, 100);
-        await userApi.actualizarJugador(storedToken, jugadores.data.jugadores[3].id, 100);
-      } else {
-        await userApi.actualizarJugador(storedToken, jugadores.data.jugadores[0].id, -100);
-        await userApi.actualizarJugador(storedToken, jugadores.data.jugadores[3].id, -100);
-      }
-  
-      if (summaryToSend.puntajeEquipo2 === 2) {
-        await userApi.actualizarJugador(storedToken, jugadores.data.jugadores[1].id, 100);
-        await userApi.actualizarJugador(storedToken, jugadores.data.jugadores[2].id, 100);
-      } else {
-        await userApi.actualizarJugador(storedToken, jugadores.data.jugadores[1].id, -100);
-        await userApi.actualizarJugador(storedToken, jugadores.data.jugadores[2].id, -100);
-      }
+
+
+   //   if(Notificacion == true){
+    //    if (summaryToSend.puntajeEquipo1 === 2) {
+      //    console.log("entre a actualizar jugador");
+      //    console.log("Valor jugador iD" + jugadores.data.jugadores[0].id);
+        //  await userApi.actualizarJugador(storedToken, jugadores.data.jugadores[0].id, 100);
+       //   await userApi.actualizarJugador(storedToken, jugadores.data.jugadores[3].id, 100);
+// } else {
+       //   await userApi.actualizarJugador(storedToken, jugadores.data.jugadores[0].id, -100);
+//await userApi.actualizarJugador(storedToken, jugadores.data.jugadores[3].id, -100);
+      //  }
+    
+       // if (summaryToSend.puntajeEquipo2 === 2) {
+//await userApi.actualizarJugador(storedToken, jugadores.data.jugadores[1].id, 100);
+      //    await userApi.actualizarJugador(storedToken, jugadores.data.jugadores[2].id, 100);
+      //  } else {
+//await userApi.actualizarJugador(storedToken, jugadores.data.jugadores[1].id, -100);
+      //    await userApi.actualizarJugador(storedToken, jugadores.data.jugadores[2].id, -100);
+      //  }
+     // }
+    //  else
+    //  {
+    //    return;
+    //  }
+      
+      
+      
       
       Alert.alert("Resultado del partido enviado con éxito", `Respuesta: ${JSON.stringify(response)}`);
       

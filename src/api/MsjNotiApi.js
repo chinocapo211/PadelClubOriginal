@@ -1,8 +1,7 @@
 import apiManager from './apiManger';
 import userApi from './userApi';
-import MsjNotiApi from './MsjNotiApi';
 
-const NotificacionesApi = async (token) => {
+export const MsjNotiApi = async (token) => {
   const Token = await userApi.ObtenerInfoJugador(token);
   const headers = {
     "Content-Type": "application/json",
@@ -10,41 +9,28 @@ const NotificacionesApi = async (token) => {
     "ngrok-skip-browser-warning": true, 
   };
   try {
-    const result = await apiManager("GET", headers, {}, `Notificaciones/${Token.Usuario.id}`);
+    const result = await apiManager("GET", headers, {}, `Msjnoti`);
     console.log(result);
     return result;
   } catch (error) {
     console.error('Error en la solicitud:', error);
     return { error: error.message };
-  }  
+  }
 };
 
-const CrearNoti = async (token,tipo,ide,idr) =>
-{
+export const ObtenerMensajePorTipo= async(token,tipo) =>{
   const headers = {
     "Content-Type": "application/json",
     "Authorization": `Bearer ${token}`,  
     "ngrok-skip-browser-warning": true, 
   };
-
-  const msj = await MsjNotiApi.ObtenerMensajePorTipo(token,tipo);
-console.log("Mensaje" + JSON.stringify(msj));
-  const data = {
-    Mensaje: msj.data.msj,
-    idE: ide,
-    idR: idr,
-    Tipo: tipo,
-  }
   try {
-    const result = await apiManager("POST", headers,data,`Notificaciones`);
+    const result = await apiManager("GET", headers, {}, `Msjnoti/${tipo}`);
     console.log(result);
     return result;
   } catch (error) {
     console.error('Error en la solicitud:', error);
     return { error: error.message };
-  }  
-}
-
-
-
-export default {NotificacionesApi,CrearNoti}
+  }
+};
+export default {MsjNotiApi,ObtenerMensajePorTipo}
