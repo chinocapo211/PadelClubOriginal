@@ -87,9 +87,9 @@ const ObtenerJugadorPorID = async(token,idJugador) =>{
 const actualizarJugador = async(token,idJugador,numeroUpdate) =>
   {
 
-    const jugador = await ObtenerInfoJugador(token,idJugador);
+    const jugador = await ObtenerJugadorPorID(token,idJugador);
 
-
+    console.log("INFO DEL JUGADOR A ACTUALIZAR" + JSON.stringify(jugador, null, 2));
     const method = "PATCH";
     const headers = {
       "Content-Type": "application/json",

@@ -2,7 +2,7 @@ import apiManager from './apiManger';
 import userApi from './userApi';
 const create_Partido = async (token, data) => {
   let Token;
-
+console.log("Token antes de enviar"+token)
   try {
     Token = await userApi.ObtenerInfoJugador(token);
     console.log(`ID de Usuario antes de enviar: ${Token.Usuario.id} (Tipo: ${typeof Token.Usuario.id})`);
@@ -21,7 +21,7 @@ const create_Partido = async (token, data) => {
 
   if (!(data.fecha instanceof Date) || isNaN(data.fecha.getTime())) {
     console.error('La fecha no es un objeto Date válido:', data.fecha);
-    return; // Salir si la fecha no es válida
+    return; 
   }
 console.log( "tipo de dato despues de la conversion" + typeof(data.fecha))
 

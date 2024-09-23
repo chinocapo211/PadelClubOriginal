@@ -51,7 +51,7 @@ const FinalJugar = ({ route }) => {
           set1: '',
           set2: '',
           set3: '',
-          fecha: new Date(), // Almacenar como objeto Date
+          fecha: new Date(), 
           puntajeEquipo1: 0,
           puntajeEquipo2: 0
         };
@@ -78,13 +78,14 @@ const FinalJugar = ({ route }) => {
             console.log(`Score en Set ${index + 1} no es válido o no tiene un formato esperado.`);
           }
         });
-
+        console.log(team1Score);
+        console.log(team2Score);
         summary.puntajeEquipo1 = team1Score;
         summary.puntajeEquipo2 = team2Score;
 
         setMatchSummary(summary);
 
-        Alert.alert("Primer puntaje", JSON.stringify(summary.set1));
+        Alert.alert("Primer puntaje", team1Points);
       }
     };
 
@@ -101,14 +102,18 @@ const FinalJugar = ({ route }) => {
       
       const summaryToSend = {
         ...matchSummary,
+        puntajeEquipo1: team1Points,
+        puntajeEquipo2: team2Points,
         fecha: matchSummary.fecha.toISOString() 
       };
+
+      console.log("Summary to send"+ JSON.stringify(summaryToSend));
 
       const response = await PartidoApi.create_Partido(storedToken, summaryToSend);
       const jugadores = await PartidoApi.getJugadoresEquipo1y2(storedToken,idEquipo1,idEquipo2)
 
       console.log(matchSummary.puntajeEquipo1)
-      if (matchSummary.puntajeEquipo1 === 2) {
+      if (summaryToSend.puntajeEquipo1 === 2) {
         console.log("entre a actualizar jugador");
         console.log("Valor jugador iD" + jugadores.data.jugadores[0].id);
         await userApi.actualizarJugador(storedToken, jugadores.data.jugadores[0].id, 100);
@@ -118,7 +123,7 @@ const FinalJugar = ({ route }) => {
         await userApi.actualizarJugador(storedToken, jugadores.data.jugadores[3].id, -100);
       }
   
-      if (matchSummary.puntajeEquipo2 === 2) {
+      if (summaryToSend.puntajeEquipo2 === 2) {
         await userApi.actualizarJugador(storedToken, jugadores.data.jugadores[1].id, 100);
         await userApi.actualizarJugador(storedToken, jugadores.data.jugadores[2].id, 100);
       } else {
@@ -161,8 +166,8 @@ const FinalJugar = ({ route }) => {
           <Text>{`Set 1: ${matchSummary.set1}`}</Text>
           <Text>{`Set 2: ${matchSummary.set2}`}</Text>
           <Text>{`Set 3: ${matchSummary.set3}`}</Text>
-          <Text>{`Equipo 1: ${matchSummary.puntajeEquipo1} puntos`}</Text>
-          <Text>{`Equipo 2: ${matchSummary.puntajeEquipo2} puntos`}</Text>
+          <Text>{`Equipo 1: ${team1Points} puntos`}</Text>
+          <Text>{`Equipo 2: ${team2Points} puntos`}</Text>
           <TouchableOpacity style={styles.submitButton} onPress={submitResults}>
           <Text style={styles.submitButtonText}>Enviar Resultados</Text>
         </TouchableOpacity>
