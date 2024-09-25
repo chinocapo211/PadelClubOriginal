@@ -14,7 +14,7 @@ const Notificaciones = ({ navigation }) => {
       try {
         const storedToken = await AsyncStorage.getItem('@AccessToken');
         if (storedToken) {
-          const response = await NotificacionesApi(storedToken);
+          const response = await NotificacionesApi.NotificacionesApi(storedToken);
 
           console.log('Respuesta de la API:', response);
 

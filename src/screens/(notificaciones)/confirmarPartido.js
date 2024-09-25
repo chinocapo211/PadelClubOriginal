@@ -3,9 +3,42 @@ import { View, Text, TouchableOpacity, StyleSheet, Alert, Image } from 'react-na
 import { SafeAreaView } from 'react-native-safe-area-context';
 import NavbarHigh from '../../components/navbarHigh';
 import NavbarLow from '../../components/navbarLow';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import PartidoApi from '../../api/PartidoApi';
 
 const ConfirmarPartido = ({ navigation }) => {
+
+  useEffect(() => {
+    const fetchPartido = async () => {
+      try {
+        const storedToken = await AsyncStorage.getItem('@GrupoId1');
+        if (storedToken) {
+          const response = await NotificacionesApi.NotificacionesApi(storedToken);
+
+          console.log('Respuesta de la API:', response);
+
+          if (Array.isArray(response.data)) {
+            setNotificaciones(response.data);
+          } else if (response && Array.isArray(response.notificaciones)) {
+            setNotificaciones(response.notificaciones);
+          } else {
+            console.error('Respuesta inesperada:', response);
+            setNotificaciones([]);
+          }
+        } else {
+          console.log('Token no encontrado');
+        }
+      } catch (error) {
+        console.error('Failed to fetch notifications or token:', error);
+      }
+    };
+    fetchNotifications();
+  }, []);
+
+  const handlePartidoButton = (item) => {
+    navigation.navigate('ConfirmarPartido'); //, { partidoId: item.id }
+  };  
+
 
   return (
     <SafeAreaView style={styles.safeArea}>

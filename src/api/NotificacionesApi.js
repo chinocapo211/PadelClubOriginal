@@ -9,6 +9,8 @@ const NotificacionesApi = async (token) => {
     "Authorization": `Bearer ${token}`,  
     "ngrok-skip-browser-warning": true, 
   };
+
+  console.log("ID del usuario" + Token.Usuario.id)
   try {
     const result = await apiManager("GET", headers, {}, `Notificaciones/${Token.Usuario.id}`);
     console.log(result);
@@ -19,21 +21,22 @@ const NotificacionesApi = async (token) => {
   }  
 };
 
-const CrearNoti = async (token,tipo,ide,idr) =>
+const CrearNoti = async (token,tipo,ide,idr,idgrupo) =>
 {
   const headers = {
     "Content-Type": "application/json",
     "Authorization": `Bearer ${token}`,  
     "ngrok-skip-browser-warning": true, 
   };
-
+console.log("Tipo " + tipo );
   const msj = await MsjNotiApi.ObtenerMensajePorTipo(token,tipo);
-console.log("Mensaje" + JSON.stringify(msj));
+console.log("Mensaje" + JSON.stringify(msj.data.msj));
   const data = {
     Mensaje: msj.data.msj,
     idE: ide,
     idR: idr,
     Tipo: tipo,
+    idGrupo:idgrupo,
   }
   try {
     const result = await apiManager("POST", headers,data,`Notificaciones`);

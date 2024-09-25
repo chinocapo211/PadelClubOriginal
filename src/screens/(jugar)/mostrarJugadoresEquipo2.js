@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, FlatList  } from 'react-native';
 import NavbarHigh from '../../components/navbarHigh';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import userApi from '../../api/userApi';
@@ -21,22 +21,18 @@ const MostrarJugadoresEquipo2 = ({ navigation }) => {
           const storedToken = await AsyncStorage.getItem('@AccessToken');
           const storedIdEquipo1 = await AsyncStorage.getItem('@GrupoId1');
           const storedIdEquipo2 = await AsyncStorage.getItem('@GrupoId2');
-          console.log("Token almacenado:", storedToken);
-          console.log("ID del grupo almacenado:", storedIdEquipo1);
 
           if (storedToken && storedIdEquipo2) {
             setToken(storedToken);
 
             const equipo1Response = await Equipo1Api.ObtenerInfoGrupo(storedToken, storedIdEquipo1);
             const equipo2Response = await Equipo2Api.ObtenerInfoGrupo(storedToken, storedIdEquipo2);
-            console.log("Equipo1 mostrarJugadores:", JSON.stringify(equipo1Response, null, 2));
-            console.log("Equipo1 mostrarJugadores:", JSON.stringify(equipo2Response, null, 2));
+
             if (equipo1Response && equipo2Response) {
               const jugadoresEnEquipo1 = [equipo1Response.data.grupo.id2].filter(id => id !== 0);
               const jugadoresEnEquipo2 = [equipo2Response.data.grupo.id3, equipo2Response.data.grupo.id4].filter(id => id !== 0);
-              
+
               const response = await userApi.ObtenerJugadores(storedToken);
-              console.log("Jugadores obtenidos:", response);
 
               if (response && Array.isArray(response)) {
                 const jugadoresFiltrados = response.filter(jugador => 
@@ -44,9 +40,6 @@ const MostrarJugadoresEquipo2 = ({ navigation }) => {
                   !jugadoresEnEquipo2.includes(jugador.id)
                 );
                 setJugadores(jugadoresFiltrados);
-                console.log("Jugadores filtrados:", jugadoresFiltrados);
-              } else {
-                console.error('La estructura de respuesta no es la esperada:', response);
               }
             }
           }
@@ -102,6 +95,21 @@ const MostrarJugadoresEquipo2 = ({ navigation }) => {
     }
   };
 
+  const renderItem = ({ item }) => (
+    <View style={styles.profileContainer}>
+      <Text style={styles.userName}>{item.Nombre}</Text>
+      <View style={styles.userInfo}>
+        <Text style={styles.userRank}>Rango: {item.Rango}</Text>
+        <TouchableOpacity
+          style={styles.addButton}
+          onPress={() => UpdateGrupo(item.id)}
+        >
+          <AntDesign name="pluscircle" size={30} color="#6CA0D4" />
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
@@ -112,29 +120,14 @@ const MostrarJugadoresEquipo2 = ({ navigation }) => {
             style={styles.backButton}
           />
         </TouchableOpacity>
-        
-        <View style={styles.scrollContainer}>
-          <ScrollView contentContainerStyle={styles.scrollContent}>
-            {jugadores.length === 0 ? (
-              <Text>No hay jugadores disponibles.</Text>
-            ) : (
-              jugadores.map((jugador) => (
-                <View key={jugador.id} style={styles.profileContainer}>
-                  <Text style={styles.userName}>{jugador.Nombre}</Text>
-                  <View style={styles.userInfo}>
-                    <Text style={styles.userRank}>Rango: {jugador.Rango}</Text>
-                    <TouchableOpacity
-                      style={styles.addButton}
-                      onPress={() => UpdateGrupo(jugador.id)}
-                    >
-                      <AntDesign name="pluscircle" size={30} color="#6CA0D4" />
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              ))
-            )}
-          </ScrollView>
-        </View>
+
+        <FlatList
+          data={jugadores}
+          renderItem={renderItem}
+          keyExtractor={item => item.id.toString()}
+          contentContainerStyle={styles.scrollContent}
+          ListEmptyComponent={<Text>No hay jugadores disponibles.</Text>}
+        />
       </View>
     </SafeAreaView>
   );

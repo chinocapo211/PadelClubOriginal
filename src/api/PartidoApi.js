@@ -62,6 +62,23 @@ const getJugadoresEquipo1y2 = async(token,idEquipo1,idEquipo2) =>
   }
 }
 
+const getPartidoByidGrupo = async (idEquipo1) =>
+{
+  const headers = {
+    "Content-Type": "application/json",
+    "Authorization": `Bearer ${token}`,
+    "ngrok-skip-browser-warning": true,
+  };
+  const data = {}
+  try {
+    const result = await apiManager("GET", headers, data, `Partido/${idEquipo1}`);
+    return result;
+  } catch (error) {
+    console.error('Error en la solicitud:', error);
+    return { error: error.message };
+  }
+}
 
 
-export default {create_Partido,getJugadoresEquipo1y2}
+
+export default {create_Partido,getJugadoresEquipo1y2,getPartidoByidGrupo}
