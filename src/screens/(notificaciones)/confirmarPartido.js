@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Alert, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import NavbarHigh from '../../components/navbarHigh';
@@ -32,14 +32,25 @@ const ConfirmarPartido = ({ navigation }) => {
         console.error('Failed to fetch notifications or token:', error);
       }
     };
-    fetchNotifications();
+    fetchPartido();
   }, []);
 
-  const handlePartidoButton = (item) => {
-    navigation.navigate('ConfirmarPartido'); //, { partidoId: item.id }
-  };  
+/*
+  --------------------ACA CALCULO ELO
+  idEquipo1 = grupo[partido.grupo].equipo1
+  idEquipo2 = = grupo[partido.grupo].equipo2
+  Equipo1PuntosTotales = Jugador[Equipo1[idEquipo1].id1].puntos + Jugador[Equipo1[idEquipo1].id2]
+  Equipo2PuntosTotales = Jugador[Equipo1[idEquipo2].id1].puntos + Jugador[Equipo1[idEquipo2].id2]
+  if(partido.puntajeEquipo1 > puntajeEquipo2){
+     
+  }
+  elseIf(partido.puntajeEquipo2 > puntajeEquipo1){
 
-
+  }
+  else{
+    error con valores null
+  }
+*/
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
