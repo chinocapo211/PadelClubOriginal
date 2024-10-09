@@ -56,9 +56,9 @@ const Home = ({ navigation }) => {
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.button, styles.buttonFriends]}
-          onPress={() => navigation.navigate('AmigosStack')}
+          onPress={() => navigation.navigate('HomeStack', {screen: "Ranking"})}
         >
-          <Text style={styles.buttonText}>Amigos</Text>
+          <Text style={styles.buttonText}>Ranking</Text>
         </TouchableOpacity>
       </View>
       <NavbarLow />

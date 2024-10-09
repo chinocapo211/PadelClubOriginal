@@ -15,21 +15,22 @@ import OlvidasteContraseña from './src/screens/(login)/olvidasteContraseña';
 import IngresarCodigo from './src/screens/(login)/ingresarCodigo';
 import CrearNuevaContraseña from './src/screens/(login)/crearNuevaContraseña';
 import ContraseñaExitosa from './src/screens/(login)/contraseñaExitosa';
-import Amigos from './src/screens/(home)/amigos';
 import InicioJugar from './src/screens/(jugar)/inicioJugar';
 import MostrarJugadoresEquipo1 from './src/screens/(jugar)/mostrarJugadoresEquipo1';
 import MostrarJugadoresEquipo2 from './src/screens/(jugar)/mostrarJugadoresEquipo2';
 import PuntajeJugar from './src/screens/(jugar)/puntajeJugar';
 import FinalJugar from './src/screens/(jugar)/finalJugar';
+import Ranking from './src/screens/(home)/ranking';
 import ConfirmarPartido from './src/screens/(notificaciones)/confirmarPartido';
+
 import { AuthProvider, useAuth } from './src/components/AuthProvider';
+
 
 const LoginStack = createStackNavigator();
 const TabBarStack = createStackNavigator();
 const NavBarStack = createStackNavigator();
 const HomeStack = createStackNavigator();
 const JugarStack = createStackNavigator();
-const AmigosStack = createStackNavigator();
 const AppStack = createStackNavigator();
 const PerfilStack = createStackNavigator();
 const NotificacionesStack = createStackNavigator();
@@ -89,14 +90,6 @@ function PerfilStackScreen() {
   );
 }
 
-function AmigosStackScreen() {
-  return (
-    <AmigosStack.Navigator screenOptions={{ headerShown: false }}>
-      <AmigosStack.Screen name="Amigos" component={Amigos} />
-    </AmigosStack.Navigator>
-  );
-}
-
 function JugarStackScreen() {
   return (
     <JugarStack.Navigator screenOptions={{ headerShown: false }}>
@@ -115,7 +108,7 @@ function HomeStackScreen() {
     <HomeStack.Navigator screenOptions={{ headerShown: false }}>
       <HomeStack.Screen name="HomeMain" component={Home} />
       <HomeStack.Screen name="JugarStack" component={JugarStackScreen} />
-      <HomeStack.Screen name="AmigosStack" component={AmigosStackScreen} />
+      <HomeStack.Screen name="Ranking" component={Ranking} />
     </HomeStack.Navigator>
   );
 }
