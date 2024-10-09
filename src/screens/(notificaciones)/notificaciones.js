@@ -38,7 +38,19 @@ const Notificaciones = ({ navigation }) => {
 
   const handlePartidoButton = (item) => {
     navigation.navigate('ConfirmarPartido'); //, { partidoId: item.id }
-  };  
+  };
+  const handleSancionButton = (item) => {
+    navigation.navigate('Sancion'); //, { partidoId: item.id }
+  }; 
+  const handleNotificacionButton = (item) => {
+    navigation.navigate('Notificacion'); //, { partidoId: item.id }
+  }; 
+  const handleGlobalButton = (item) => {
+    navigation.navigate('Global'); //, { partidoId: item.id }
+  }; 
+  const handleTorneoButton = (item) => {
+    navigation.navigate('Torneo'); //, { partidoId: item.id }
+  }; 
 
   const renderNotification = ({ item }) => (
     <View style={styles.notificationContainer} key={item.id}>
@@ -50,8 +62,28 @@ const Notificaciones = ({ navigation }) => {
         <Text style={styles.dateText}>{new Date(item.Fecha).toLocaleString()}</Text>
       </View>
       {/* Botón alineado a la derecha */}
-      {item.Tipo !== 'Partido' && (
+      {item.Tipo === 'Partido' && (
         <TouchableOpacity style={styles.button} onPress={() => handlePartidoButton(item)}>
+          <Text style={styles.buttonText}>Ver Partido</Text>
+        </TouchableOpacity>
+      )}
+      {item.Tipo === 'Sancion' && (
+        <TouchableOpacity style={styles.button} onPress={() => handleSancionButton(item)}>
+          <Text style={styles.buttonText}>Ver Partido</Text>
+        </TouchableOpacity>
+      )}
+      {item.Tipo === 'Notificacion' && (
+        <TouchableOpacity style={styles.button} onPress={() => handleNotificacionButton(item)}>
+          <Text style={styles.buttonText}>Ver Partido</Text>
+        </TouchableOpacity>
+      )}
+      {item.Tipo === 'Global' && (
+        <TouchableOpacity style={styles.button} onPress={() => handleGlobalButton(item)}>
+          <Text style={styles.buttonText}>Ver Partido</Text>
+        </TouchableOpacity>
+      )}
+      {item.Tipo === 'Torneo' && (
+        <TouchableOpacity style={styles.button} onPress={() => handleTorneoButton(item)}>
           <Text style={styles.buttonText}>Ver Partido</Text>
         </TouchableOpacity>
       )}
