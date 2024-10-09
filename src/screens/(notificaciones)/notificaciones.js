@@ -62,7 +62,7 @@ const Notificaciones = ({ navigation }) => {
         <Text style={styles.dateText}>{new Date(item.Fecha).toLocaleString()}</Text>
       </View>
       {/* Botón alineado a la derecha */}
-      {item.Tipo === 'Partido' && (
+      {item.Tipo === 'Confirmar_Resultado_Partido' && (
         <TouchableOpacity style={styles.button} onPress={() => handlePartidoButton(item)}>
           <Text style={styles.buttonText}>Ver Partido</Text>
         </TouchableOpacity>

@@ -26,7 +26,7 @@ export const ObtenerMensajePorTipo= async(token,tipo) =>{
   };
   try {
     const result = await apiManager("GET", headers, {}, `Msjnoti/${tipo}`);
-    console.log(result);
+    console.log( "tipo obtenido" + result);
     return result;
   } catch (error) {
     console.error('Error en la solicitud:', error);

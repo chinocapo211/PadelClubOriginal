@@ -114,7 +114,7 @@ const FinalJugar = ({ route }) => {
       const response = await PartidoPendienteApi.create_Partido(storedToken, summaryToSend);
 
     
-
+      console.log( "ID grupo" + response.data.partido.idGrupo);
       const jugadores = await PartidoPendienteApi.getJugadoresEquipo1y2(storedToken,idEquipo1,idEquipo2)
       const Notificacion = await NotificacionesApi.CrearNoti(storedToken,"Confirmar_Resultado_Partido",jugadores.data.jugadores[0].id, jugadores.data.jugadores[2].id, response.data.partido.idGrupo);
       console.log(matchSummary.puntajeEquipo1)
