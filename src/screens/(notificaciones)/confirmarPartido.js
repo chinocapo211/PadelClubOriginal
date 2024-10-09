@@ -41,7 +41,7 @@ const ConfirmarPartido = ({ navigation }) => {
 ---------------IMPORTANTE, CREAR "KFactor" para que se pueda calcular el elo
 KFactor arranca como 200 por 5 partidos
 Hasta los 15 partidos vale 150
-A partir de ahi vale 125
+A partir de ahi vale 100
 
   idEquipo1 = grupo[partido.grupo].equipo1
   idEquipo2 = grupo[partido.grupo].equipo2
