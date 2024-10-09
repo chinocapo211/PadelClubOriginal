@@ -1,5 +1,5 @@
-import React, { useState, useEffect ,} from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import NavbarHigh from '../../components/navbarHigh';
 import NavbarLow from '../../components/navbarLow';
 import userApi from '../../api/userApi';
@@ -9,60 +9,137 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 const Ranking = ({ navigation }) => {
+  const [rankingData, setRankingData] = useState([]);
+  const [userRank, setUserRank] = useState(null);
+  const [top5, setTop5] = useState([]);
+  const [userSection, setUserSection] = useState([]);
+
+  useEffect(() => {
+    const fetchRanking = async () => {
+      try {
+        // Simulación de obtener datos de ranking desde la API
+        const storedToken = await AsyncStorage.getItem('@AccessToken');
+        if (storedToken) {
+          const response = await userApi.ObtenerRanking(storedToken);  // Suponiendo que la API devuelve el ranking
+          setRankingData(response.ranking);
+          setUserRank(response.userRank); // Suponiendo que devuelve la posición del usuario
+
+          // Dividimos el Top 5 y la sección del usuario
+          const top5Players = response.ranking.slice(0, 5);  // Los primeros 5 jugadores
+          setTop5(top5Players);
+
+          if (response.userRank > 5) {
+            // Muestra el usuario y 2 jugadores arriba y abajo de su posición
+            const userRankSection = response.ranking.slice(response.userRank - 3, response.userRank + 2);
+            setUserSection(userRankSection);
+          }
+        } else {
+          console.log('Token no encontrado');
+        }
+      } catch (error) {
+        console.error('Error fetching ranking:', error);
+      }
+    };
+    fetchRanking();
+  }, []);
 
   return (
-  <SafeAreaView style={styles.safeArea}>
-    <View style={styles.container}>
+    <SafeAreaView style={styles.safeArea}>
       <NavbarHigh />
-      <View style={styles.buttonContainer}>
-        
-      </View>
+      
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        {/* Sección de Top 5 */}
+        <View style={styles.top5Container}>
+          <Text style={styles.sectionTitle}>Top 5 Jugadores</Text>
+          {top5.map((player, index) => (
+            <View key={player.id} style={styles.playerRow}>
+              <Text style={styles.rankText}>#{index + 1}</Text>
+              <Text style={styles.nameText}>{player.name}</Text>
+              <Text style={styles.pointsText}>{player.points} pts</Text>
+            </View>
+          ))}
+        </View>
+
+        {/* Sección de Usuario (si no está en el Top 5) */}
+        {userRank > 5 && (
+          <View style={styles.userSection}>
+            <Text style={styles.sectionTitle}>Tu Posición</Text>
+            {userSection.map((player, index) => (
+              <View key={player.id} style={styles.playerRow}>
+                <Text style={styles.rankText}>#{player.rank}</Text>
+                <Text style={styles.nameText}>{player.name}</Text>
+                <Text style={styles.pointsText}>{player.points} pts</Text>
+              </View>
+            ))}
+          </View>
+        )}
+      </ScrollView>
+
       <NavbarLow />
-    </View>
-  </SafeAreaView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   safeArea: {
-    flex:1,
-    backgroundColor:"#EBEBEB",
-  },
-  container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingBottom: screenHeight * 0.05,
+    backgroundColor: '#EBEBEB',
   },
-  buttonContainer: {
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    width: '80%',
-    maxWidth: screenWidth * 0.8,
-    paddingHorizontal: screenWidth * 0.05,
-    marginTop:50,
+  scrollContainer: {
+    paddingVertical: screenHeight * 0.02,
   },
-  button: {
-    height: screenHeight * 0.15,
-    justifyContent: 'center',
-    alignItems: 'center',
+  top5Container: {
+    marginTop:'30%',
+    backgroundColor: '#FFFFFF',
     borderRadius: 10,
-    marginBottom: 10,
-    width: '100%',
+    paddingVertical: screenHeight * 0.02,
+    marginHorizontal: screenWidth * 0.05,
+    marginBottom: screenHeight * 0.02,
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
   },
-  buttonPlay: {
-    backgroundColor: '#8dc1ff',
+  userSection: {
+    backgroundColor: '#F0F0F0',
+    borderRadius: 10,
+    paddingVertical: screenHeight * 0.02,
+    marginHorizontal: screenWidth * 0.05,
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
   },
-  buttonTournaments: {
-    backgroundColor: '#6CA0D4',
+  sectionTitle: {
+    fontSize: screenWidth * 0.06,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: screenHeight * 0.02,
   },
-  buttonFriends: {
-    backgroundColor: '#3D8AD4',
+  playerRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: screenWidth * 0.05,
+    paddingVertical: screenHeight * 0.015,
+    borderBottomWidth: 1,
+    borderBottomColor: '#DDDDDD',
   },
-  buttonText: {
-    color: 'white',
-    fontSize: screenWidth * 0.08,
+  rankText: {
+    fontSize: screenWidth * 0.05,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  nameText: {
+    fontSize: screenWidth * 0.05,
+    color: '#333',
+    flex: 1,
+    textAlign: 'center',
+  },
+  pointsText: {
+    fontSize: screenWidth * 0.05,
+    color: '#333',
   },
 });
 

@@ -22,7 +22,10 @@ import PuntajeJugar from './src/screens/(jugar)/puntajeJugar';
 import FinalJugar from './src/screens/(jugar)/finalJugar';
 import Ranking from './src/screens/(home)/ranking';
 import ConfirmarPartido from './src/screens/(notificaciones)/confirmarPartido';
-
+import Sancion from './src/screens/(notificaciones)/sancion';
+import Notificacion from './src/screens/(notificaciones)/notificacion';
+import Global from './src/screens/(notificaciones)/global';
+import ConfirmarPartidoTorneo from './src/screens/(notificaciones)/confirmarPartidoTorneo';
 import { AuthProvider, useAuth } from './src/components/AuthProvider';
 
 
@@ -58,6 +61,10 @@ function NotificacionesStackScreen() {
     <NotificacionesStack.Navigator screenOptions={{ headerShown: false }}>
       <NotificacionesStack.Screen name="Notificaciones" component={Notificaciones} />
       <NotificacionesStack.Screen name="ConfirmarPartido" component={ConfirmarPartido}/>
+      <NotificacionesStack.Screen name="Sancion" component={Sancion}/>
+      <NotificacionesStack.Screen name="Notificacion" component={Notificacion}/>
+      <NotificacionesStack.Screen name="Global" component={Global}/>
+      <NotificacionesStack.Screen name="ConfirmarPartidoTorneo" component={ConfirmarPartidoTorneo}/>
     </NotificacionesStack.Navigator>
   );
 }
