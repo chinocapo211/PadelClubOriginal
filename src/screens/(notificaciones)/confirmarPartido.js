@@ -37,6 +37,9 @@ const ConfirmarPartido = ({ navigation }) => {
 
 /*
   --------------------ACA CALCULO ELO
+
+---------------IMPORTANTE, CREAR "KFactor" para que se pueda calcular el elo
+
   idEquipo1 = grupo[partido.grupo].equipo1
   idEquipo2 = = grupo[partido.grupo].equipo2
   Equipo1PuntosTotales = Jugador[Equipo1[idEquipo1].id1].puntos + Jugador[Equipo1[idEquipo1].id2]
