@@ -39,21 +39,44 @@ const ConfirmarPartido = ({ navigation }) => {
   --------------------ACA CALCULO ELO
 
 ---------------IMPORTANTE, CREAR "KFactor" para que se pueda calcular el elo
+KFactor arranca como 200 por 5 partidos
+Hasta los 15 partidos vale 150
+A partir de ahi vale 125
 
   idEquipo1 = grupo[partido.grupo].equipo1
-  idEquipo2 = = grupo[partido.grupo].equipo2
-  Equipo1PuntosTotales = Jugador[Equipo1[idEquipo1].id1].puntos + Jugador[Equipo1[idEquipo1].id2]
-  Equipo2PuntosTotales = Jugador[Equipo1[idEquipo2].id1].puntos + Jugador[Equipo1[idEquipo2].id2]
+  idEquipo2 = grupo[partido.grupo].equipo2
+  idJugador1 = Jugador[Equipo1[idEquipo1].id1].id
+  idJugador2 = Jugador[Equipo1[idEquipo1].id2].id
+  idJugador3 = Jugador[Equipo2[idEquipo2].id1].id
+  idJugador4 = Jugador[Equipo2[idEquipo2].id2].id
+
+  Equipo1PuntosTotales = (Jugador[idJugador1].puntos + Jugador[idJugador2].puntos]):2
+  Equipo2PuntosTotales = (Jugador[idJugador3].puntos + Jugador[idJugador4].puntos]):2
   
+  const E1 = calcularE(Equipo1PuntosTotales, Equipo2PuntosTotales)
+  const E2 = calcularE(Equipo2PuntosTotales, Equipo1PuntosTotales)
+
   if(partido.puntajeEquipo1 > puntajeEquipo2){
-     
+     Jugador1PutajeNuevo = Jugador[idJugador1].puntos + Jugador[idJugador1].KFactor * (1 - E1)
+     Jugador2PutajeNuevo = Jugador[idJugador2].puntos + Jugador[idJugador2].KFactor * (1 - E1)
+     Jugador3PutajeNuevo = Jugador[idJugador3].puntos + Jugador[idJugador3].KFactor * (0 - E2)
+     Jugador4PutajeNuevo = Jugador[idJugador4].puntos + Jugador[idJugador3].KFactor * (0 - E2)
   }
   elseIf(partido.puntajeEquipo2 > puntajeEquipo1){
-
+     Jugador1PutajeNuevo = Jugador[idJugador1].puntos + Jugador[idJugador1].KFactor * (0 - E1)
+     Jugador2PutajeNuevo = Jugador[idJugador2].puntos + Jugador[idJugador2].KFactor * (0 - E1)
+     Jugador3PutajeNuevo = Jugador[idJugador3].puntos + Jugador[idJugador3].KFactor * (1 - E2)
+     Jugador4PutajeNuevo = Jugador[idJugador4].puntos + Jugador[idJugador3].KFactor * (1 - E2)
   }
   else{
-    error con valores null
+    Error
   }
+
+  FUNCION PARA CALCULAR E
+  function calcularE(eloJugador, eloOponente) {
+    const E = 1 / (1 + Math.pow(10, (eloOponente - eloJugador) / 600));
+    return E;
+}
 */
   return (
     <SafeAreaView style={styles.safeArea}>

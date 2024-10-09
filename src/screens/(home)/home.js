@@ -11,7 +11,6 @@ const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 const Home = ({ navigation }) => {
   const [userData, setUserData] = useState(null);
   const [token, setToken] = useState(null);
-
   useEffect(() => {
     const fetchTokenAndData = async () => {
       try {
