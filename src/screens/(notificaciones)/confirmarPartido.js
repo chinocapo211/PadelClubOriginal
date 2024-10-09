@@ -44,6 +44,7 @@ const ConfirmarPartido = ({ navigation }) => {
   idEquipo2 = = grupo[partido.grupo].equipo2
   Equipo1PuntosTotales = Jugador[Equipo1[idEquipo1].id1].puntos + Jugador[Equipo1[idEquipo1].id2]
   Equipo2PuntosTotales = Jugador[Equipo1[idEquipo2].id1].puntos + Jugador[Equipo1[idEquipo2].id2]
+  
   if(partido.puntajeEquipo1 > puntajeEquipo2){
      
   }
