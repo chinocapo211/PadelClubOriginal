@@ -64,36 +64,32 @@ const Notificaciones = ({ navigation }) => {
       {/* Botón alineado a la derecha */}
       {item.Tipo === 'Confirmar_Resultado_Partido' && (
         <TouchableOpacity style={styles.button} onPress={() => handlePartidoButton(item)}>
-          <Text style={styles.buttonText}>Ver Partido</Text>
+          <Text style={styles.buttonText}>Ver partido</Text>
         </TouchableOpacity>
       )}
       {item.Tipo === 'Sancion' && (
         <TouchableOpacity style={styles.button} onPress={() => handleSancionButton(item)}>
-          <Text style={styles.buttonText}>Ver Partido</Text>
+          <Text style={styles.buttonText}>Has sido sancionado</Text>
         </TouchableOpacity>
       )}
       {item.Tipo === 'Notificacion' && (
         <TouchableOpacity style={styles.button} onPress={() => handleNotificacionButton(item)}>
-          <Text style={styles.buttonText}>Ver Partido</Text>
+          <Text style={styles.buttonText}>Has sido notificado</Text>
         </TouchableOpacity>
       )}
       {item.Tipo === 'Global' && (
         <TouchableOpacity style={styles.button} onPress={() => handleGlobalButton(item)}>
-          <Text style={styles.buttonText}>Ver Partido</Text>
+          <Text style={styles.buttonText}>Mensaje global</Text>
         </TouchableOpacity>
       )}
       {item.Tipo === 'Torneo' && (
         <TouchableOpacity style={styles.button} onPress={() => handleTorneoButton(item)}>
-          <Text style={styles.buttonText}>Ver Partido</Text>
+          <Text style={styles.buttonText}>Ver partido torneo</Text>
         </TouchableOpacity>
       )}
     </View>
   );
   
-  const handleButtonPress = (item) => {
-    console.log('Acción para el partido:', item);
-  };
-
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
