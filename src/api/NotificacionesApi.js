@@ -48,6 +48,26 @@ console.log("Mensaje" + JSON.stringify(msj.data.msj));
   }  
 }
 
+const getInfoNotificacionById = async (token, id) =>
+{
+  const headers = {
+    "Content-Type": "application/json",
+    "Authorization": `Bearer ${token}`,  
+    "ngrok-skip-browser-warning": true, 
+  };
+  const data = {}
+  try {
+    const result = await apiManager("POST", headers,data,`Notificaciones/infoNotificacion/${id}`);
+    console.log(result);
+    return result;
+  } catch (error) {
+    console.error('Error en la solicitud:', error);
+    return { error: error.message };
+  }  
+}
 
 
-export default {NotificacionesApi,CrearNoti}
+
+
+
+export default { NotificacionesApi, CrearNoti, getInfoNotificacionById }
