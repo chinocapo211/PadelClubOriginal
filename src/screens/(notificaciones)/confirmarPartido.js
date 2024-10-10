@@ -4,26 +4,35 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import NavbarHigh from '../../components/navbarHigh';
 import NavbarLow from '../../components/navbarLow';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import PartidoApi from '../../api/PartidoApi';
+import PartidoPendienteApi from '../../api/PartidoPendienteApi';
+import NotificacionesApi from '../../api/NotificacionesApi';
 
-const ConfirmarPartido = ({ navigation }) => {
+const ConfirmarPartido = ({ navigation , route }) => {
+
+  const [ partido, setPartido] = useState();
+  const [notificacion, setnoti] = useState();
+  const { noti } = route.params;
 
   useEffect(() => {
+    console.log('Información de noti:', noti); 
+
     const fetchPartido = async () => {
       try {
-        const storedToken = await AsyncStorage.getItem('@GrupoId1');
+        const storedToken = await AsyncStorage.getItem('@AccessToken');
         if (storedToken) {
-          const response = await NotificacionesApi.NotificacionesApi(storedToken);
-
-          console.log('Respuesta de la API:', response);
-
-          if (Array.isArray(response.data)) {
-            setNotificaciones(response.data);
-          } else if (response && Array.isArray(response.notificaciones)) {
-            setNotificaciones(response.notificaciones);
+          const response = await NotificacionesApi.getInfoNotificacionById(storedToken, noti);
+          console.log("Estructura response:", JSON.stringify(response, null, 2));
+          const partido = await PartidoPendienteApi.getPartidoByidGrupo(response.data.idGrupo);
+          console.log('Respuesta de la API:', partido);
+          if (Array.isArray(partido)) {
+            setPartido(partido);
+            setnoti(response);
+          } else if (partido && Array.isArray(partido.data)) {
+            setPartido(partido);
+            setnoti(response);
           } else {
-            console.error('Respuesta inesperada:', response);
-            setNotificaciones([]);
+            console.error('Respuesta inesperada:', partido);
+            setPartido([]);
           }
         } else {
           console.log('Token no encontrado');
@@ -32,9 +41,27 @@ const ConfirmarPartido = ({ navigation }) => {
         console.error('Failed to fetch notifications or token:', error);
       }
     };
+    
     fetchPartido();
-  }, []);
+  }, [noti]);  
 
+  return (
+    <SafeAreaView style={styles.safeArea}>
+      <View style={styles.container}>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+          <Image
+            source={require('../../../assets/images/back.png')}
+            style={styles.backImage}
+          />
+        </TouchableOpacity>
+        <NavbarHigh />
+        <View style={styles.content}>
+          <Text>{notificacion}</Text>
+        </View>
+      </View>  
+    </SafeAreaView>
+  );
+};
 /*
   --------------------ACA CALCULO ELO
 
@@ -78,23 +105,7 @@ A partir de ahi vale 100
     return E;
 }
 */
-  return (
-    <SafeAreaView style={styles.safeArea}>
-      <View style={styles.container}>
-      <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <Image
-            source={require('../../../assets/images/back.png')}
-            style={styles.backImage}
-          />
-        </TouchableOpacity>
-        <NavbarHigh/>
-        <View style={styles.content}>
 
-        </View>
-      </View>  
-    </SafeAreaView>
-  );
-};
 
 const styles = StyleSheet.create({
   safeArea: {

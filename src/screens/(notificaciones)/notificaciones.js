@@ -37,7 +37,8 @@ const Notificaciones = ({ navigation }) => {
   }, []);
 
   const handlePartidoButton = (item) => {
-    navigation.navigate('ConfirmarPartido'); //, { partidoId: item.id }
+    console.log(" item antes de entrar al partido" + item);
+    navigation.navigate('ConfirmarPartido', {noti : item}); //, { partidoId: item.id }
   };
   const handleSancionButton = (item) => {
     navigation.navigate('Sancion'); //, { partidoId: item.id }
@@ -63,7 +64,7 @@ const Notificaciones = ({ navigation }) => {
       </View>
       {/* Botón alineado a la derecha */}
       {item.Tipo === 'Confirmar_Resultado_Partido' && (
-        <TouchableOpacity style={styles.button} onPress={() => handlePartidoButton(item)}>
+        <TouchableOpacity style={styles.button} onPress={() => handlePartidoButton(item.id)}>
           <Text style={styles.buttonText}>Ver Partido</Text>
         </TouchableOpacity>
       )}
