@@ -21,6 +21,7 @@ const ConfirmarPartido = ({ navigation , route }) => {
         const storedToken = await AsyncStorage.getItem('@AccessToken');
         if (storedToken) {
           const response = await NotificacionesApi.getInfoNotificacionById(storedToken, noti);
+          //se puede probar pasar la notificacion entera por parametro y no tener que acceder a la base de datos
           console.log("Estructura response:", JSON.stringify(response, null, 2));
           const partido = await PartidoPendienteApi.getPartidoByidGrupo(response.data.idGrupo);
           console.log('Respuesta de la API:', partido);
