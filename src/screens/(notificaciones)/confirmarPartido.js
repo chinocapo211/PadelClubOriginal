@@ -59,22 +59,28 @@ const ConfirmarPartido = ({ navigation, route }) => {
     try {
       const storedToken = await AsyncStorage.getItem('@AccessToken');
       if (storedToken) {
-        console.log(JSON.stringify(notificacion, null, 2));
         const response = await GruposApi.ObtenerInfoGrupo(storedToken, notificacion.data.idGrupo);
-        console.log(JSON.stringify(response, null, 2));
-  
         const responseEquipo1 = await Equipo1Api.ObtenerInfoGrupo(storedToken, response.data.grupo.idEquipo1);
         const responseEquipo2 = await Equipo2Api.ObtenerInfoGrupo(storedToken, response.data.grupo.idEquipo2);
-        console.log(JSON.stringify(responseEquipo1, null, 2));
-        console.log(JSON.stringify(responseEquipo2, null, 2));
   
         if (responseEquipo1 && responseEquipo2) {
-          setJugador1(responseEquipo1.data.jugadores[0]);
-          setJugador2(responseEquipo1.data.jugadores[1]);
-          setJugador3(responseEquipo2.data.jugadores[0]);
-          setJugador4(responseEquipo2.data.jugadores[1]);
+          const jugador1 = responseEquipo1.data.jugadores[0];
+          const jugador2 = responseEquipo1.data.jugadores[1];
+          const jugador3 = responseEquipo2.data.jugadores[0];
+          const jugador4 = responseEquipo2.data.jugadores[1];
+  
+          
+          setJugador1(jugador1);
+          setJugador2(jugador2);
+          setJugador3(jugador3);
+          setJugador4(jugador4);
+  
+          if (jugador1 && jugador2 && jugador3 && jugador4) {
+            setListJugadores([jugador1, jugador2, jugador3, jugador4]); 
+          } else {
+            console.log('Error: Uno o más jugadores no están disponibles.');
+          }
         }
-        setListJugadores(Jugador1,Jugador2,Jugador3,Jugador4);
       } else {
         console.log('Token no encontrado');
       }
@@ -83,50 +89,78 @@ const ConfirmarPartido = ({ navigation, route }) => {
     }
   };
   
+
   useEffect(() => {
     console.log("Data jugador:", Jugador1);
     console.log("Data jugador:", Jugador2);
     console.log("Data jugador:", Jugador3);
     console.log("Data jugador:", Jugador4);
+    
   }, [Jugador1,Jugador2,Jugador3,Jugador4]);
-
-  const updatePlayerPointsByEloSystem = async => 
-    {
-
-      fetchGrupoAndPlayers();
-      let i = 0;
-      for(  i ; i < listJugadores.length; i++)
-      {
-        if(listJugadores[i].Cant_Partidos <= 5)
-      {
-        kFactor = 200
-      }
-      else if(listJugadores[i].Cant_Partidos < 15 &&  listJugadores[i].Cant_Partidos > 5)
-      {
-        kFactor = 150;
-      }
-      else
-      {
-        kFactor = 100;
-      }
+  useEffect(() => {
+    console.log('Jugadores en listJugadores:', listJugadores);
+    console.log('Cantidad de jugadores:', listJugadores.length);
+  }, [listJugadores]);
+  
+ 
+  useEffect( async () => {
+    if (listJugadores.length === 4) {
+      console.log('Jugadores en listJugadores:', listJugadores);
+  
+      const equipo1 = listJugadores.slice(0, 2);
+      const equipo2 = listJugadores.slice(2, 4);
+  
+      const equipo1PuntosTotales = (equipo1[0].Puntos + equipo1[1].Puntos) / 2;
+      const equipo2PuntosTotales = (equipo2[0].Puntos + equipo2[1].Puntos) / 2;
+  
+      const E1 = calcularE(equipo1PuntosTotales, equipo2PuntosTotales);
+      const E2 = calcularE(equipo2PuntosTotales, equipo1PuntosTotales);
+  
+      equipo1.forEach(jugador => {
+        let kFactor = calcularKFactor(jugador.Cant_Partidos);
+        // Calcula el nuevo puntaje
+        const nuevoPuntaje = kFactor * (1 - E1);
+        jugador.puntos = nuevoPuntaje; // Asigna el nuevo puntaje
+      });
+  
+      equipo2.forEach(jugador => {
+        let kFactor = calcularKFactor(jugador.Cant_Partidos);
+        // Calcula el nuevo puntaje
+        const nuevoPuntaje = kFactor * (0 - E2);
+        jugador.puntos = nuevoPuntaje; // Asigna el nuevo puntaje
+      });
+  
       
-      if(partido.puntajeEquipo1 > puntajeEquipo2){
-        Jugador1PutajeNuevo = Jugador[idJugador1].puntos + Jugador[idJugador1].KFactor * (1 - E1)
-        Jugador2PutajeNuevo = Jugador[idJugador2].puntos + Jugador[idJugador2].KFactor * (1 - E1)
-        Jugador3PutajeNuevo = Jugador[idJugador3].puntos + Jugador[idJugador3].KFactor * (0 - E2)
-        Jugador4PutajeNuevo = Jugador[idJugador4].puntos + Jugador[idJugador3].KFactor * (0 - E2)
-     }
-     else if(partido.puntajeEquipo2 > puntajeEquipo1){
-        Jugador1PutajeNuevo = Jugador[idJugador1].puntos + Jugador[idJugador1].KFactor * (0 - E1)
-        Jugador2PutajeNuevo = Jugador[idJugador2].puntos + Jugador[idJugador2].KFactor * (0 - E1)
-        Jugador3PutajeNuevo = Jugador[idJugador3].puntos + Jugador[idJugador3].KFactor * (1 - E2)
-        Jugador4PutajeNuevo = Jugador[idJugador4].puntos + Jugador[idJugador3].KFactor * (1 - E2)
-     }
-     else{
-       Error
-     }
-      }
+      await Promise.all(listJugadores.map(async jugador => {
+        await userApi.actualizarJugador(jugador.id, jugador.puntos);
+      }));
+  
+      console.log('Puntos actualizados:', listJugadores);
     }
+  }, [listJugadores]);
+  
+  const updatePlayerPointsByEloSystem = async () => {
+    await fetchGrupoAndPlayers(); // Asegura que el fetch termine antes de usar los datos
+  };
+  
+  // Calcular KFactor basado en Cant_Partidos
+  const calcularKFactor = (cantPartidos) => {
+    if (cantPartidos <= 5) return 200;
+    if (cantPartidos <= 15) return 150;
+    return 100;
+  };
+  
+  // Función para calcular E (probabilidad de victoria)
+  const calcularE = (eloJugador, eloOponente) => {
+    return 1 / (1 + Math.pow(10, (eloOponente - eloJugador) / 600));
+  };
+  
+  
+  
+  
+ 
+  
+ 
 
   
 
@@ -166,49 +200,7 @@ const ConfirmarPartido = ({ navigation, route }) => {
     </SafeAreaView>
   );
 };
-/*
-  --------------------ACA CALCULO ELO
 
----------------IMPORTANTE, CREAR "KFactor" para que se pueda calcular el elo
-KFactor arranca como 200 por 5 partidos
-Hasta los 15 partidos vale 150
-A partir de ahi vale 100
-
-  idEquipo1 = grupo[partido.grupo].equipo1
-  idEquipo2 = grupo[partido.grupo].equipo2
-  idJugador1 = Jugador[Equipo1[idEquipo1].id1].id
-  idJugador2 = Jugador[Equipo1[idEquipo1].id2].id
-  idJugador3 = Jugador[Equipo2[idEquipo2].id1].id
-  idJugador4 = Jugador[Equipo2[idEquipo2].id2].id
-
-  Equipo1PuntosTotales = (Jugador[idJugador1].puntos + Jugador[idJugador2].puntos]):2
-  Equipo2PuntosTotales = (Jugador[idJugador3].puntos + Jugador[idJugador4].puntos]):2
-  
-  const E1 = calcularE(Equipo1PuntosTotales, Equipo2PuntosTotales)
-  const E2 = calcularE(Equipo2PuntosTotales, Equipo1PuntosTotales)
-
-  if(partido.puntajeEquipo1 > puntajeEquipo2){
-     Jugador1PutajeNuevo = Jugador[idJugador1].puntos + Jugador[idJugador1].KFactor * (1 - E1)
-     Jugador2PutajeNuevo = Jugador[idJugador2].puntos + Jugador[idJugador2].KFactor * (1 - E1)
-     Jugador3PutajeNuevo = Jugador[idJugador3].puntos + Jugador[idJugador3].KFactor * (0 - E2)
-     Jugador4PutajeNuevo = Jugador[idJugador4].puntos + Jugador[idJugador3].KFactor * (0 - E2)
-  }
-  elseIf(partido.puntajeEquipo2 > puntajeEquipo1){
-     Jugador1PutajeNuevo = Jugador[idJugador1].puntos + Jugador[idJugador1].KFactor * (0 - E1)
-     Jugador2PutajeNuevo = Jugador[idJugador2].puntos + Jugador[idJugador2].KFactor * (0 - E1)
-     Jugador3PutajeNuevo = Jugador[idJugador3].puntos + Jugador[idJugador3].KFactor * (1 - E2)
-     Jugador4PutajeNuevo = Jugador[idJugador4].puntos + Jugador[idJugador3].KFactor * (1 - E2)
-  }
-  else{
-    Error
-  }
-
-  FUNCION PARA CALCULAR E
-  function calcularE(eloJugador, eloOponente) {
-    const E = 1 / (1 + Math.pow(10, (eloOponente - eloJugador) / 600));
-    return E;
-}
-*/
 
 
 const styles = StyleSheet.create({

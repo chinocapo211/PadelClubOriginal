@@ -34,7 +34,7 @@ const ObtenerInfoJugador = async (token) => {
     return result.data;
   } catch (error) {
     console.error('Error en ObtenerInfoJugador:', error.message);
-    await AsyncStorage.removeItem('@AccessToken');
+
     return { error: error.message };
   }
 };
@@ -57,7 +57,6 @@ const ObtenerJugadores = async(token) =>
     return result.data;
   } catch (error) {
     console.error('Error en ObtenerInfoJugador:', error.message);
-    await AsyncStorage.removeItem('@AccessToken');
     return { error: error.message };
   }
 };
@@ -78,38 +77,35 @@ const ObtenerJugadorPorID = async(token,idJugador) =>{
     return result.data;
   } catch (error) {
     console.error('Error en ObtenerInfoJugador:', error.message);
-    await AsyncStorage.removeItem('@AccessToken');
+
     return { error: error.message };
   }
 
 }
 
-const actualizarJugador = async(token,idJugador,numeroUpdate) =>
+const actualizarJugador = async(idJugador,numeroUpdate) =>
   {
-
-    const jugador = await ObtenerJugadorPorID(token,idJugador);
-
+    console.log( "valor numero Update" +numeroUpdate);
+    const storedToken = await AsyncStorage.getItem('@AccessToken');
+    const jugador = await ObtenerJugadorPorID(storedToken,idJugador);
+     
     console.log("INFO DEL JUGADOR A ACTUALIZAR" + JSON.stringify(jugador, null, 2));
     const method = "PATCH";
     const headers = {
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${token}`,  
+      "Authorization": `Bearer ${storedToken}`,  
       "ngrok-skip-browser-warning": true, 
     };
-    jugador.Puntos += numeroUpdate
-    const data = 
-    {
-      Puntos: jugador.Puntos 
-    }
+    jugador.Puntos += numeroUpdate;
+    const data = { Puntos: jugador.Puntos };
 
     try {
-      console.log("Informacion antes de enviar" + data);
+      console.log("Informacion antes de enviar" + JSON.stringify(data, null, 2));
       const result = await apiManager(method, headers, data, `Jugador/${idJugador}`);
       console.log('User info response:', result.data);  
       return result.data;
     } catch (error) {
       console.error('Error en ObtenerInfoJugador:', error.message);
-      await AsyncStorage.removeItem('@AccessToken');
       return { error: error.message };
     }
   };
