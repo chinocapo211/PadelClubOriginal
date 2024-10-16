@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   innerContainer: {
-    marginTop: '2%',
+    marginTop: '1%',
     alignItems: 'center',
     width: '90%'
   },
@@ -213,7 +213,8 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   equipoContainer: {
-    marginBottom: 20,
+    marginTop:"5%",
+    marginBottom: "1%",
     backgroundColor: 'lightblue',
     borderRadius: 10,
     shadowColor: '#000',
@@ -224,7 +225,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    padding: 10,
+    padding: "1%",
   },
   title: {
     fontSize: 24,
@@ -241,8 +242,8 @@ const styles = StyleSheet.create({
     color: 'gray',
   },
   addButton: {
-    width: 60,
-    height: 60,
+    width: "10%",
+    height: "10%",
     borderRadius: 30,
     justifyContent: 'center',
     alignItems: 'center',
@@ -250,12 +251,12 @@ const styles = StyleSheet.create({
   },
   startButton: {
     backgroundColor: '#32CD32',
-    width: 150,
-    height: 50,
+    width: "40%",
+    height:"10%",
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: '3%',
+    marginTop: '5%',
   },
   startButtonText: {
     fontSize: 15,

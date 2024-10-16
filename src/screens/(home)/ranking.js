@@ -10,15 +10,13 @@ const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 const Ranking = ({ navigation }) => {
   const [rankingData, setRankingData] = useState([]);
-  const [userRank, setUserRank] = useState(null);
-  const [userSection, setUserSection] = useState([]);
 
   useEffect(() => {
     const fetchRanking = async () => {
       try {
         const storedToken = await AsyncStorage.getItem('@AccessToken');
         if (storedToken) {
-          const response = await userApi.ObtenerJugadores();  // Suponiendo que la API devuelve el ranking
+          const response = await userApi.ObtenerJugadores(storedToken);  // Suponiendo que la API devuelve el ranking
           setRankingData(response);
         } else {
           console.log('Token no encontrado');
@@ -41,30 +39,16 @@ const Ranking = ({ navigation }) => {
       <NavbarHigh />
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.top5Container}>
-          <Text style={styles.sectionTitle}>Top 5 Jugadores</Text>
-          {top5.map((player, index) => (
+          <Text style={styles.sectionTitle}>Ranking</Text>
+          {rankingData.map((player, index) => (
             <View key={player.id} style={styles.playerRow}>
               <Text style={styles.rankText}>#{index + 1}</Text>
-              <Text style={styles.nameText}>{player.name}</Text>
-              <Text style={styles.pointsText}>{player.points} pts</Text>
+              <Text style={styles.nameText}>{player.Nombre}</Text>
+              <Text style={styles.pointsText}>{player.Puntos} pts</Text>
             </View>
           ))}
         </View>
-        {userRank > 5 && (
-          <View style={styles.userSection}>
-            <Text style={styles.sectionTitle}>Tu Posición</Text>
-            {userSection.map((player, index) => (
-              <View key={player.id} style={styles.playerRow}>
-                <Text style={styles.rankText}>#{player.rank}</Text>
-                <Text style={styles.nameText}>{player.name}</Text>
-                <Text style={styles.pointsText}>{player.points} pts</Text>
-              </View>
-            ))}
-          </View>
-        )}
       </ScrollView>
-
-      <NavbarLow />
     </SafeAreaView>
   );
 };
@@ -90,7 +74,7 @@ const styles = StyleSheet.create({
     marginTop:'30%',
     backgroundColor: '#FFFFFF',
     borderRadius: 10,
-    width:"70%",
+    width:"80%",
     alignContent:"center",
     alignSelf:"center",
     paddingVertical: screenHeight * 0.02,
