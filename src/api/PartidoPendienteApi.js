@@ -70,7 +70,7 @@ const getPartidoByidGrupo = async (token ,idEquipo1) =>
     "ngrok-skip-browser-warning": true,
   };
 
-  console.log('valor idEquipo 1' + typeof(idEquipo1));
+  console.log('valor idEquipo 1' + idEquipo1);
   const data = {}
   try {
     const result = await apiManager("GET", headers, data, `PartidoPendiente/${idEquipo1}`);

@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Alert, Image } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import NavbarHigh from '../../components/navbarHigh';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import PartidoPendienteApi from '../../api/PartidoPendienteApi';
 import NotificacionesApi from '../../api/NotificacionesApi';
+import userApi from '../../api/userApi';
+import GruposApi from '../../api/GruposApi';
 
 const ConfirmarPartido = ({ navigation, route }) => {
   const [partido, setPartido] = useState(null); 
@@ -18,7 +20,6 @@ const ConfirmarPartido = ({ navigation, route }) => {
         if (storedToken) {
           const response = await NotificacionesApi.getInfoNotificacionById(storedToken, noti);
           const partidoData = await PartidoPendienteApi.getPartidoByidGrupo(storedToken, response.data.idGrupo);
-          
           if (partidoData && partidoData.data) {
             setPartido(partidoData.data);
             setnoti(response);
