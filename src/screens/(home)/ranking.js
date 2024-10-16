@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Dimensions, Image } from 'react-native';
 import NavbarHigh from '../../components/navbarHigh';
 import NavbarLow from '../../components/navbarLow';
 import userApi from '../../api/userApi';
@@ -11,28 +11,15 @@ const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 const Ranking = ({ navigation }) => {
   const [rankingData, setRankingData] = useState([]);
   const [userRank, setUserRank] = useState(null);
-  const [top5, setTop5] = useState([]);
   const [userSection, setUserSection] = useState([]);
 
   useEffect(() => {
     const fetchRanking = async () => {
       try {
-        // Simulación de obtener datos de ranking desde la API
         const storedToken = await AsyncStorage.getItem('@AccessToken');
         if (storedToken) {
-          const response = await userApi.ObtenerRanking(storedToken);  // Suponiendo que la API devuelve el ranking
-          setRankingData(response.ranking);
-          setUserRank(response.userRank); // Suponiendo que devuelve la posición del usuario
-
-          // Dividimos el Top 5 y la sección del usuario
-          const top5Players = response.ranking.slice(0, 5);  // Los primeros 5 jugadores
-          setTop5(top5Players);
-
-          if (response.userRank > 5) {
-            // Muestra el usuario y 2 jugadores arriba y abajo de su posición
-            const userRankSection = response.ranking.slice(response.userRank - 3, response.userRank + 2);
-            setUserSection(userRankSection);
-          }
+          const response = await userApi.ObtenerJugadores();  // Suponiendo que la API devuelve el ranking
+          setRankingData(response);
         } else {
           console.log('Token no encontrado');
         }
@@ -45,10 +32,14 @@ const Ranking = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
+      <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+          <Image
+            source={require('../../../assets/images/back.png')}
+            style={styles.backImage}
+          />
+        </TouchableOpacity>
       <NavbarHigh />
-      
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        {/* Sección de Top 5 */}
         <View style={styles.top5Container}>
           <Text style={styles.sectionTitle}>Top 5 Jugadores</Text>
           {top5.map((player, index) => (
@@ -59,8 +50,6 @@ const Ranking = ({ navigation }) => {
             </View>
           ))}
         </View>
-
-        {/* Sección de Usuario (si no está en el Top 5) */}
         {userRank > 5 && (
           <View style={styles.userSection}>
             <Text style={styles.sectionTitle}>Tu Posición</Text>
@@ -85,6 +74,15 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#EBEBEB',
   },
+  backButton: {
+    width: 30,
+    height: 30,
+    zIndex: 1,
+  },
+  backImage: {
+    width: '100%',
+    height: '100%',
+  },
   scrollContainer: {
     paddingVertical: screenHeight * 0.02,
   },
@@ -92,9 +90,10 @@ const styles = StyleSheet.create({
     marginTop:'30%',
     backgroundColor: '#FFFFFF',
     borderRadius: 10,
+    width:"70%",
+    alignContent:"center",
+    alignSelf:"center",
     paddingVertical: screenHeight * 0.02,
-    marginHorizontal: screenWidth * 0.05,
-    marginBottom: screenHeight * 0.02,
     elevation: 3,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
