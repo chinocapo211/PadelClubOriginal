@@ -111,25 +111,30 @@ const MostrarJugadoresEquipo2 = ({ navigation }) => {
   );
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <View style={styles.container}>
-        <NavbarHigh />
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Image
-            source={require('../../../assets/images/back.png')}
-            style={styles.backButton}
-          />
-        </TouchableOpacity>
+      <View>
+        <View style={{height: "20vh"}}>
+          <NavbarHigh />
+        </View>
 
-        <FlatList
-          data={jugadores}
-          renderItem={renderItem}
-          keyExtractor={item => item.id.toString()}
-          contentContainerStyle={styles.scrollContent}
-          ListEmptyComponent={<Text>No hay jugadores disponibles.</Text>}
-        />
+              {/*  <TouchableOpacity onPress={() => navigation.goBack()}>
+                 <Image
+                  source={require('../../../assets/images/back.png')}
+                   style={styles.backButton}
+                 />
+               </TouchableOpacity> */}
+
+        <View style={{height: "80vh"}}>
+                <FlatList
+                  data={jugadores}
+                  renderItem={renderItem}
+                  keyExtractor={item => item.id.toString()}
+                  contentContainerStyle={styles.scrollContent}
+                  ListEmptyComponent={<Text>No hay jugadores disponibles.</Text>}
+                />
+
+        </View>
       </View>
-    </SafeAreaView>
+
   );
 };
 
