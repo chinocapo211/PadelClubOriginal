@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import NavbarHigh from '../../components/navbarHigh';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import GruposApi from '../../api/GruposApi';
@@ -102,10 +102,13 @@ const InicioJugar = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
-        <NavbarHigh />
-        <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-          <Text style={styles.backButtonText}>{'<'}</Text>
+      <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+          <Image
+            source={require('../../../assets/images/back.png')}
+            style={styles.backImage}
+          />
         </TouchableOpacity>
+        <NavbarHigh />
         <View style={styles.innerContainer}>
           <View style={styles.profileContainer}>
           <View style={styles.equipoContainer}>
@@ -187,6 +190,15 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor:"#EBEBEB"
+  },
+  backButton: {
+    width: 30,
+    height: 30,
+    zIndex: 1,
+  },
+  backImage: {
+    width: '100%',
+    height: '100%',
   },
   container: {
     flex: 1,

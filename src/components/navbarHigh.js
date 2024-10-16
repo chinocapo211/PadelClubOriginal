@@ -25,7 +25,7 @@ const NavbarHigh = () => {
 const styles = StyleSheet.create({
   container: {
     width: "100vw",
-    height: "20vh",
+    height: "15vh",
     backgroundColor: 'white',
     top: 0,
     left: 0,
@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
   },
   topSection: {
     display: 'flex',
-    height: "20vh",
+    height: "15vh",
     flexDirection: "row",
     backgroundColor: 'white',
     justifyContent: "space-around",
@@ -42,8 +42,8 @@ const styles = StyleSheet.create({
 
   },
   logo: {
-    width: "60%",
-    height: "60%",  // Ajusta el tamaño según tu necesidad
+    width: "75%",
+    height: "75%",  // Ajusta el tamaño según tu necesidad
     resizeMode: "contain"
 
   },

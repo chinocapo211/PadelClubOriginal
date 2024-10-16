@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, FlatList } from 'react-native';
 import NavbarHigh from '../../components/navbarHigh';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import userApi from '../../api/userApi';
@@ -96,44 +96,43 @@ const MostrarJugadoresEquipo1 = ({ navigation }) => {
       console.error('Error al actualizar el grupo:', error);
     }
   };
-
+  const renderItem = ({ item }) => (
+    <View style={styles.profileContainer}>
+      <Text style={styles.userName}>{item.Nombre}</Text>
+      <View style={styles.userInfo}>
+        <Text style={styles.userRank}>Rango: {item.Rango}</Text>
+        <TouchableOpacity
+          style={styles.addButton}
+          onPress={() => UpdateGrupo(item.id)}
+        >
+          <AntDesign name="pluscircle" size={30} color="#6CA0D4" />
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <View style={styles.container}>
-        <NavbarHigh />
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+    <View>
+        <View style={{height: "15vh"}}>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <Image
             source={require('../../../assets/images/back.png')}
-            style={styles.backButton}
+            style={styles.backImage}
           />
         </TouchableOpacity>
-        
-        <View style={styles.scrollContainer}>
-          <ScrollView contentContainerStyle={styles.scrollContent}>
-            {jugadores.length === 0 ? (
-              <Text>No hay jugadores disponibles.</Text>
-            ) : (
-              jugadores.map((jugador) => (
-                <View key={jugador.id} style={styles.profileContainer}>
-                  <Text style={styles.userName}>{jugador.Nombre}</Text>
-                  <View style={styles.userInfo}>
-                    <Text style={styles.userRank}>Rango: {jugador.Rango}</Text>
-                    <TouchableOpacity
-                      style={styles.addButton}
-                      onPress={() => UpdateGrupo(jugador.id)}
-                    >
-                      <AntDesign name="pluscircle" size={30} color="#6CA0D4" />
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              ))
-            )}
-          </ScrollView>
+          <NavbarHigh />
+        </View>
+        <View style={{height: "85vh"}}>
+                <FlatList
+                  data={jugadores}
+                  renderItem={renderItem}
+                  keyExtractor={item => item.id.toString()}
+                  contentContainerStyle={styles.scrollContent}
+                  ListEmptyComponent={<Text>No hay jugadores disponibles.</Text>}
+                />
+
         </View>
       </View>
-    </SafeAreaView>
-  );
-};
+)};
 
 const styles = StyleSheet.create({
   safeArea: {
@@ -149,6 +148,10 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginTop: 10,
     zIndex: 1,
+  },
+  backImage: {
+    width: '100%',
+    height: '100%',
   },
   scrollContainer: {
     flex: 1,

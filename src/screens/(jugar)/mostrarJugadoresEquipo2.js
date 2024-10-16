@@ -112,18 +112,16 @@ const MostrarJugadoresEquipo2 = ({ navigation }) => {
 
   return (
       <View>
-        <View style={{height: "20vh"}}>
+        <View style={{height: "15vh"}}>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+          <Image
+            source={require('../../../assets/images/back.png')}
+            style={styles.backImage}
+          />
+        </TouchableOpacity>
           <NavbarHigh />
         </View>
-
-              {/*  <TouchableOpacity onPress={() => navigation.goBack()}>
-                 <Image
-                  source={require('../../../assets/images/back.png')}
-                   style={styles.backButton}
-                 />
-               </TouchableOpacity> */}
-
-        <View style={{height: "80vh"}}>
+        <View style={{height: "85vh"}}>
                 <FlatList
                   data={jugadores}
                   renderItem={renderItem}
@@ -141,6 +139,15 @@ const MostrarJugadoresEquipo2 = ({ navigation }) => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
+  },
+  backButton: {
+    width: 30,
+    height: 30,
+    zIndex: 1,
+  },
+  backImage: {
+    width: '100%',
+    height: '100%',
   },
   container: {
     flex: 1,
