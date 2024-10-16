@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import NavbarHigh from '../../components/navbarHigh';
-import NavbarLow from '../../components/navbarLow';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import PartidoPendienteApi from '../../api/PartidoPendienteApi';
 import NotificacionesApi from '../../api/NotificacionesApi';
@@ -38,6 +37,14 @@ const ConfirmarPartido = ({ navigation, route }) => {
     fetchPartido();
   }, [noti]);
 
+  const handleConfirm = () => {
+    Alert.alert('Confirmación', 'El partido ha sido confirmado.');
+  }
+
+  const handleReport = () => {
+    Alert.alert('Denunciar', 'El partido ha sido denunciado.');
+  }
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
@@ -50,75 +57,36 @@ const ConfirmarPartido = ({ navigation, route }) => {
         <NavbarHigh />
         <View style={styles.content}>
           {notificacion ? (
-            <Text> {notificacion.data.Mensaje}</Text>
+            <Text style={styles.notificationText}>{notificacion.data.Mensaje}</Text>
           ) : (
-            <Text>Cargando notificación...</Text>
+            <Text style={styles.loadingText}>Cargando notificación...</Text>
           )}
           {partido ? (
             <>
-              <Text>Puntaje Equipo 1: {partido.puntajeEquipo1}</Text>
-              <Text>Puntaje Equipo 2: {partido.puntajeEquipo2}</Text>
+              <Text style={styles.scoreText}>Puntaje Equipo 1: {partido.puntajeEquipo1}</Text>
+              <Text style={styles.scoreText}>Puntaje Equipo 2: {partido.puntajeEquipo2}</Text>
             </>
           ) : (
-            <Text>Cargando datos del partido...</Text>
+            <Text style={styles.loadingText}>Cargando datos del partido...</Text>
           )}
 
-          <Text> Si</Text>
-          <Text>No</Text>
+          <TouchableOpacity style={styles.buttonConfirm} onPress={handleConfirm}>
+            <Text style={styles.buttonText}>Confirmar</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.buttonReport} onPress={handleReport}>
+            <Text style={styles.buttonText}>Denunciar</Text>
+          </TouchableOpacity>
         </View>
       </View>  
     </SafeAreaView>
   );
 };
-/*
-  --------------------ACA CALCULO ELO
-
----------------IMPORTANTE, CREAR "KFactor" para que se pueda calcular el elo
-KFactor arranca como 200 por 5 partidos
-Hasta los 15 partidos vale 150
-A partir de ahi vale 100
-
-  idEquipo1 = grupo[partido.grupo].equipo1
-  idEquipo2 = grupo[partido.grupo].equipo2
-  idJugador1 = Jugador[Equipo1[idEquipo1].id1].id
-  idJugador2 = Jugador[Equipo1[idEquipo1].id2].id
-  idJugador3 = Jugador[Equipo2[idEquipo2].id1].id
-  idJugador4 = Jugador[Equipo2[idEquipo2].id2].id
-
-  Equipo1PuntosTotales = (Jugador[idJugador1].puntos + Jugador[idJugador2].puntos]):2
-  Equipo2PuntosTotales = (Jugador[idJugador3].puntos + Jugador[idJugador4].puntos]):2
-  
-  const E1 = calcularE(Equipo1PuntosTotales, Equipo2PuntosTotales)
-  const E2 = calcularE(Equipo2PuntosTotales, Equipo1PuntosTotales)
-
-  if(partido.puntajeEquipo1 > puntajeEquipo2){
-     Jugador1PutajeNuevo = Jugador[idJugador1].puntos + Jugador[idJugador1].KFactor * (1 - E1)
-     Jugador2PutajeNuevo = Jugador[idJugador2].puntos + Jugador[idJugador2].KFactor * (1 - E1)
-     Jugador3PutajeNuevo = Jugador[idJugador3].puntos + Jugador[idJugador3].KFactor * (0 - E2)
-     Jugador4PutajeNuevo = Jugador[idJugador4].puntos + Jugador[idJugador3].KFactor * (0 - E2)
-  }
-  elseIf(partido.puntajeEquipo2 > puntajeEquipo1){
-     Jugador1PutajeNuevo = Jugador[idJugador1].puntos + Jugador[idJugador1].KFactor * (0 - E1)
-     Jugador2PutajeNuevo = Jugador[idJugador2].puntos + Jugador[idJugador2].KFactor * (0 - E1)
-     Jugador3PutajeNuevo = Jugador[idJugador3].puntos + Jugador[idJugador3].KFactor * (1 - E2)
-     Jugador4PutajeNuevo = Jugador[idJugador4].puntos + Jugador[idJugador3].KFactor * (1 - E2)
-  }
-  else{
-    Error
-  }
-
-  FUNCION PARA CALCULAR E
-  function calcularE(eloJugador, eloOponente) {
-    const E = 1 / (1 + Math.pow(10, (eloOponente - eloJugador) / 600));
-    return E;
-}
-*/
-
 
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor:"#EBEBEB"
+    backgroundColor: "#EBEBEB"
   },
   backButton: {
     width: 30,
@@ -134,27 +102,48 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    justifyContent: 'center', // Para centrar el contenido en la pantalla
+    justifyContent: 'center',
     alignItems: 'center',
   },
-  button: {
-    backgroundColor: '#d3d3d3',
-    width: '150%',
-    height: '15%',
-    padding: '6%',
+  buttonConfirm: {
+    backgroundColor: '#81E7B5', // Verde más fuerte
+    width: '70%', // Botón más pequeño
+    padding: 10,
     marginVertical: 10,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 5,
   },
-  buttonClub: {
-    backgroundColor: 'black',
+  buttonReport: {
+    backgroundColor: '#FF9A9A', // Rojo más fuerte
+    width: '70%', // Botón más pequeño
+    padding: 10,
+    marginVertical: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 5,
   },
   buttonText: {
     color: 'black',
     fontSize: 16,
-    marginBottom: '3%'
-  },  
+    textAlign: 'center', // Centrar el texto
+  },
+  notificationText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    textAlign: 'center',
+    color: '#333', // Color del texto de notificación
+  },
+  scoreText: {
+    fontSize: 16,
+    marginVertical: 5,
+    color: '#444', // Color del texto del puntaje
+  },
+  loadingText: {
+    fontSize: 16,
+    color: '#888', // Color para el texto de carga
+  },
 });
 
 export default ConfirmarPartido;
