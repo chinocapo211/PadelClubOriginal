@@ -62,8 +62,11 @@ const getJugadoresEquipo1y2 = async(token,idEquipo1,idEquipo2) =>
   }
 }
 
-const getPartidoByidGrupo = async (idEquipo1) =>
+const getPartidoByidGrupo = async (token,idEquipo1) =>
 {
+
+
+  
   const headers = {
     "Content-Type": "application/json",
     "Authorization": `Bearer ${token}`,

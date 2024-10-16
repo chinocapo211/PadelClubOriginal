@@ -57,7 +57,7 @@ const getInfoNotificacionById = async (token, id) =>
   };
   const data = {}
   try {
-    const result = await apiManager("POST", headers,data,`Notificaciones/infoNotificacion/${id}`);
+    const result = await apiManager("GET", headers,data,`Notificaciones/infoNotificacion/${id}`);
     console.log(result);
     return result;
   } catch (error) {

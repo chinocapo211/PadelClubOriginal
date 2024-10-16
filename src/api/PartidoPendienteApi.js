@@ -37,7 +37,7 @@ console.log( "tipo de dato despues de la conversion" + typeof(data.fecha))
   };
 
   try {
-    const result = await apiManager("POST", headers, dato, `Partido`);
+    const result = await apiManager("POST", headers, dato, `PartidoPendiente`);
     return result;
   } catch (error) {
     console.error('Error en la solicitud:', error);
@@ -54,7 +54,7 @@ const getJugadoresEquipo1y2 = async(token,idEquipo1,idEquipo2) =>
   };
   const data = {}
   try {
-    const result = await apiManager("GET", headers, data, `Partido/${idEquipo1}/${idEquipo2}`);
+    const result = await apiManager("GET", headers, data, `PartidoPendiente/${idEquipo1}/${idEquipo2}`);
     return result;
   } catch (error) {
     console.error('Error en la solicitud:', error);
@@ -62,16 +62,18 @@ const getJugadoresEquipo1y2 = async(token,idEquipo1,idEquipo2) =>
   }
 }
 
-const getPartidoByidGrupo = async (idEquipo1) =>
+const getPartidoByidGrupo = async (token ,idEquipo1) =>
 {
   const headers = {
     "Content-Type": "application/json",
     "Authorization": `Bearer ${token}`,
     "ngrok-skip-browser-warning": true,
   };
+
+  console.log('valor idEquipo 1' + typeof(idEquipo1));
   const data = {}
   try {
-    const result = await apiManager("GET", headers, data, `Partido/${idEquipo1}`);
+    const result = await apiManager("GET", headers, data, `PartidoPendiente/${idEquipo1}`);
     return result;
   } catch (error) {
     console.error('Error en la solicitud:', error);

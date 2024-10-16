@@ -7,33 +7,24 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import PartidoPendienteApi from '../../api/PartidoPendienteApi';
 import NotificacionesApi from '../../api/NotificacionesApi';
 
-const ConfirmarPartido = ({ navigation , route }) => {
-
-  const [ partido, setPartido] = useState();
-  const [notificacion, setnoti] = useState();
+const ConfirmarPartido = ({ navigation, route }) => {
+  const [partido, setPartido] = useState(null); 
+  const [notificacion, setnoti] = useState(null); 
   const { noti } = route.params;
 
   useEffect(() => {
-    console.log('Información de noti:', noti); 
-
     const fetchPartido = async () => {
       try {
         const storedToken = await AsyncStorage.getItem('@AccessToken');
         if (storedToken) {
           const response = await NotificacionesApi.getInfoNotificacionById(storedToken, noti);
-          //se puede probar pasar la notificacion entera por parametro y no tener que acceder a la base de datos
-          console.log("Estructura response:", JSON.stringify(response, null, 2));
-          const partido = await PartidoPendienteApi.getPartidoByidGrupo(response.data.idGrupo);
-          console.log('Respuesta de la API:', partido);
-          if (Array.isArray(partido)) {
-            setPartido(partido);
-            setnoti(response);
-          } else if (partido && Array.isArray(partido.data)) {
-            setPartido(partido);
+          const partidoData = await PartidoPendienteApi.getPartidoByidGrupo(storedToken, response.data.idGrupo);
+          
+          if (partidoData && partidoData.data) {
+            setPartido(partidoData.data);
             setnoti(response);
           } else {
-            console.error('Respuesta inesperada:', partido);
-            setPartido([]);
+            console.error('Respuesta inesperada:', partidoData);
           }
         } else {
           console.log('Token no encontrado');
@@ -42,9 +33,9 @@ const ConfirmarPartido = ({ navigation , route }) => {
         console.error('Failed to fetch notifications or token:', error);
       }
     };
-    
+
     fetchPartido();
-  }, [noti]);  
+  }, [noti]);
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -57,7 +48,22 @@ const ConfirmarPartido = ({ navigation , route }) => {
         </TouchableOpacity>
         <NavbarHigh />
         <View style={styles.content}>
-          <Text>{notificacion}</Text>
+          {notificacion ? (
+            <Text> {notificacion.data.Mensaje}</Text>
+          ) : (
+            <Text>Cargando notificación...</Text>
+          )}
+          {partido ? (
+            <>
+              <Text>Puntaje Equipo 1: {partido.puntajeEquipo1}</Text>
+              <Text>Puntaje Equipo 2: {partido.puntajeEquipo2}</Text>
+            </>
+          ) : (
+            <Text>Cargando datos del partido...</Text>
+          )}
+
+          <Text> Si</Text>
+          <Text>No</Text>
         </View>
       </View>  
     </SafeAreaView>
