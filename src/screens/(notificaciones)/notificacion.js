@@ -4,26 +4,27 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import NavbarHigh from '../../components/navbarHigh';
 import NavbarLow from '../../components/navbarLow';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import PartidoApi from '../../api/PartidoApi';
+import PartidoPendienteApi from '../../api/PartidoPendienteApi';
+import NotificacionesApi from '../../api/NotificacionesApi';
 
-const Notificacion = ({ navigation }) => {
+const Notificacion = ({ navigation, route }) => {
+  const [partido, setPartido] = useState(null); 
+  const [notificacion, setnoti] = useState(null); 
+  const { noti } = route.params;
 
   useEffect(() => {
     const fetchPartido = async () => {
       try {
-        const storedToken = await AsyncStorage.getItem('@GrupoId1');
+        const storedToken = await AsyncStorage.getItem('@AccessToken');
         if (storedToken) {
-          const response = await NotificacionesApi.NotificacionesApi(storedToken);
-
-          console.log('Respuesta de la API:', response);
-
-          if (Array.isArray(response.data)) {
-            setNotificaciones(response.data);
-          } else if (response && Array.isArray(response.notificaciones)) {
-            setNotificaciones(response.notificaciones);
+          const response = await NotificacionesApi.getInfoNotificacionById(storedToken, noti);
+          const partidoData = await PartidoPendienteApi.getPartidoByidGrupo(storedToken, response.data.idGrupo);
+          
+          if (partidoData && partidoData.data) {
+            setPartido(partidoData.data);
+            setnoti(response);
           } else {
-            console.error('Respuesta inesperada:', response);
-            setNotificaciones([]);
+            console.error('Respuesta inesperada:', partidoData);
           }
         } else {
           console.log('Token no encontrado');
@@ -32,8 +33,9 @@ const Notificacion = ({ navigation }) => {
         console.error('Failed to fetch notifications or token:', error);
       }
     };
+
     fetchPartido();
-  }, []);
+  }, [noti]);
 
 /*
   --------------------ACA CALCULO ELO
