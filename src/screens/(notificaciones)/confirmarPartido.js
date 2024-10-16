@@ -18,6 +18,7 @@ const ConfirmarPartido = ({ navigation, route }) => {
         const storedToken = await AsyncStorage.getItem('@AccessToken');
         if (storedToken) {
           const response = await NotificacionesApi.getInfoNotificacionById(storedToken, noti);
+          //probar traer notifiacion entera por parametro
           const partidoData = await PartidoPendienteApi.getPartidoByidGrupo(storedToken, response.data.idGrupo);
           
           if (partidoData && partidoData.data) {
